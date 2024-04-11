@@ -1,4 +1,4 @@
-# **Game Name Here**
+# **Forest Adventure**
 
 ## _Game Design Document_
 
@@ -46,15 +46,19 @@
 
 ### **Summary**
 
-Sum up your game idea in 2 sentences. A kind of elevator pitch. Keep it simple!
+Forest Adventure" is a DBG that tells the story of the camp "_____", which one day is invaded by creatures from another dimension. Our campers and staff have the responsibility to defend the camp at all costs.
 
 ### **Gameplay**
 
-What should the gameplay be like? What is the goal of the game, and what kind of obstacles are in the way? What tactics should the player use to overcome them?
+The game consists of a PvP where players will fight against each other. Before the match starts, you will be able to select 5 cards from the different characters that are available. The user can build 2 different decks, one for the "campist" side and the other for the "monster" side.
+
+When the match begins, the user will be assigned to either one of the sides. Each player will have 2 characters on the board and 3 in their hand. Each character has different abilities and statistics that will define their fighting style. The user can use the abilities of the characters while the Energy Bar has enough energy, and they will also be able to switch a character at the cost of their turn.
+
+The game will end when either one of the sides runs out of cards to play. The one to kill all the cards of the opposite side will be the winner.
 
 ### **Mindset**
 
-What kind of mindset do you want to provoke in the player? Do you want them to feel powerful, or weak? Adventurous, or nervous? Hurried, or calm? How do you intend to provoke those emotions?
+We want players to feel ambitious about progressing in the game. We aim for them to sense the ability to create their own strategies within the arena and to improve their proficiency in the game's mechanics.
 
 ## _Technical_
 
