@@ -50,12 +50,11 @@ Forest Adventure" is a DBG that tells the story of the camp "_____", which one d
 
 ### **Gameplay**
 
-The game consists of a PvP where players will fight against each other. Before the match starts, you will be able to select 5 cards from the different characters that are available. The user can build 2 different decks, one for the "campist" side and the other for the "monster" side.
+The game consists of a P v CPU where players will fight against the different creatures trying to attack their campsite. Before the match starts, you will be able to select 5 cards from the different characters that are available.
 
-When the match begins, the user will be assigned to either one of the sides. Each player will have 2 characters on the board and 3 in their hand. Each character has different abilities and statistics that will define their fighting style. The user can use the abilities of the characters while the Energy Bar has enough energy, and they will also be able to switch a character at the cost of their turn.
+When the match begins, the user will be assigned to either one of the sides. Each player will have 2 characters on the board and 3 in their hand. Each character has different abilities and statistics that will define their fighting style. The user can use the abilities of the characters while the Energy Bar has enough energy, and they will also be able to switch a character at the cost of their turn. In addition, your campers will recieve assitance from different power ups to help them boost their atacks or damage their enemies.
 
-The game will end when either one of the sides runs out of cards to play. The one to kill all the cards of the opposite side will be the winner.
-
+The game will end when either your campers defeat all the monsters or lose their lives at battle. 
 ### **Mindset**
 
 We want players to feel ambitious about progressing in the game. We aim for them to sense the ability to create their own strategies within the arena and to improve their proficiency in the game's mechanics.
@@ -69,10 +68,11 @@ We want players to feel ambitious about progressing in the game. We aim for them
 1. Title Screen
     1. Options
 2. Level Select
-3. Game
+3. Deck Building
+4. Game
     1. Inventory
     2. Assessment / Next Level
-4. End Credits
+5. End Credits
 
 _(example)_
 
