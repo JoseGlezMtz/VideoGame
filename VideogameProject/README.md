@@ -94,6 +94,7 @@ The fisrt instance, the play will optain a "Power-up" card, and will have two op
 1. Use it in a card that is on the field
 2. Save it to use it in a later round
    1. Some cards have a limit toime to save it, maening that after specific number of rounds, they will disapper
+   2. If the powr-ups deck run out of cards, it will shuffle and reestart again
 
 After this, the player will have several option:
 
