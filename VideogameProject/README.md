@@ -66,9 +66,10 @@ We want players to feel ambitious about progressing in the game. We aim for them
 ### **Screens**
 
 1. Title Screen
-    1. Options
-2. Level Select
-3. Deck Building
+    1. Play Game
+    2. Build-Deck
+    3. Exit
+2. Deck Building
 4. Game
     1. Inventory
     2. Assessment / Next Level
@@ -78,11 +79,31 @@ _(example)_
 
 ### **Controls**
 
-How will the player interact with the game? Will they be able to choose the controls? What kind of in-game events are they going to be able to trigger, and how? (e.g. pressing buttons, opening doors, etc.)
+The player will interact with all the UI with the mouse and the click
 
 ### **Mechanics**
 
-Are there any interesting mechanics? If so, how are you going to accomplish them? Physics, algorithms, etc.
+#### Before the game:
+Before starting the game, the player have the option to configurate their deck of 5 characters, giving the option of creat a team based in the best strategy that the player considers, they have the options to choose 2 starting cards and 3 cards that they'll keep in their hand.
+
+#### In-game:
+At the strat of the match they will start with 2 coards in the field and the rest of the cards in the hand.
+
+The fisrt instance, the play will optain a "Power-up" card, and will have two options:
+
+1. Use it in a card that is on the field
+2. Save it to use it in a later round
+   1. Some cards have a limit toime to save it, maening that after specific number of rounds, they will disapper
+
+After this, the player will have several option:
+
+1. Attack the enemy: this attack will cost certain amount of energy, choosing between the normal or special attack that have each character
+2. Change a card: the player can change a character with one card of their hand, this will cost the end of the turn of the player
+3. End turn: The player can just end his turn in order to save energy or strategic descition that the player wants to do
+
+At the end of the turn, the energy bar will restore a certain amount of energy
+
+After the player's turn, the enemy will follow a similar flow, and the loop will reapeat.
 
 ## _Level Design_
 
