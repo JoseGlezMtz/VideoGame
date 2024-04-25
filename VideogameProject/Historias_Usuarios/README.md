@@ -1,17 +1,20 @@
-| Yo Como      |    Quiero    | Para      |Funcional / no funcional|
-|--------------|--------------|--------------|----------|
-| Jugador      |poder jugar aun juego de cartas de modalidad BCG      | experimentar un enfrentamiento pve     |Funcional|
-| Jugador      | Una interfaz gráfica donde pueda visualizar los elementos necesarios     | Poder jugar de manera interactiva|Funcional|
-| Jugador      | Tener distintas opciones tanto de personajes como otros componentes       | Crear mi propio mazo y evitar que el juego sea demasiado predecible y mantenerme entretenido|Funcional|
-|  Jugador     | Poder Iniciar sesión| Guardar mi progreso en el juego así como mis preferencias de configuración  |Funcional|
-|Jugador       | Enfrentarme a distintos oponentes de dificultades distintas |Retarme como jugador y mejorar mi toma de decisiones en el juego de forma progresiva|Funcional|
-|Jugador |Tener efectos visuales y auditivos|Que la experiencia del juego sea más inmersiva|Funcional|
-|Jugador|Manejar distintas herramientas de administración de recursos (barra de energía y límite de powerups)| Hacer el juego más estratégico y aumentar su dificultad|Funcional|
-|Jugador|Seleccionar entre distintos power ups |para potenciar mis unidades y hacer el combate más emocionante|Funcional|
-|Jugador|Poder crear un mazo con las cartas que seleccione antes de la partida|Cambiar entre mazos de forma simple antes de cada juego y mantenerlo novedoso|Funcional|
-|Jugador|poder tener mayor variedad de cartas a lo largo del videojuego|tener más dinamismo dentro de las partidas| Funcional|
-|Jugador|poder tener un juego equilibrado en sus cartas|no perder el interés en la estrategia.|Funcional|
-|Jugador|Poder acceder a la información de cada carta durante la partida|Hacer la curva de aprendizaje más fácil|Funcional|
-|Desarrollador|Almacenar los datos del juego dentro de una base de datos|Para guardar la información de mi juego en un lugar seguro en el que pueda hacer CRUD|Funcional|
+| Yo Como      |    Quiero    | Para      |Funcional / no funcional| Validación|
+|--------------|--------------|--------------|----------|-----|
+|Jugador|Poder jugar un juego dondé me enfrente a un oponente| Poderme entreterner|Funcional| - Crear el juego <br> -Crear el oponente.|
+|Jugador| Que mis datos en el juego se guarden correctamente| Para no tener que hacer mi mazo y registrarme cada vez que ingrese| No funcional|-Crear un espacio donde se puedan almacenar estos datos.|
+|Jugador|Manejar distintas herramientas de administración de recursos (barra de energía y límite de powerups)| Hacer el juego más estratégico y aumentar su dificultad|Funcional| - Crear diferentes comandos para implementar estos recursos. <br> -Crear un espacio para almacenar estos datos.|
+|Jugador| Poder jugar un juego que no se tarde a la hora de hacer una acción|Que no me desespere jugando|No funcional|-Probar el juego para verificar si hay retrasos significativos al realizar acciones durante el juego.<br> - Crear diferentes algoritmos para eliminar estos retrasos.|
+| Jugador      | Un juego donde pueda visualizar los elementos necesarios     | Poder jugar de manera interactiva|Funcional|-Crear una interfas gráfica con los elementos.|
+| Jugador      | Tener distintas opciones tanto de personajes como otros componentes       | Crear mi propio mazo y evitar que el juego sea demasiado predecible y mantenerme entretenido|Funcional|-Crear las cartas necesarioas para crear un juego poco predecible. <br> -implementar estas cartas al juego.
+|  Jugador     | Poder Iniciar sesión| Guardar mi progreso en el juego así como mis preferencias de configuración  |Funcional|- Crear una base la cual permita guardar estos datos.|
+|Jugador       | Enfrentarme a distintos oponentes de dificultades distintas |Retarme como jugador y mejorar mi toma de decisiones en el juego de forma progresiva|Funcional|-Evaluar si los oponentes presentan desafíos adecuados que requieran una toma de decisiones estratégicas por parte del jugador.<br> -Crear oponentes cada vez más desafiantes conforme al progreso del jugador.|
+|Jugador| Poder ver mis estádisticas| Ver como he progresado en el juego| No funcional|-Implemetar una función para poder ver las estadísticas. <Br> -Verificar si las estadísticas del jugador se muestran claramente en una interfaz fácil de entender.
+|Jugador |Tener efectos visuales y auditivos|Que la experiencia del juego sea más inmersiva|No Funcional|-Implementar visuales y audios para la inmerción del juego.|
+|Jugador|Seleccionar entre distintos power ups |para potenciar mis unidades y hacer el combate más emocionante|Funcional|-Crear los diferentes power ups. <Br>-implementarlos en el juego.|
+|Jugador|Poder crear un mazo con las cartas que seleccione antes de la partida|Cambiar entre mazos de forma simple antes de cada juego y mantenerlo novedoso|Funcional|-Dar la opción de creación de masos al jugador|
+|Jugador|poder tener mayor variedad de cartas a lo largo del videojuego|tener más dinamismo dentro de las partidas|No funcional|-Crear la variadad de cartas. <Br>-Implementarlas para poder utilizarlas en el juego.|
+|Jugador|poder tener un juego equilibrado en sus cartas|no perder el interés en la estrategia.|No funcional|-Comprobar la implemectación de las cartas en el juego
+|Jugador|Poder acceder a la información de cada carta durante la partida|Hacer la curva de aprendizaje más fácil|Funcional|-Implementar las funciones necesarias para implementar está información al juego.<BR>-Verificar si la información de la carta se muestra claramente y de manera accesible para el jugador.|
+|Desarrollador|Almacenar los datos del juego dentro de una base de datos|Para guardar la información de mi juego en un lugar seguro en el que pueda hacer CRUD|Funcional|-Crear operaciones CRUD para verificar el almacenamiento de estos datos.|
 
 
