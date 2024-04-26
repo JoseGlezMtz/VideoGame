@@ -69,11 +69,8 @@ We want players to feel ambitious about progressing in the game. We aim for them
     1. Play Game
     2. Build-Deck
     3. Exit
-2. Deck Building
-4. Game
-    1. Inventory
-    2. Assessment / Next Level
-5. End Credits
+2. Build-Deck
+3. Play_game
 
 _(example)_
 
