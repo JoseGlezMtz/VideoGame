@@ -72,13 +72,20 @@ We want players to feel ambitious about progressing in the game. We aim for them
 2. Build-Deck
 3. Play_game
 
-_(example)_
+**Temporary Title Screen**
+
+![Title Screen](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/TitlePage.png)
+
+
+**Example of Playing Screen**
+![In-Game Scene](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/ejemploPantalla.png)
 
 ### **Controls**
 
 The player will interact with all the UI with the mouse and the click
 
 ### **Mechanics**
+![Mechanics Image](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/mechanics.png)
 
 #### Before the game:
 Before starting the game, the player have the option to configurate their deck of 5 characters, giving the option of creat a team based in the best strategy that the player considers, they have the options to choose 2 starting cards and 3 cards that they'll keep in their hand.
@@ -192,49 +199,35 @@ _(example)_
 
 ## _Graphics_
 
----
+**Card Template:**
+
+![Wendy Card Design](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/wendy.png)
+
+**Initial Character Models**
+![Early character models](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/initialCharacterModels.png)
+
 
 ### **Style Attributes**
+**Color Palette:**
+![Color Palette](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/colorpalette_forestAdventure.png)
 
-What kinds of colors will you be using? Do you have a limited palette to work with? A post-processed HSV map/image? Consistency is key for immersion.
-
-What kind of graphic style are you going for? Cartoony? Pixel-y? Cute? How, specifically? Solid, thick outlines with flat hues? Non-black outlines with limited tints/shades? Emphasize smooth curvatures over sharp angles? Describe a set of general rules depicting your style here.
-
-Well-designed feedback, both good (e.g. leveling up) and bad (e.g. being hit), are great for teaching the player how to play through trial and error, instead of scripting a lengthy tutorial. What kind of visual feedback are you going to use to let the player know they&#39;re interacting with something? That they \*can\* interact with something?
+**Graphic Style:** The style that we decided to use is a 2d cartoony inspired by the animation of the Disney series Gravity Falls which is a simple style with minimal, flat shadows and a black outline for the key elements in the scene. 
 
 ### **Graphics Needed**
 
-1. Characters
-    1. Human-like
-        1. Goblin (idle, walking, throwing)
-        2. Guard (idle, walking, stabbing)
-        3. Prisoner (walking, running)
-    2. Other
-        1. Wolf (idle, walking, running)
-        2. Giant Rat (idle, scurrying)
-2. Blocks
-    1. Dirt
-    2. Dirt/Grass
-    3. Stone Block
-    4. Stone Bricks
-    5. Tiled Floor
-    6. Weathered Stone Block
-    7. Weathered Stone Bricks
-3. Ambient
-    1. Tall Grass
-    2. Rodent (idle, scurrying)
-    3. Torch
-    4. Armored Suit
-    5. Chains (matching Weathered Stone Bricks)
-    6. Blood stains (matching Weathered Stone Bricks)
-4. Other
-    1. Chest
-    2. Door (matching Stone Bricks)
-    3. Gate
-    4. Button (matching Weathered Stone Bricks)
-
-_(example)_
-
+1. Cards
+    1. Characters
+    2. Power Ups
+2. Backgrounds
+    1. Main Page
+    2. In-Game
+    3. Deck Building
+3. UI
+    1. Buttons
+    2. Energy Bar
+    3. Win/Loss sign
+    4. Character statistics (health, speed, resistance)
+4. Animations
 
 ## _Sounds/Music_
 
