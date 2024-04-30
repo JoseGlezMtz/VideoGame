@@ -9,7 +9,9 @@ public class CardManager : MonoBehaviour{
 
     public List<GameObject> Cartas_mano=new List<GameObject>();
     public List<GameObject> Cartas_jugando=new List<GameObject>();
-    public bool Change_Option;
+    public bool Change_Option=false;
+    public GameObject obj1=null;
+    public GameObject obj2=null;
 
     
 
@@ -79,22 +81,20 @@ public class CardManager : MonoBehaviour{
     }
 
     public void registerCard(GameObject objeto_carta){
-        public GameObject obj1=null;
-        public GameObject obj2=null;
-
-        if(Change_Option){
+        if (Change_Option==true){
             if (obj2==null){
-                obj2=objeto_carta;
+                obj2 = objeto_carta;
                 Change_Cards(obj1,obj2);
             }
+
             else{
                 obj1=objeto_carta;
-
             }
         }
     }
-
     public void Change_State(){
         Change_Option=true;
-    }
-}
+        
+        }
+}   
+
