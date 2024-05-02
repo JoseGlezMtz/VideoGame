@@ -4,7 +4,7 @@
 
 ---
 
-##### **Copyright notice / author information / boring legal stuff nobody likes**
+##### José Antonio González Martínez, Valentina González, Enrique Martínez
 
 ##
 ## _Index_
@@ -46,7 +46,7 @@
 
 ### **Summary**
 
-Forest Adventure" is a DBG that tells the story of the camp "_____", which one day is invaded by creatures from another dimension. Our campers and staff have the responsibility to defend the camp at all costs.
+Forest Adventure" is a DBG that tells the story of the camp "_____", which one day is invaded by creatures from another dimension.... themselves. Our campers and staff have the responsibility to defend the camp at all costs.
 
 ### **Gameplay**
 
@@ -112,9 +112,7 @@ After the player's turn, the enemy will follow a similar flow, and the loop will
 
 ## _Level Design_
 
----
-
-_(Note : These sections can safely be skipped if they&#39;re not relevant, or you&#39;d rather go about it another way. For most games, at least one of them should be useful. But I&#39;ll understand if you don&#39;t want to use them. It&#39;ll only hurt my feelings a little bit.)_
+The levels will be formed by diferent enemies, by each level the dificultie of the enemies will increase, but also the player will recieve diferent cards at the time advance in the levels
 
 ### **Themes**
 
@@ -147,15 +145,11 @@ _(example)_
 
 ### **Game Flow**
 
-1. Player starts in forest
-2. Pond to the left, must move right
-3. To the right is a hill, player jumps to traverse it (&quot;jump&quot; taught)
-4. Player encounters castle - door&#39;s shut and locked
-5. There&#39;s a window within jump height, and a rock on the ground
-6. Player picks up rock and throws at glass (&quot;throw&quot; taught)
-7. … etc.
+1. The player log-in
+2. Create the deck
+3. Select level
+4. Star the level
 
-_(example)_
 
 ## _Development_
 
@@ -169,8 +163,6 @@ _(example)_
     1. Cards Manager
 4.Scene Manager
 5.getCards
-
-_(example)_
 
 
 ## _Graphics_
@@ -211,31 +203,24 @@ _(example)_
 
 ### **Style Attributes**
 
-Again, consistency is key. Define that consistency here. What kind of instruments do you want to use in your music? Any particular tempo, key? Influences, genre? Mood?
-
-Stylistically, what kind of sound effects are you looking for? Do you want to exaggerate actions with lengthy, cartoony sounds (e.g. mario&#39;s jump), or use just enough to let the player know something happened (e.g. mega man&#39;s landing)? Going for realism? You can use the music style as a bit of a reference too.
-
- Remember, auditory feedback should stand out from the music and other sound effects so the player hears it well. Volume, panning, and frequency/pitch are all important aspects to consider in both music _and_ sounds - so plan accordingly!
+We're looking for a soft music for the main menu, something that transmite a forest vibe, that make the player to feel inside the camp, but also in the match we want them to feel the tension of the fight, that the weight of the enemy traspass the sccreen.
 
 ### **Sounds Needed**
 
 1. Effects
-    1. Soft Footsteps (dirt floor)
-    2. Sharper Footsteps (stone floor)
-    3. Soft Landing (low vertical velocity)
-    4. Hard Landing (high vertical velocity)
-    5. Glass Breaking
-    6. Chest Opening
-    7. Door Opening
-2. Feedback
+    1. Hit effect
+    2. Change-card sound
+    3. Select card effect
+2. Feedback (pendiente)
     1. Relieved &quot;Ahhhh!&quot; (health)
     2. Shocked &quot;Ooomph!&quot; (attacked)
     3. Happy chime (extra life)
     4. Sad chime (died)
 
-_(example)_
+
 
 ### **Music Needed**
+(pendiente)
 
 1. Slow-paced, nerve-racking &quot;forest&quot; track
 2. Exciting &quot;castle&quot; track
