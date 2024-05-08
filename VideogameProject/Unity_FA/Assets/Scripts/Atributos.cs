@@ -4,7 +4,19 @@ using UnityEngine;
 
 public class Atributos : MonoBehaviour
 {
+    [SerializeField] private int hp; 
+    [SerializeField] private int attack; 
+
     // Propiedades para los atributos de la carta
-    public int HP { get; set; } // Puntos de vida
-    public int Attack { get; set; } // Ataque
+    public int HP 
+    { 
+        get { return hp; } 
+        set { hp = value; } 
+    }
+
+    public int Attack 
+    { 
+        get { return attack; } 
+        set { attack = value; } 
+    }
 }

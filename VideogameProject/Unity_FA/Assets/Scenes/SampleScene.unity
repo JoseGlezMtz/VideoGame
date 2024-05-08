@@ -358,7 +358,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316479426}
         m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
-        m_MethodName: Atack
+        m_MethodName: Change_State2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -541,9 +541,11 @@ MonoBehaviour:
   - {fileID: 507509}
   - {fileID: 141230203}
   Change_Option: 0
-  Atack_Option: 0
+  Attack_Option: 0
   obj1: {fileID: 0}
   obj2: {fileID: 0}
+  card1: {fileID: 0}
+  card2: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
