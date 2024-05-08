@@ -1,56 +1,114 @@
-/*
-Deck Manager 
-Valentina Gonzalez
-07/05/2024
-
-Funcionalidades
-- obtener la lista de cartas como un serializefield 
-- inicializar las cartas en el panel de Cards
-- Agregar funcionalidad de OnClick para las cartas dentro del panel Cards para que se agreguen al panel de MainCard (utilizar componente image?)
--Agregar funcionalidad de initialize cards??
-
-*/
-
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
-using UnityEditor;
-using System;
 
 public class DeckManager : MonoBehaviour
 {
-    [SerializeField]List<OptionsCards> cards;
+    [SerializeField] List<GameObject> cards;
+    [SerializeField] List<GameObject> deck;
+
     int numCards = 7;
-    int numCardsDeck;
-    
+    int maxDeck = 5;
+
     [SerializeField] GameObject displayedCard;
-
+    [SerializeField] GameObject selectedCard;
     [SerializeField] Transform cardsParent;
+    [SerializeField] Transform deckParent;
     [SerializeField] GameObject cardsPrefab;
+    [SerializeField] GameObject AddBtn;
 
-    // Start is called before the first frame update
     void Start()
     {
-        initializeCards();
+        cards = new List<GameObject>();
+        deck = new List<GameObject>(); 
+        InitializeCards();
     }
 
-void initializeCards(){
-    for(int i = 0; i < numCards; i++){
-        int index = i;
-        GameObject newCard = Instantiate(cardsPrefab, cardsParent);
-        newCard.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>($"CardImages/{index+1}");
-    }
-}
-
-
-    // Update is called once per frame
-    void Update()
+    void InitializeCards()
     {
-        
+        for (int i = 0; i < numCards; i++)
+        {
+            int index = i;
+
+            GameObject newCard = Instantiate(cardsPrefab, cardsParent);
+            newCard.name = $"card{index}";
+            Image imageComponent = newCard.GetComponent<Image>();
+            if (imageComponent == null)
+            {
+                Debug.LogError("Image component not found on newCard.");
+            }
+            else
+            {
+                // Image component found, proceed to set sprite
+                imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{index}");
+            }
+
+            OptionsCards optionsCardsComponent = newCard.GetComponent<OptionsCards>();
+            if (optionsCardsComponent == null)
+            {
+                Debug.LogError("OptionsCards component not found on newCard.");
+            }
+            else
+            {
+                // OptionsCards component found, proceed to initialize it
+                optionsCardsComponent.cardIndex = index;
+                cards.Add(newCard);
+            }
+
+            Button buttonComponent = newCard.GetComponent<Button>();
+            if (buttonComponent == null)
+            {
+                Debug.LogError("Button component not found on newCard.");
+            }
+            else
+            {
+                // Button component found, proceed to add onClick listener
+                buttonComponent.onClick.AddListener(() => DisplayCard(index));
+            }
+        }
     }
 
-    
+    public void DisplayCard(int index)
+    {
+        Button addButton = AddBtn.GetComponent<Button>();
+
+        for (int i = 0; i < cards.Count; i++)
+        {
+            OptionsCards optionsCardsComponent = cards[i].GetComponent<OptionsCards>();
+            if (index == optionsCardsComponent.cardIndex)
+            {
+                selectedCard = cards[i];
+                OptionsCards selectedCardComponent = selectedCard.GetComponent<OptionsCards>();
+                Image displayedCardImage = displayedCard.GetComponent<Image>();
+                displayedCardImage.sprite = Resources.Load<Sprite>($"CardImages/{index}");
+                addButton.onClick.AddListener(() => AddDeck(selectedCard)); // Pass the selected card object
+            }
+        }
+        Debug.Log($"Card Index: {index}");
+    }
+
+    void AddDeck(GameObject cardToAdd)
+    {
+        OptionsCards optionsCardsComponent = cardToAdd.GetComponent<OptionsCards>();
+        Debug.Log($"Adding card with index: {optionsCardsComponent.cardIndex}");
+        if (deck.Count < maxDeck)
+        {
+            if (!deck.Contains(cardToAdd))
+            {
+                deck.Add(cardToAdd);
+                cardToAdd.transform.SetParent(deckParent);
+                cards.Remove(cardToAdd);
+                Debug.Log("Card Added Successfully");
+            }
+            else
+            {
+                Debug.LogError("Card Already in Deck");
+            }
+        }
+        else
+        {
+            Debug.LogError("Deck is Full");
+        }
+    }
 }
