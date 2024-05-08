@@ -17,6 +17,7 @@ public class DeckManager : MonoBehaviour
     [SerializeField] Transform deckParent;
     [SerializeField] GameObject cardsPrefab;
     [SerializeField] GameObject AddBtn;
+    [SerializeField] GameObject RemoveBtn;
 
     void Start()
     {
@@ -36,7 +37,7 @@ public class DeckManager : MonoBehaviour
             Image imageComponent = newCard.GetComponent<Image>();
             if (imageComponent == null)
             {
-                Debug.LogError("Image component not found on newCard.");
+                //Debug.LogError("Image component not found on newCard.");
             }
             else
             {
@@ -47,7 +48,7 @@ public class DeckManager : MonoBehaviour
             OptionsCards optionsCardsComponent = newCard.GetComponent<OptionsCards>();
             if (optionsCardsComponent == null)
             {
-                Debug.LogError("OptionsCards component not found on newCard.");
+                //Debug.LogError("OptionsCards component not found on newCard.");
             }
             else
             {
@@ -59,39 +60,40 @@ public class DeckManager : MonoBehaviour
             Button buttonComponent = newCard.GetComponent<Button>();
             if (buttonComponent == null)
             {
-                Debug.LogError("Button component not found on newCard.");
+                //Debug.LogError("Button component not found on newCard.");
             }
             else
             {
                 // Button component found, proceed to add onClick listener
-                buttonComponent.onClick.AddListener(() => DisplayCard(index));
+                buttonComponent.onClick.AddListener(() => DisplayCard(newCard));
             }
         }
     }
 
-    public void DisplayCard(int index)
+    public void DisplayCard(GameObject card)
     {
-        Button addButton = AddBtn.GetComponent<Button>();
+        OptionsCards cardCardsComponent = card.GetComponent<OptionsCards>();
+        int index = cardCardsComponent.cardIndex;
+        //Debug.Log($"Card Index: {index}");
 
-        for (int i = 0; i < cards.Count; i++)
-        {
-            OptionsCards optionsCardsComponent = cards[i].GetComponent<OptionsCards>();
-            if (index == optionsCardsComponent.cardIndex)
-            {
-                selectedCard = cards[i];
-                OptionsCards selectedCardComponent = selectedCard.GetComponent<OptionsCards>();
-                Image displayedCardImage = displayedCard.GetComponent<Image>();
-                displayedCardImage.sprite = Resources.Load<Sprite>($"CardImages/{index}");
-                addButton.onClick.AddListener(() => AddDeck(selectedCard)); // Pass the selected card object
-            }
-        }
-        Debug.Log($"Card Index: {index}");
+        Button addButton = AddBtn.GetComponent<Button>();
+        Button removeButton = RemoveBtn.GetComponent<Button>();
+
+        OptionsCards cardComponent = card.GetComponent<OptionsCards>();
+        selectedCard = card;
+
+        Image displayedCardImage = displayedCard.GetComponent<Image>();
+        displayedCardImage.sprite = Resources.Load<Sprite>($"CardImages/{index}");
+
+        addButton.onClick.AddListener(() => AddDeck(selectedCard));
+        removeButton.onClick.AddListener(() => RemoveDeck(selectedCard));
+        
     }
 
     void AddDeck(GameObject cardToAdd)
     {
         OptionsCards optionsCardsComponent = cardToAdd.GetComponent<OptionsCards>();
-        Debug.Log($"Adding card with index: {optionsCardsComponent.cardIndex}");
+        //Debug.Log($"Adding card with index: {optionsCardsComponent.cardIndex}");
         if (deck.Count < maxDeck)
         {
             if (!deck.Contains(cardToAdd))
@@ -99,16 +101,44 @@ public class DeckManager : MonoBehaviour
                 deck.Add(cardToAdd);
                 cardToAdd.transform.SetParent(deckParent);
                 cards.Remove(cardToAdd);
-                Debug.Log("Card Added Successfully");
+
+                Button cardButton = cardToAdd.GetComponent<Button>();
+                if (cardButton == null)
+                    {
+                        //Debug.LogError("Button component not found on newCard.");
+                    }
+                    else
+                    {
+                        //Debug.Log("Button found, adding functionality...");
+                        // Button component found, proceed to add onClick listener
+                        cardButton.onClick.AddListener(() => DisplayCard(cardToAdd));
+
+                    }
+
+                //Debug.Log("Card Added Successfully");
             }
             else
             {
-                Debug.LogError("Card Already in Deck");
+                //Debug.LogError("Card Already in Deck");
             }
         }
         else
         {
-            Debug.LogError("Deck is Full");
+            //Debug.LogError("Deck is Full");
+        }
+    }
+
+    void RemoveDeck(GameObject cardToRemove){
+        OptionsCards optionsCardsComponent = cardToRemove.GetComponent<OptionsCards>();
+        //Debug.Log($"Removing card with index: {optionsCardsComponent.cardIndex}");
+        if(deck.Contains(cardToRemove)){
+            cards.Add(cardToRemove);
+            cardToRemove.transform.SetParent(cardsParent);
+            deck.Remove(cardToRemove);
+
+        }
+        else{
+            //Debug.LogError($"The card with index: {optionsCardsComponent.cardIndex} is not in the deck");
         }
     }
 }

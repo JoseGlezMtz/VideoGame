@@ -1051,6 +1051,7 @@ MonoBehaviour:
   deckParent: {fileID: 1676740141}
   cardsPrefab: {fileID: 1407755583945505491, guid: df7db83b0ec8b584091bf8e75388da44, type: 3}
   AddBtn: {fileID: 559233175}
+  RemoveBtn: {fileID: 1568316629}
 --- !u!4 &1131934867
 Transform:
   m_ObjectHideFlags: 0
