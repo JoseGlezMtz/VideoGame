@@ -50,24 +50,48 @@ CREATE TABLE IF NOT EXISTS Game (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
 CREATE TABLE IF NOT EXISTS Deck (
   id INT NOT NULL AUTO_INCREMENT,
+  player_id INT NOT NULL,
   card1 INT NOT NULL,
+  card2 INT NOT NULL,
   card3 INT NOT NULL,
   card4 INT NOT NULL,
   card5 INT NOT NULL,
-  powerup1 INT NOT NULL,
-  powerup2 INT NOT NULL,
-  powerup3 INT NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT fk_deck_card1 FOREIGN KEY (card1) REFERENCES Character_card(id),
-  CONSTRAINT fk_deck_card3 FOREIGN KEY (card3) REFERENCES Character_card(id),
-  CONSTRAINT fk_deck_card4 FOREIGN KEY (card4) REFERENCES Character_card(id),
-  CONSTRAINT fk_deck_card5 FOREIGN KEY (card5) REFERENCES Character_card(id),
-  CONSTRAINT fk_deck_powerup1 FOREIGN KEY (powerup1) REFERENCES Powerup_card(id),
-  CONSTRAINT fk_deck_powerup2 FOREIGN KEY (powerup2) REFERENCES Powerup_card(id),
-  CONSTRAINT fk_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
+  CONSTRAINT fk_normal_deck_player FOREIGN KEY (player_id) REFERENCES Player(id),
+  CONSTRAINT fk_normal_deck_card1 FOREIGN KEY (card1) REFERENCES Character_card(id),
+  CONSTRAINT fk_normal_deck_card2 FOREIGN KEY (card2) REFERENCES Character_card(id),
+  CONSTRAINT fk_normal_deck_card3 FOREIGN KEY (card3) REFERENCES Character_card(id),
+  CONSTRAINT fk_normal_deck_card4 FOREIGN KEY (card4) REFERENCES Character_card(id),
+  CONSTRAINT fk_normal_deck_card5 FOREIGN KEY (card5) REFERENCES Character_card(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE IF NOT EXISTS Game_Deck (
+  id INT NOT NULL AUTO_INCREMENT,
+  player_id INT NOT NULL,
+  card1 INT NOT NULL,
+  card2 INT NOT NULL,
+  card3 INT NOT NULL,
+  card4 INT NOT NULL,
+  card5 INT NOT NULL,
+  powerup1 INT,
+  powerup2 INT,
+  powerup3 INT,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_in_game_deck_player FOREIGN KEY (player_id) REFERENCES Player(id),
+  CONSTRAINT fk_in_game_deck_card1 FOREIGN KEY (card1) REFERENCES Character_card(id),
+  CONSTRAINT fk_in_game_deck_card2 FOREIGN KEY (card2) REFERENCES Character_card(id),
+  CONSTRAINT fk_in_game_deck_card3 FOREIGN KEY (card3) REFERENCES Character_card(id),
+  CONSTRAINT fk_in_game_deck_card4 FOREIGN KEY (card4) REFERENCES Character_card(id),
+  CONSTRAINT fk_in_game_deck_card5 FOREIGN KEY (card5) REFERENCES Character_card(id),
+  CONSTRAINT fk_in_game_deck_powerup1 FOREIGN KEY (powerup1) REFERENCES Powerup_card(id),
+  CONSTRAINT fk_in_game_deck_powerup2 FOREIGN KEY (powerup2) REFERENCES Powerup_card(id),
+  CONSTRAINT fk_in_game_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 INSERT INTO `Character_card` (`id`, `name`, `description`, `ability`, `resistance`, `health`, `speed`) VALUES
