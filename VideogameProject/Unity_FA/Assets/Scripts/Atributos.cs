@@ -6,8 +6,8 @@ public class Atributos : MonoBehaviour
 {
     [SerializeField] private int hp; 
     [SerializeField] private int attack; 
+    [SerializeField] private int curation;
 
-    // Propiedades para los atributos de la carta
     public int HP 
     { 
         get { return hp; } 
@@ -18,5 +18,16 @@ public class Atributos : MonoBehaviour
     { 
         get { return attack; } 
         set { attack = value; } 
+    }
+
+    public int Curation 
+    { 
+        get { return curation; } 
+        set { curation = value; } 
+    }
+
+    public void Heal(int amount)
+    {
+        HP += amount;
     }
 }
