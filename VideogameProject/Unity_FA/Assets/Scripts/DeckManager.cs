@@ -153,7 +153,6 @@ public class DeckManager : MonoBehaviour
 
     //Method to remove card
     void RemoveDeck(GameObject cardToRemove){
-        OptionsCards optionsCardsComponent = cardToRemove.GetComponent<OptionsCards>();
         //Debug.Log($"Removing card with index: {optionsCardsComponent.cardIndex}");
         
         //Check if the card is in the deck, if so, remove
