@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -249, y: -24}
+  m_AnchoredPosition: {x: -249, y: -23.999939}
   m_SizeDelta: {x: -720, y: -329.83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &507511
@@ -358,7 +358,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316479426}
         m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
-        m_MethodName: Change_State2
+        m_MethodName: Attack_button
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -955,7 +955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 250, y: -24}
+  m_AnchoredPosition: {x: 250, y: -23.999939}
   m_SizeDelta: {x: -720, y: -329.83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1391906388
