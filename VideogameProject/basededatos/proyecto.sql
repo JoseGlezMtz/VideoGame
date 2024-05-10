@@ -10,28 +10,6 @@ CREATE TABLE IF NOT EXISTS Player (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
-
-CREATE TABLE IF NOT EXISTS Powerup_card (
-  id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(45) NOT NULL,
-  image VARCHAR(9),
-  description TEXT,
-  ability INT NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE IF NOT EXISTS Character_card (
-  id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(45) NOT NULL,
-  description TEXT,
-  ability VARCHAR(45),
-  resistance INT NOT NULL,
-  health INT NOT NULL,
-  speed INT NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 CREATE TABLE IF NOT EXISTS Ability (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
@@ -40,7 +18,34 @@ CREATE TABLE IF NOT EXISTS Ability (
   cards_affected VARCHAR(45),
   effect VARCHAR(45),
   PRIMARY KEY (id)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+CREATE TABLE IF NOT EXISTS Character_card (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  description TEXT,
+  ability INT NOT NULL,
+  resistance INT NOT NULL,
+  health INT NOT NULL,
+  speed INT NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_character_ability FOREIGN KEY (ability) REFERENCES Ability(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE IF NOT EXISTS Powerup_card (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  image VARCHAR(9),
+  description TEXT,
+  ability INT NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_powerup_ability FOREIGN KEY (ability) REFERENCES Ability(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE IF NOT EXISTS Game (
   id INT NOT NULL AUTO_INCREMENT,
@@ -75,6 +80,43 @@ CREATE TABLE IF NOT EXISTS Deck (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+
+INSERT INTO `Ability` (`id`, `name`, `amount`, `cost`, `cards_affected`, `effect`) VALUES
+(1, 'Curacion con Queso', 0, 20, 'aliado', 'curacion'),
+(2, 'Rana Venenosa', 0, 12, 'enemigo seleccionado', 'dano'),
+(3, 'Destruccion DIY', 0, 10, 'enemigo seleccionado', 'dano'),
+(4, 'Golpe de Lenador', 0, 25, 'ambos enemigos', 'dano'),
+(5, 'Pep-talk', 0, 20, 'aliado', 'mejora_dano'),
+(6, 'RCP', 0, 30, 'carta de tu mazo', 'curacion'),
+(7, 'Juicio Celestial', 0, 15, 'enemigo seleccionado', 'dano'),
+(8, 'Bombón', 0, 0, 'mismo', 'curacion'),
+(9, 'Galleta', 0, 0, 'mismo', 'curacion'),
+(10, 'Chocolate', 0, 0, 'mismo', 'curacion'),
+(11, 'Tienda de Acampar', 0, 0, 'mismo', 'escudo'),
+(12, 'Botiquín de primeros auxilios', 0, 0, 'mismo', 'escudo'),
+(13, 'Repelente de mosquitos', 0, 0, 'mismo', 'escudo'),
+(14, 'Fogata', 0, 0, 'mismo', 'escudo'),
+(15, 'Enciclopedia', 0, 0, 'Mike', 'mejora_dano'), 
+(17, 'Barra de Granola', 0, 0, 'mismo', 'curacion'),
+(18, 'linterna', 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
+(19, 'Curita', 0, 0, 'mismo', 'curacion'),
+(20, 'Bebida energética', 0, 0, 'mismo', 'restaura_energia'),
+(22, 'Camisa de Franela', 0, 0, 'mismo', 'mejora_resistencia'),
+(24, 'Espada de madera', 0, 0, 'Brick', 'mejora_dano'),
+(25, 'Arco', 0, 0, 'Brick', 'mejora_dano'),
+(26, 'Insignia', 0, 0, 'mismo', 'restaura_energia'),
+(27, 'Afilador', 0, 0, 'Eduardo', 'mejora_dano'),
+(28, 'Mancuerna', 0, 0, 'Entrenador', 'mejora_dano'),
+(29, 'Piedra extraña', 0, 0, 'activos', 'mejora_dano'),
+(30, 'Sarten', 0, 0, 'Martha', 'mejora_curacion'),
+(32, 'Dulce', 0, 0, 'mismo', 'mejora_velocidad'),
+(33, 'Café de olla', 0, 0, 'mismo', 'restaura_energia'),
+(34, 'Flechas', 0, 0, 'Brick', 'mejora_dano'),
+(36, 'Red de Pescar', 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
+(37, 'Espatula', 0, 0, 'Martha', 'mejora_curacion'),
+(38, 'Jetski', 0, 0, 'Jack', 'bloquea_dano'),
+(39, 'Flotador', 0, 0, 'mismo', 'bloquea_dano'),
+(40, 'Telescopio', 0, 0, 'Mike', 'mejora_dano');
 
 INSERT INTO `Character_card` (`id`, `name`, `description`, `ability`, `resistance`, `health`, `speed`) VALUES
 (1, 'Martha', 'Chef', 1, 12, 70, 4),
@@ -117,41 +159,4 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (40, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 40);
 
 
-INSERT INTO `Ability` (`id`, `name`, `amount`, `cost`, `cards_affected`, `effect`) VALUES
-(1, 'Curacion con Queso', 0, 20, 'aliado', 'curacion'),
-(2, 'Rana Venenosa', 0, 12, 'enemigo seleccionado', 'dano'),
-(3, 'Destruccion DIY', 0, 10, 'enemigo seleccionado', 'dano'),
-(4, 'Golpe de Lenador', 0, 25, 'ambos enemigos', 'dano'),
-(5, 'Pep-talk', 0, 20, 'aliado', 'mejora_dano'),
-(6, 'RCP', 0, 30, 'carta de tu mazo', 'curacion'),
-(7, 'Juicio Celestial', 0, 15, 'enemigo seleccionado', 'dano'),
-(8, 'Bombón', 0, 0, 'mismo', 'curacion'),
-(9, 'Galleta', 0, 0, 'mismo', 'curacion'),
-(10, 'Chocolate', 0, 0, 'mismo', 'curacion'),
-(11, 'Tienda de Acampar', 0, 0, 'mismo', 'escudo'),
-(12, 'Botiquín de primeros auxilios', 0, 0, 'mismo', 'escudo'),
-(13, 'Repelente de mosquitos', 0, 0, 'mismo', 'escudo'),
-(14, 'Fogata', 0, 0, 'mismo', 'escudo'),
-(15, 'Enciclopedia', 0, 0, 'Mike', 'mejora_dano'), 
-(17, 'Barra de Granola', 0, 0, 'mismo', 'curacion'),
-(18, 'linterna', 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(19, 'Curita', 0, 0, 'mismo', 'curacion'),
-(20, 'Bebida energética', 0, 0, 'mismo', 'restaura_energia'),
-(22, 'Camisa de Franela', 0, 0, 'mismo', 'mejora_resistencia'),
-(24, 'Espada de madera', 0, 0, 'Brick', 'mejora_dano'),
-(25, 'Arco', 0, 0, 'Brick', 'mejora_dano'),
-(26, 'Insignia', 0, 0, 'mismo', 'restaura_energia'),
-(27, 'Afilador', 0, 0, 'Eduardo', 'mejora_dano'),
-(28, 'Mancuerna', 0, 0, 'Entrenador', 'mejora_dano'),
-(29, 'Piedra extraña', 0, 0, 'activos', 'mejora_dano'),
-(30, 'Sarten', 0, 0, 'Martha', 'mejora_curacion'),
-(32, 'Dulce', 0, 0, 'mismo', 'mejora_velocidad'),
-(33, 'Café de olla', 0, 0, 'mismo', 'restaura_energia'),
-(34, 'Flechas', 0, 0, 'Brick', 'mejora_dano'),
-(36, 'Red de Pescar', 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(37, 'Espatula', 0, 0, 'Martha', 'mejora_curacion'),
-(38, 'Jetski', 0, 0, 'Jack', 'bloquea_dano'),
-(39, 'Flotador', 0, 0, 'mismo', 'bloquea_dano'),
-(40, 'Telescopio', 0, 0, 'Mike', 'mejora_dano');
-
-
+select* from powerup_card; 
