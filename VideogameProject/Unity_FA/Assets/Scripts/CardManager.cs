@@ -6,9 +6,14 @@ using System.Collections.Generic;
 public class CardManager : MonoBehaviour
 {
     [SerializeField] GameObject CardPrefab;
+    [SerializeField] GameObject PuButtonPrefab;
+    [SerializeField] GameObject PUPrefab;
     [SerializeField] Transform parentPrefab;
+    [SerializeField] Transform PUParentPrefab;
     [SerializeField] public List<GameObject> Cartas_mano = new List<GameObject>();
     [SerializeField] public List<GameObject> Panels = new List<GameObject>();
+    [SerializeField] public List<GameObject> PUs = new List<GameObject>();
+    public bool PlayerTurn = false;
     public bool Change_Option = false;
     public bool Attack_Option = false;
     public GameObject obj1 = null;
@@ -32,7 +37,16 @@ public class CardManager : MonoBehaviour
         Button button = Card.GetComponent<Button>();
         button.onClick.AddListener(() => registerCard(Card));
         
-        Card.GetComponent<Image>().color = Color.HSVToRGB((float)i / Panels.Count, 1, 1);
+        Image imageComponent = Card.GetComponent<Image>();
+            if (imageComponent == null)
+            {
+                //Debug.LogError("Image component not found on newCard.");
+            }
+            else
+            {
+                // Image component found, proceed to set sprite
+                imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{i}");
+            }
         //We set the attributes of the cards
         Atributos atributosCarta = Card.GetComponent<Atributos>();
         if (Lista.Count == 6 || Lista.Count==7)
@@ -46,9 +60,21 @@ public class CardManager : MonoBehaviour
             atributosCarta.Attack = 50;
         }
     }
+
+    //template of all the power ups in the board
+    public void PU_Base(List<GameObject> Lista)
+    {
+        GameObject PU = Instantiate(PUPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
+        PU.AddComponent<Atributos>();
+        PU.name = "PU" + Lista.Count;
+        Lista.Add(PU);
+        Debug.Log("Creating: " + PU.name);
+        Button button = PU.GetComponent<Button>();
+        
+    }
     // creat cards in the board
 
-    IEnumerator Creat_card()
+    IEnumerator Creat_Board()
     {
         int i = 0;
         while (i < Panels.Count)
@@ -57,12 +83,17 @@ public class CardManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             i++;
         }
+        //We create the power up button
+        PU_button();
+        //We set the player turn to true
+        PlayerTurn = true;
     }
     //init the game
 
     void InitGame()
     {
-        StartCoroutine(Creat_card());
+        StartCoroutine(Creat_Board());
+        
     }
     //This function changes the position of two cards
 
@@ -75,6 +106,13 @@ public class CardManager : MonoBehaviour
 
     public void registerCard(GameObject objeto_carta)
     {
+        //First we check if the player turn is active
+        if (!PlayerTurn)
+        {
+            Debug.Log("Not your turn");
+            return;
+        }
+        else{
         //First we check if the cahnge option is active
 
         if (Change_Option)
@@ -108,6 +146,8 @@ public class CardManager : MonoBehaviour
                     obj1 = null;
                     obj2 = null;
                     Change_Option = false;
+                    //We end the player turn
+                    PlayerTurn = false;
                 }
             }
         }
@@ -133,12 +173,15 @@ public class CardManager : MonoBehaviour
                 card1 = null;
                 card2 = null;
                 Attack_Option = false;
+                //we end the player turn
+                PlayerTurn = false;
             }
             }
         else
         {
           Debug.Log("Invalid option");
         }
+    }
     }
     //This function is used to change the state of the change option(active in the change button)
 
@@ -196,4 +239,22 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
     {
         Attack_Option = true;
     }
+
+// Function to create the power up button
+
+public void PU_button()
+    {
+        GameObject PU = Instantiate(PuButtonPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
+        Button button = PU.GetComponent<Button>();
+        //We add that we the button is clicked we create a power up
+        button.onClick.AddListener(() => PU_Base(PUs));
+        
+    }
+
+
+public void EndTurn()
+{
+    PlayerTurn = false;
+}
+
 }
