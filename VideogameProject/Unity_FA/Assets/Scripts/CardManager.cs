@@ -13,6 +13,8 @@ public class CardManager : MonoBehaviour
     [SerializeField] public List<GameObject> Cartas_mano = new List<GameObject>();
     [SerializeField] public List<GameObject> Panels = new List<GameObject>();
     [SerializeField] public List<GameObject> PUs = new List<GameObject>();
+    private bool changeButtonPressed = false;
+    private bool attackButtonPressed = false;
     public bool PlayerTurn = false;
     public bool Change_Option = false;
     public bool Attack_Option = false;
@@ -20,9 +22,14 @@ public class CardManager : MonoBehaviour
     public GameObject obj2 = null;
     public GameObject card1 = null;
     public GameObject card2 = null;
+    public GameObject cartAttack;
+
+    
+    public int counter=0;
 
     void Start()
     {
+        
         InitGame();
     }
     //template of al  the cards in the board 
@@ -107,12 +114,8 @@ public class CardManager : MonoBehaviour
     public void registerCard(GameObject objeto_carta)
     {
         //First we check if the player turn is active
-        if (!PlayerTurn)
-        {
-            Debug.Log("Not your turn");
-            return;
-        }
-        else{
+       
+        
         //First we check if the cahnge option is active
 
         if (Change_Option)
@@ -132,12 +135,23 @@ public class CardManager : MonoBehaviour
                     Debug.Log("Changing with " + obj1.name);
                 }
              //If the first card is already stablished we stablished the seconf card and change the cards
-
+                
                 else
                 {
+                    
                     obj2 = objeto_carta;
+                    //We check if the cards are the same so you can't change the card with itself
                     Debug.Log("Changing with " + obj2.name);
-                    Change_Cards(obj1, obj2);
+                    if (obj1 == obj2)
+                    {
+                        Debug.Log("You can't change the card with itself");
+                        obj1 = null;
+                        obj2 = null;
+                        return;
+                    //We check if the cards are in the hand an in attack position so you can change them and your turn end
+                    }else if(Cartas_mano.IndexOf(obj1)==0 && Cartas_mano.IndexOf(obj2)==3 || Cartas_mano.IndexOf(obj1)==0 && Cartas_mano.IndexOf(obj2)==4 || Cartas_mano.IndexOf(obj1)==1 && Cartas_mano.IndexOf(obj2)==3 || Cartas_mano.IndexOf(obj1)==1 && Cartas_mano.IndexOf(obj2)==4 || Cartas_mano.IndexOf(obj1)==2 && Cartas_mano.IndexOf(obj2)==3 || Cartas_mano.IndexOf(obj1)==2 && Cartas_mano.IndexOf(obj2)==4 || Cartas_mano.IndexOf(obj1)==3 && Cartas_mano.IndexOf(obj2)==0 || Cartas_mano.IndexOf(obj1)==3 && Cartas_mano.IndexOf(obj2)==1 || Cartas_mano.IndexOf(obj1)==3 && Cartas_mano.IndexOf(obj2)==2 || Cartas_mano.IndexOf(obj1)==4 && Cartas_mano.IndexOf(obj2)==0 || Cartas_mano.IndexOf(obj1)==4 && Cartas_mano.IndexOf(obj2)==1 || Cartas_mano.IndexOf(obj1)==4 && Cartas_mano.IndexOf(obj2)==2)
+                    {
+                        Change_Cards(obj1, obj2);
                     int index1 = Cartas_mano.IndexOf(obj1);
                     int index2 = Cartas_mano.IndexOf(obj2);
                     // Intercambia las posiciones de los objetos en la lista
@@ -148,6 +162,21 @@ public class CardManager : MonoBehaviour
                     Change_Option = false;
                     //We end the player turn
                     PlayerTurn = false;
+
+                    }else{
+                        Change_Cards(obj1, obj2);
+                    int index1 = Cartas_mano.IndexOf(obj1);
+                    int index2 = Cartas_mano.IndexOf(obj2);
+                    // Intercambia las posiciones de los objetos en la lista
+                    Cartas_mano[index1] = obj2;
+                    Cartas_mano[index2] = obj1;
+                    obj1 = null;
+                    obj2 = null;
+                    Change_Option = false;
+
+                    }
+                    
+                    
                 }
             }
         }
@@ -155,6 +184,12 @@ public class CardManager : MonoBehaviour
 
         else if (Attack_Option)
         {
+            if (cartAttack == objeto_carta )
+        {
+            Debug.Log("You have already used this card for attack");
+            return;
+        }
+
         // we check if the card is in the player hand
             Debug.Log("Attack option");
             if (card1 == null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4))
@@ -174,20 +209,57 @@ public class CardManager : MonoBehaviour
                 card2 = null;
                 Attack_Option = false;
                 //we end the player turn
+                //PlayerTurn = false;
+                counter++;
+                if (counter == 2)
+            {
                 PlayerTurn = false;
+                counter = 0;
             }
+            
+                
             }
+            
+        }
         else
         {
           Debug.Log("Invalid option");
         }
-    }
+    
     }
     //This function is used to change the state of the change option(active in the change button)
 
     public void Change_State()
     {
-        Change_Option = true;
+        if(Attack_Option == true)
+        {
+            Debug.Log("You have Attack option active, you can't change now");
+            
+            }
+        else if(PlayerTurn == false)
+        {
+            Debug.Log("It's not your turn");
+            return;
+        
+        }else if(counter != 0)
+        {
+            Debug.Log("You have already attacked");
+            return;
+        }else{
+        if (!changeButtonPressed)
+        {
+            Change_Option = true;
+            changeButtonPressed = true;
+        }
+        else
+        {
+            Change_Option = false;
+            changeButtonPressed = false;
+        }
+            
+
+        
+        }
     }
 
 
@@ -231,14 +303,36 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
     {
         Debug.Log("Invalid option");
     }
+     cartAttack = objeto_carta1;
 }
 
 
 // Function to change the state of the attack option (active in the attack button)
- public void Attack_button()
+ public void Attack_button(){
+    if(Change_Option == true)
     {
-        Attack_Option = true;
+        Debug.Log("You have Change option active, you can't attack now");
+        
+        }
+   else if (PlayerTurn == false)
+        
+        {
+            Debug.Log("It's not your turn");
+            return;}
+
+        else{
+        if (!attackButtonPressed)
+        {
+            Attack_Option = true;
+            attackButtonPressed = true;
+        }
+        else
+        {
+            Attack_Option = false;
+            attackButtonPressed = false;
+        }
     }
+ }
 
 // Function to create the power up button
 
@@ -254,7 +348,7 @@ public void PU_button()
 
 public void EndTurn()
 {
-    PlayerTurn = false;
+    PlayerTurn = false;
 }
 
 }

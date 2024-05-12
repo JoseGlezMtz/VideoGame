@@ -626,6 +626,8 @@ MonoBehaviour:
   obj2: {fileID: 0}
   card1: {fileID: 0}
   card2: {fileID: 0}
+  cartAttack: {fileID: 0}
+  counter: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
