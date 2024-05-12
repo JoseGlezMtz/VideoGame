@@ -34,7 +34,7 @@ app.get("/api/cards", async (request, response) => {
 
     connection = await connectToDB();
 
-    const [results, fields] = await connection.execute("select * from card");
+    const [results, fields] = await connection.execute("select * from ability;");
 
     console.log(`${results.length} rows returned`);
     response.status(200).json(results);
