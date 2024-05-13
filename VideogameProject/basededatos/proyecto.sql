@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS cards_db /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE cards_db;
+CREATE DATABASE IF NOT EXISTS  FA_DataBase /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE  FA_DataBase;
 
 CREATE TABLE IF NOT EXISTS Player (
   id INT NOT NULL AUTO_INCREMENT,
@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS Player (
 
 CREATE TABLE IF NOT EXISTS Ability (
   id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(45) NOT NULL,
   amount INT NOT NULL,
   cost INT NOT NULL,
   cards_affected VARCHAR(45),
@@ -26,15 +25,16 @@ CREATE TABLE IF NOT EXISTS Ability (
 CREATE TABLE IF NOT EXISTS Character_card (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
+  nameAbility VARCHAR(45) NOT NULL,
   description TEXT,
   ability INT NOT NULL,
   resistance INT NOT NULL,
   health INT NOT NULL,
   speed INT NOT NULL,
+  
   PRIMARY KEY (id),
   CONSTRAINT fk_character_ability FOREIGN KEY (ability) REFERENCES Ability(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 
 CREATE TABLE IF NOT EXISTS Powerup_card (
   id INT NOT NULL AUTO_INCREMENT,
@@ -44,7 +44,10 @@ CREATE TABLE IF NOT EXISTS Powerup_card (
   ability INT NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT fk_powerup_ability FOREIGN KEY (ability) REFERENCES Ability(id)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 
 
 CREATE TABLE IF NOT EXISTS Game (
@@ -68,64 +71,64 @@ CREATE TABLE IF NOT EXISTS Deck (
   powerup2 INT  NOT NULL DEFAULT 0,
   powerup3 INT  NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
-  CONSTRAINT fk_in_game_deck_player FOREIGN KEY (player_id) REFERENCES Player(id),
-  CONSTRAINT fk_in_game_deck_card1 FOREIGN KEY (card1) REFERENCES Character_card(id),
-  CONSTRAINT fk_in_game_deck_card2 FOREIGN KEY (card2) REFERENCES Character_card(id),
-  CONSTRAINT fk_in_game_deck_card3 FOREIGN KEY (card3) REFERENCES Character_card(id),
-  CONSTRAINT fk_in_game_deck_card4 FOREIGN KEY (card4) REFERENCES Character_card(id),
-  CONSTRAINT fk_in_game_deck_card5 FOREIGN KEY (card5) REFERENCES Character_card(id),
-  CONSTRAINT fk_in_game_deck_powerup1 FOREIGN KEY (powerup1) REFERENCES Powerup_card(id),
-  CONSTRAINT fk_in_game_deck_powerup2 FOREIGN KEY (powerup2) REFERENCES Powerup_card(id),
-  CONSTRAINT fk_in_game_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
+  CONSTRAINT fk_deck_player FOREIGN KEY (player_id) REFERENCES Player(id),
+  CONSTRAINT fk_deck_card1 FOREIGN KEY (card1) REFERENCES Character_card(id),
+  CONSTRAINT fk_deck_card2 FOREIGN KEY (card2) REFERENCES Character_card(id),
+  CONSTRAINT fk_deck_card3 FOREIGN KEY (card3) REFERENCES Character_card(id),
+  CONSTRAINT fk_deck_card4 FOREIGN KEY (card4) REFERENCES Character_card(id),
+  CONSTRAINT fk_deck_card5 FOREIGN KEY (card5) REFERENCES Character_card(id),
+  CONSTRAINT fk_deck_powerup1 FOREIGN KEY (powerup1) REFERENCES Powerup_card(id),
+  CONSTRAINT fk_deck_powerup2 FOREIGN KEY (powerup2) REFERENCES Powerup_card(id),
+  CONSTRAINT fk_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
-INSERT INTO `Ability` (`id`, `name`, `amount`, `cost`, `cards_affected`, `effect`) VALUES
-(1, 'Curacion con Queso', 0, 20, 'aliado', 'curacion'),
-(2, 'Rana Venenosa', 0, 12, 'enemigo seleccionado', 'dano'),
-(3, 'Destruccion DIY', 0, 10, 'enemigo seleccionado', 'dano'),
-(4, 'Golpe de Lenador', 0, 25, 'ambos enemigos', 'dano'),
-(5, 'Pep-talk', 0, 20, 'aliado', 'mejora_dano'),
-(6, 'RCP', 0, 30, 'carta de tu mazo', 'curacion'),
-(7, 'Juicio Celestial', 0, 15, 'enemigo seleccionado', 'dano'),
-(8, 'Bombón', 0, 0, 'mismo', 'curacion'),
-(9, 'Galleta', 0, 0, 'mismo', 'curacion'),
-(10, 'Chocolate', 0, 0, 'mismo', 'curacion'),
-(11, 'Tienda de Acampar', 0, 0, 'mismo', 'escudo'),
-(12, 'Botiquín de primeros auxilios', 0, 0, 'mismo', 'escudo'),
-(13, 'Repelente de mosquitos', 0, 0, 'mismo', 'escudo'),
-(14, 'Fogata', 0, 0, 'mismo', 'escudo'),
-(15, 'Enciclopedia', 0, 0, 'Mike', 'mejora_dano'), 
-(17, 'Barra de Granola', 0, 0, 'mismo', 'curacion'),
-(18, 'linterna', 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(19, 'Curita', 0, 0, 'mismo', 'curacion'),
-(20, 'Bebida energética', 0, 0, 'mismo', 'restaura_energia'),
-(22, 'Camisa de Franela', 0, 0, 'mismo', 'mejora_resistencia'),
-(24, 'Espada de madera', 0, 0, 'Brick', 'mejora_dano'),
-(25, 'Arco', 0, 0, 'Brick', 'mejora_dano'),
-(26, 'Insignia', 0, 0, 'mismo', 'restaura_energia'),
-(27, 'Afilador', 0, 0, 'Eduardo', 'mejora_dano'),
-(28, 'Mancuerna', 0, 0, 'Entrenador', 'mejora_dano'),
-(29, 'Piedra extraña', 0, 0, 'activos', 'mejora_dano'),
-(30, 'Sarten', 0, 0, 'Martha', 'mejora_curacion'),
-(32, 'Dulce', 0, 0, 'mismo', 'mejora_velocidad'),
-(33, 'Café de olla', 0, 0, 'mismo', 'restaura_energia'),
-(34, 'Flechas', 0, 0, 'Brick', 'mejora_dano'),
-(36, 'Red de Pescar', 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(37, 'Espatula', 0, 0, 'Martha', 'mejora_curacion'),
-(38, 'Jetski', 0, 0, 'Jack', 'bloquea_dano'),
-(39, 'Flotador', 0, 0, 'mismo', 'bloquea_dano'),
-(40, 'Telescopio', 0, 0, 'Mike', 'mejora_dano');
+INSERT INTO `Ability` (`id`,`amount`, `cost`, `cards_affected`, `effect`) VALUES
+(1,  0, 20, 'aliado', 'curacion'),
+(2,  0, 12, 'enemigo seleccionado', 'dano'),
+(3,  0, 10, 'enemigo seleccionado', 'dano'),
+(4,  0, 25, 'ambos enemigos', 'dano'),
+(5,  0, 20, 'aliado', 'mejora_dano'),
+(6,  0, 30, 'carta de tu mazo', 'curacion'),
+(7,  0, 15, 'enemigo seleccionado', 'dano'),
+(8,  0, 0, 'mismo', 'curacion'),
+(9,  0, 0, 'mismo', 'curacion'),
+(10, 0, 0, 'mismo', 'curacion'),
+(11,  0, 0, 'mismo', 'escudo'),
+(12,  0, 0, 'mismo', 'escudo'),
+(13,  0, 0, 'mismo', 'escudo'),
+(14,  0, 0, 'mismo', 'escudo'),
+(15, 0, 0, 'Mike', 'mejora_dano'), 
+(17,  0, 0, 'mismo', 'curacion'),
+(18, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
+(19, 0, 0, 'mismo', 'curacion'),
+(20, 0, 0, 'mismo', 'restaura_energia'),
+(22, 0, 0, 'mismo', 'mejora_resistencia'),
+(24, 0, 0, 'Brick', 'mejora_dano'),
+(25, 0, 0, 'Brick', 'mejora_dano'),
+(26, 0, 0, 'mismo', 'restaura_energia'),
+(27, 0, 0, 'Eduardo', 'mejora_dano'),
+(28, 0, 0, 'Entrenador', 'mejora_dano'),
+(29, 0, 0, 'activos', 'mejora_dano'),
+(30, 0, 0, 'Martha', 'mejora_curacion'),
+(32, 0, 0, 'mismo', 'mejora_velocidad'),
+(33, 0, 0, 'mismo', 'restaura_energia'),
+(34, 0, 0, 'Brick', 'mejora_dano'),
+(36, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
+(37, 0, 0, 'Martha', 'mejora_curacion'),
+(38, 0, 0, 'Jack', 'bloquea_dano'),
+(39, 0, 0, 'mismo', 'bloquea_dano'),
+(40, 0, 0, 'Mike', 'mejora_dano');
 
-INSERT INTO `Character_card` (`id`, `name`, `description`, `ability`, `resistance`, `health`, `speed`) VALUES
-(1, 'Martha', 'Chef', 1, 12, 70, 4),
-(2, 'Wendy', 'Campista Insectos', 2, 9, 40, 10),
-(3, 'Brick', 'Campista Armas', 3, 13, 40, 8),
-(4, 'Eduardo', 'Leñador', 4, 15, 80, 3),
-(5, 'Coach', 'Entrenador', 5, 20, 100, 6),
-(6, 'Jack', 'Salvavidas', 6, 17, 70, 7),
-(7, 'Mike', 'Campista Rayos', 7, 10, 40, 5);
+INSERT INTO `Character_card` (`id`, `name`,`nameAbility`, `description`, `ability`, `resistance`, `health`, `speed`) VALUES
+(1, 'Martha', 'Chef','Curacion con Queso', 1, 12, 70, 4),
+(2, 'Wendy', 'Campista Insectos','Rana Venenosa', 2, 9, 40, 10),
+(3, 'Brick', 'Campista Armas','Destruccion DIY', 3, 13, 40, 8),
+(4, 'Eduardo', 'Leñador','Golpe de Lenador', 4, 15, 80, 3),
+(5, 'Coach', 'Entrenador','Pep-talk', 5, 20, 100, 6),
+(6, 'Jack', 'Salvavidas','RCP', 6, 17, 70, 7),
+(7, 'Mike', 'Campista Rayos','Juicio Celestial', 7, 10, 40, 5);
 
 
 INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
@@ -159,4 +162,4 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (40, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 40);
 
 
-select* from powerup_card; 
+
