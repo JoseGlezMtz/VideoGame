@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS FA_DataBase;
+
 CREATE DATABASE IF NOT EXISTS  FA_DataBase /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE  FA_DataBase;
 
@@ -81,6 +83,27 @@ CREATE TABLE IF NOT EXISTS Deck (
   CONSTRAINT fk_deck_powerup2 FOREIGN KEY (powerup2) REFERENCES Powerup_card(id),
   CONSTRAINT fk_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE VIEW Character_Ability AS
+SELECT cc.id, cc.name, cc.description AS card_description, a.effect AS ability_effect, a.amount AS ability_amount
+FROM Character_card cc
+JOIN Ability a ON cc.ability = a.id;
+
+CREATE VIEW  Powerup_Ability AS
+SELECT pc.id, pc.name, pc.description, a.effect AS ability_effect, a.amount AS ability_amount
+FROM Powerup_card pc
+JOIN Ability a ON pc.ability = a.id;
+
+CREATE VIEW Deck_Character AS
+SELECT d.id AS deck_id, p.name AS player_name, cc.name AS character_name, cc.description AS character_description
+FROM Deck d
+JOIN Character_card cc ON d.card1 = cc.id OR d.card2 = cc.id OR d.card3 = cc.id OR d.card4 = cc.id OR d.card5 = cc.id
+JOIN Player p ON d.player_id = p.id;
+
+
+
+
+
 
 
 
