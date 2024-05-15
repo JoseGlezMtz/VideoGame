@@ -2,37 +2,87 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {
     [SerializeField] GameObject CardPrefab;
     [SerializeField] GameObject PuButtonPrefab;
     [SerializeField] GameObject PUPrefab;
+
     [SerializeField] Transform parentPrefab;
     [SerializeField] Transform PUParentPrefab;
+
     [SerializeField] public List<GameObject> Cartas_mano = new List<GameObject>();
     [SerializeField] public List<GameObject> Panels = new List<GameObject>();
     [SerializeField] public List<GameObject> PUs = new List<GameObject>();
+
+    [SerializeField] TMP_Text turnText;
+    [SerializeField] TMP_Text energyText;
+    [SerializeField]  GameObject energySlider;
+
     private bool changeButtonPressed = false;
     private bool attackButtonPressed = false;
     public bool PlayerTurn = false;
     public bool Change_Option = false;
     public bool Attack_Option = false;
+
     public GameObject obj1 = null;
     public GameObject obj2 = null;
     public GameObject card1 = null;
     public GameObject card2 = null;
     public GameObject cartAttack;
-
     
-    public int counter=0;
+    public int counter = 0;
+    public int num_turn;
+
+    public int energy;
+    public int max_energy;
+
+    /*
+    PlayerTurn()
+    atributos:
+        GameObject activeCard1
+            -attack
+            -HP (slider o text)
+        GameObject activeCard2
+            -attack
+            -HP
+        GameObject selectedCard
+
+        methods:
+        attack() ->
+        change() -> 
+        end() -> end turn 
+
+
+        FLOW
+        1. Select an ally card
+        2. Choose to
+            a) attack
+            b) change
+        3. Select an enemy/ally card
+        4. Check if there are more options??
+            power ups? attack with the other card?
+        5. End Turn 
+
+    */
 
     void Start()
     {
+
+        num_turn = 1;
+        energy = 20;
+        max_energy = 100;
+
+        turnText.text = $"Turn: {num_turn}";
+        energyText.text = $"{energy}";
+
         
+
         InitGame();
     }
-    //template of al  the cards in the board 
+    //template of all  the cards in the board 
 
     public void Card_base(List<GameObject> Lista, int i)
     {
@@ -65,6 +115,7 @@ public class CardManager : MonoBehaviour
       
         {
             atributosCarta.Attack = 50;
+            atributosCarta.AbilityCost = 20;
         }
     }
 
@@ -100,7 +151,7 @@ public class CardManager : MonoBehaviour
     void InitGame()
     {
         StartCoroutine(Creat_Board());
-        
+       
     }
     //This function changes the position of two cards
 
@@ -131,6 +182,7 @@ public class CardManager : MonoBehaviour
             //if it is a card in the player hand we stablish the first card to change
                 if (obj1 == null)
                 {
+                    //objeto_carta es la carta seleccionada
                     obj1 = objeto_carta;
                     Debug.Log("Changing with " + obj1.name);
                 }
@@ -213,8 +265,10 @@ public class CardManager : MonoBehaviour
                 counter++;
                 if (counter == 2)
             {
-                PlayerTurn = false;
+                //PlayerTurn = false;
                 counter = 0;
+                Attack_Option=false;
+                Debug.Log("No more attacks available");
             }
             
                 
@@ -262,7 +316,38 @@ public class CardManager : MonoBehaviour
         }
     }
 
+    public void Turn(){
+        /*
+        is called when the player turn is true
 
+        1. Add energy to the bar
+        2. Use button listener to either:
+            a) Use a card's ability
+            b) Change a card
+            c) add the new power up to the hand
+        3. Increase number of turn
+        4. End Turn (set playerTurn to false)
+        5. Call enemyTurn
+
+        */
+    }
+
+    //Increase Energy amount
+    public void IncreaseEnegry(){
+        if(energy + (num_turn-1) * 10 <= max_energy){
+            energy += (num_turn-1) * 10;
+        }
+        else if(energy + (num_turn-1) * 10 > max_energy){
+            energy = 100;
+        }
+
+        Slider sliderComponent = energySlider.GetComponent<Slider>();
+        sliderComponent.value = energy;
+
+        
+    }
+
+    
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Function to attack enemy cards
@@ -287,6 +372,9 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
                    // We attack the enemy card 
                     atributosCarta2.HP -= atributosCarta1.Attack;
                     Debug.Log(objeto_carta1.name + " attacked " + objeto_carta2.name + " for " + atributosCarta1.Attack + " damage.");
+                    
+                    //Decrease energy amount-- fix later on with the corresponding value
+                    energy-= atributosCarta1.AbilityCost;
                 }
                 else
                 {
@@ -331,7 +419,7 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
             Attack_Option = false;
             attackButtonPressed = false;
         }
-    }
+    }
  }
 
 // Function to create the power up button
@@ -348,7 +436,18 @@ public void PU_button()
 
 public void EndTurn()
 {
-    PlayerTurn = false;
+    ++num_turn;
+    Atributos activeCard1 = Cartas_mano[3].GetComponent<Atributos>();
+    Atributos activeCard2 = Cartas_mano[4].GetComponent<Atributos>();
+
+    activeCard1.CanAttack = true;
+    activeCard2.CanAttack = true;
+
+    IncreaseEnegry();
+    turnText.text = $"Turn: {num_turn}";
+    energyText.text = $"{energy}";
+    PlayerTurn = false;
+    
 }
 
 }
