@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS FA_DataBase;
+
 CREATE DATABASE IF NOT EXISTS  FA_DataBase /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE  FA_DataBase;
 
@@ -81,6 +83,80 @@ CREATE TABLE IF NOT EXISTS Deck (
   CONSTRAINT fk_deck_powerup2 FOREIGN KEY (powerup2) REFERENCES Powerup_card(id),
   CONSTRAINT fk_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS Cards_played (
+  id INT NOT NULL AUTO_INCREMENT,
+  game_id INT NOT NULL,
+  player_id INT NOT NULL,
+  card_id INT NOT NULL,
+  is_powerup BOOLEAN NOT NULL DEFAULT FALSE,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_played_game FOREIGN KEY (game_id) REFERENCES Game(id),
+  CONSTRAINT fk_played_player FOREIGN KEY (player_id) REFERENCES Player(id),
+  CONSTRAINT fk_played_card FOREIGN KEY (card_id) REFERENCES Character_card(id),
+  CONSTRAINT chk_is_powerup CHECK (is_powerup IN (0, 1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE VIEW Character_Ability AS
+SELECT cc.id, cc.name, cc.description AS card_description, a.effect AS ability_effect, a.amount AS ability_amount
+FROM Character_card cc
+JOIN Ability a ON cc.ability = a.id;
+
+CREATE VIEW  Powerup_Ability AS
+SELECT pc.id, pc.name, pc.description, a.effect AS ability_effect, a.amount AS ability_amount
+FROM Powerup_card pc
+JOIN Ability a ON pc.ability = a.id;
+
+CREATE VIEW Deck_Character AS
+SELECT d.id AS deck_id, p.name AS player_name, cc.name AS character_name, cc.description AS character_description
+FROM Deck d
+JOIN Character_card cc ON d.card1 = cc.id OR d.card2 = cc.id OR d.card3 = cc.id OR d.card4 = cc.id OR d.card5 = cc.id
+JOIN Player p ON d.player_id = p.id;
+
+
+/*
+CREATE VIEW Player_Deck_Character AS
+SELECT p.name AS player_name, dc.character_name, dc.character_description
+FROM Player p
+JOIN Deck d ON p.id = d.player_id
+JOIN Deck_Character dc ON d.id = dc.deck_id;
+
+CREATE VIEW Player_Cards_Played AS
+SELECT g.id AS game_id, p.name AS player_name, cp.card_id, cp.is_powerup
+FROM Game g
+JOIN Cards_played cp ON g.id = cp.game_id
+JOIN Player p ON cp.player_id = p.id;
+
+
+CREATE VIEW Character_Ability_Cost AS
+SELECT cc.name AS character_name, a.effect AS ability_effect, a.cost AS ability_cost
+FROM Character_card cc
+JOIN Ability a ON cc.ability = a.id;
+
+CREATE VIEW Powerup_Effects AS
+SELECT pc.name AS powerup_name, pc.description AS powerup_description, a.effect AS ability_effect
+FROM Powerup_card pc
+JOIN Ability a ON pc.ability = a.id;
+
+CREATE VIEW Player_Deck_Powerups AS
+SELECT p.name AS player_name, d.powerup1, d.powerup2, d.powerup3
+FROM Player p
+JOIN Deck d ON p.id = d.player_id;
+
+CREATE VIEW Game_Statistics AS
+SELECT g.id AS game_id, g.cards AS num_cards, g.duration AS game_duration, g.enemies_played AS num_enemies_played
+FROM Game g;
+
+CREATE VIEW Character_Health_Speed AS
+SELECT cc.name AS character_name, cc.health AS character_health, cc.speed AS character_speed
+FROM Character_card cc;*/
+
+
+
+
+
+
 
 
 
