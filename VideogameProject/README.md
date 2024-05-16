@@ -66,9 +66,9 @@ We want players to feel ambitious about progressing in the game. We aim for them
 ### **Screens**
 
 1. Title Screen
-    1. Play Game
-    2. Build-Deck
-    3. Exit
+    - Play Game
+    - Build-Deck
+    - Exit
 2. Build-Deck
 3. Play_game
 
@@ -76,9 +76,17 @@ We want players to feel ambitious about progressing in the game. We aim for them
 
 ![Title Screen](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/TitlePage.png)
 
+**Playing Screen**
 
-**Example of Playing Screen**
-![In-Game Scene](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/ejemploPantalla.png)
+![In-Game Scene](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/game%20scene.png)
+
+**Example of deck scene**
+
+
+![Deck scene](https://github.com/JoseGlezMtz/VideoGame/blob/main/VideogameProject/Assets/deck%20scene.png)
+
+This is where the player will create his deck. The 'Add' button is to add the selected character to his deck, the 'Remove' button to remove this character, and the 'Save' button is for saving your deck. The images of the characters that are at the bottom of the screen are the ones that are in your deck.
+
 
 ### **Controls**
 
@@ -90,8 +98,9 @@ The player will interact with all the UI with the mouse and the click
 #### Before the game:
 Before starting the game, the player have the option to configurate their deck of 5 characters, giving the option of creat a team based in the best strategy that the player considers, they have the options to choose 2 starting cards and 3 cards that they'll keep in their hand.
 
+
 #### In-game:
-At the strat of the match they will start with 2 coards in the field and the rest of the cards in the hand.
+At the strat of the match they will start with 2 cards in the field and the rest of the cards in the hand.
 
 The fisrt instance, the play will optain a "Power-up" card, and will have two options:
 
@@ -102,17 +111,18 @@ The fisrt instance, the play will optain a "Power-up" card, and will have two op
 
 After this, the player will have several option:
 
-1. Attack the enemy: this attack will cost certain amount of energy, choosing between the normal or special attack that have each character
-2. Change a card: the player can change a character with one card of their hand, this will cost the end of the turn of the player
-3. End turn: The player can just end his turn in order to save energy or strategic descition that the player wants to do
+1. Attack the enemy: this attack will cost certain amount of energy.
+2. Change a card: The player can swap a character with one card from their hand. The player can only perform this action if they haven't attacked an enemy card.
+3. End turn: The player can end their turn if they finish all their movement options or if they want to conserve energy or execute any other strategic maneuver.
 
-At the end of the turn, the energy bar will restore a certain amount of energy
+   
+At the end of the turn, the energy bar will restore 20 points of energy. 
 
 After the player's turn, the enemy will follow a similar flow, and the loop will reapeat.
 
 ## _Level Design_
 
-The levels will be formed by diferent enemies, by each level the dificultie of the enemies will increase, but also the player will recieve diferent cards at the time advance in the levels
+The levels will be formed by diferent enemies, by each level the dificultie of the enemies will increase.
 
 ### **Themes**
 

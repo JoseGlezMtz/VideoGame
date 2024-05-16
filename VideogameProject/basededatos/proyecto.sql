@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS Deck (
   CONSTRAINT fk_deck_powerup1 FOREIGN KEY (powerup1) REFERENCES Powerup_card(id),
   CONSTRAINT fk_deck_powerup2 FOREIGN KEY (powerup2) REFERENCES Powerup_card(id),
   CONSTRAINT fk_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE IF NOT EXISTS Cards_played (
   id INT NOT NULL AUTO_INCREMENT,
@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS Cards_played (
   CONSTRAINT fk_played_card FOREIGN KEY (card_id) REFERENCES Character_card(id),
   CONSTRAINT chk_is_powerup CHECK (is_powerup IN (0, 1))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 CREATE VIEW Character_Ability AS
@@ -113,6 +114,7 @@ SELECT d.id AS deck_id, p.name AS player_name, cc.name AS character_name, cc.des
 FROM Deck d
 JOIN Character_card cc ON d.card1 = cc.id OR d.card2 = cc.id OR d.card3 = cc.id OR d.card4 = cc.id OR d.card5 = cc.id
 JOIN Player p ON d.player_id = p.id;
+
 
 
 /*
@@ -151,6 +153,7 @@ FROM Game g;
 CREATE VIEW Character_Health_Speed AS
 SELECT cc.name AS character_name, cc.health AS character_health, cc.speed AS character_speed
 FROM Character_card cc;*/
+
 
 
 

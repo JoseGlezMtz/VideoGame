@@ -2,37 +2,86 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {
     [SerializeField] GameObject CardPrefab;
     [SerializeField] GameObject PuButtonPrefab;
     [SerializeField] GameObject PUPrefab;
+
     [SerializeField] Transform parentPrefab;
     [SerializeField] Transform PUParentPrefab;
+
     [SerializeField] public List<GameObject> Cartas_mano = new List<GameObject>();
     [SerializeField] public List<GameObject> Panels = new List<GameObject>();
     [SerializeField] public List<GameObject> PUs = new List<GameObject>();
+
+    [SerializeField] TMP_Text turnText;
+    [SerializeField] TMP_Text energyText;
+    [SerializeField]  GameObject energySlider;
+
     private bool changeButtonPressed = false;
-    private bool attackButtonPressed = false;
     public bool PlayerTurn = false;
     public bool Change_Option = false;
     public bool Attack_Option = false;
-    public GameObject obj1 = null;
-    public GameObject obj2 = null;
-    public GameObject card1 = null;
-    public GameObject card2 = null;
-    public GameObject cartAttack;
+    int card_Index1;
+    int card_Index2;
 
+    public GameObject Selected_card1 = null;
+    public GameObject Selected_card2 = null;
+    public GameObject cartAttack;
     
-    public int counter=0;
+    public int counter = 0;
+    public int num_turn;
+
+    public int energy;
+    public int max_energy;
+
+    /*
+    PlayerTurn()
+    atributos:
+        GameObject activeCard1
+            -attack
+            -HP (slider o text)
+        GameObject activeCard2
+            -attack
+            -HP
+        GameObject selectedCard
+
+        methods:
+        attack() ->
+        change() -> 
+        end() -> end turn 
+
+
+        FLOW
+        1. Select an ally card
+        2. Choose to
+            a) attack
+            b) change
+        3. Select an enemy/ally card
+        4. Check if there are more options??
+            power ups? attack with the other card?
+        5. End Turn 
+
+    */
 
     void Start()
     {
+
+        num_turn = 1;
+        energy = 20;
+        max_energy = 100;
+
+        turnText.text = $"Turn: {num_turn}";
+        energyText.text = $"{energy}";
+
         
+
         InitGame();
     }
-    //template of al  the cards in the board 
+    //template of all  the cards in the board 
 
     public void Card_base(List<GameObject> Lista, int i)
     {
@@ -55,8 +104,8 @@ public class CardManager : MonoBehaviour
                 imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{i}");
             }
         //We set the attributes of the cards
-        Atributos atributosCarta = Card.GetComponent<Atributos>();
-        if (Lista.Count == 6 || Lista.Count==7)
+        //Atributos atributosCarta = Card.GetComponent<Atributos>();
+        /*if (Lista.Count == 6 || Lista.Count==7)
         {
             atributosCarta.HP = 100;
         }
@@ -65,7 +114,8 @@ public class CardManager : MonoBehaviour
       
         {
             atributosCarta.Attack = 50;
-        }
+            atributosCarta.AbilityCost = 20;
+        }*/
     }
 
     //template of all the power ups in the board
@@ -100,7 +150,7 @@ public class CardManager : MonoBehaviour
     void InitGame()
     {
         StartCoroutine(Creat_Board());
-        
+       
     }
     //This function changes the position of two cards
 
@@ -112,121 +162,104 @@ public class CardManager : MonoBehaviour
     }
 
     public void registerCard(GameObject objeto_carta)
-    {
-        //First we check if the player turn is active
-       
-        
-        //First we check if the cahnge option is active
-
-        if (Change_Option)
-        {
-            //We check if the card is in the enemy hand
-
+    { //REvisamos si ya tenemos alguna carata guardada
+        if (Selected_card1==null){
             if (Cartas_mano.IndexOf(objeto_carta) > 4)
             {
                 Debug.Log("Enemy card, can't change it");
             }
-            else
-            {
-            //if it is a card in the player hand we stablish the first card to change
-                if (obj1 == null)
-                {
-                    obj1 = objeto_carta;
-                    Debug.Log("Changing with " + obj1.name);
-                }
-             //If the first card is already stablished we stablished the seconf card and change the cards
-                
-                else
-                {
-                    
-                    obj2 = objeto_carta;
+            //si no, guardamos la primera carta
+            else{
+            Selected_card1= objeto_carta;
+            int card_Index1=Cartas_mano.IndexOf(Selected_card1);
+            Debug.Log("Selecting " + Selected_card1.name);
+            }
+        }
+
+        else{
+            //revisamos si la opcion cambio está activada
+            if (Change_Option){
+                Selected_card2 = objeto_carta;
+                int card_Index2=Cartas_mano.IndexOf(Selected_card2);
                     //We check if the cards are the same so you can't change the card with itself
-                    Debug.Log("Changing with " + obj2.name);
-                    if (obj1 == obj2)
-                    {
+                Debug.Log("Changing with " + Selected_card2.name);
+                if (Selected_card1 == Selected_card2)
+                {       //Revisamos que la carta no sea la misma
                         Debug.Log("You can't change the card with itself");
-                        obj1 = null;
-                        obj2 = null;
+                        Selected_card1 = null;
+                        Selected_card2 = null;
                         return;
                     //We check if the cards are in the hand an in attack position so you can change them and your turn end
-                    }else if(Cartas_mano.IndexOf(obj1)==0 && Cartas_mano.IndexOf(obj2)==3 || Cartas_mano.IndexOf(obj1)==0 && Cartas_mano.IndexOf(obj2)==4 || Cartas_mano.IndexOf(obj1)==1 && Cartas_mano.IndexOf(obj2)==3 || Cartas_mano.IndexOf(obj1)==1 && Cartas_mano.IndexOf(obj2)==4 || Cartas_mano.IndexOf(obj1)==2 && Cartas_mano.IndexOf(obj2)==3 || Cartas_mano.IndexOf(obj1)==2 && Cartas_mano.IndexOf(obj2)==4 || Cartas_mano.IndexOf(obj1)==3 && Cartas_mano.IndexOf(obj2)==0 || Cartas_mano.IndexOf(obj1)==3 && Cartas_mano.IndexOf(obj2)==1 || Cartas_mano.IndexOf(obj1)==3 && Cartas_mano.IndexOf(obj2)==2 || Cartas_mano.IndexOf(obj1)==4 && Cartas_mano.IndexOf(obj2)==0 || Cartas_mano.IndexOf(obj1)==4 && Cartas_mano.IndexOf(obj2)==1 || Cartas_mano.IndexOf(obj1)==4 && Cartas_mano.IndexOf(obj2)==2)
+                    }
+                    else if(card_Index1>2 && card_Index2<=2 ||card_Index1<=2 && card_Index2>2 )
                     {
-                        Change_Cards(obj1, obj2);
-                    int index1 = Cartas_mano.IndexOf(obj1);
-                    int index2 = Cartas_mano.IndexOf(obj2);
-                    // Intercambia las posiciones de los objetos en la lista
-                    Cartas_mano[index1] = obj2;
-                    Cartas_mano[index2] = obj1;
-                    obj1 = null;
-                    obj2 = null;
-                    Change_Option = false;
-                    //We end the player turn
-                    PlayerTurn = false;
+                        Change_Cards(Selected_card1, Selected_card2);
+                        
+                        //Intercambia las posiciones de los objetos en la lista
+                        Cartas_mano[card_Index1]=Selected_card2;
+                        Cartas_mano[card_Index2]=Selected_card1;
+                        Selected_card1 = null;
+                        Selected_card2 = null;
+                        Change_Option = false;
+                        //We end the player turn
+                        EndTurn();
 
                     }else{
-                        Change_Cards(obj1, obj2);
-                    int index1 = Cartas_mano.IndexOf(obj1);
-                    int index2 = Cartas_mano.IndexOf(obj2);
-                    // Intercambia las posiciones de los objetos en la lista
-                    Cartas_mano[index1] = obj2;
-                    Cartas_mano[index2] = obj1;
-                    obj1 = null;
-                    obj2 = null;
-                    Change_Option = false;
+                        //en caso de que las cartas estén en la mano del jugador no le quitara un turno
+                        Change_Cards(Selected_card1, Selected_card2);
+                        
+                        //Intercambia las posiciones de los objetos en la lista
+                        Cartas_mano[card_Index1]=Selected_card2;
+                        Cartas_mano[card_Index2]=Selected_card1;
+                        Selected_card1 = null;
+                        Selected_card2 = null;
+                        Change_Option = false;
 
                     }
                     
                     
                 }
-            }
-        }
-      //If the change option is not active we send error message
-
-        else if (Attack_Option)
-        {
-            if (cartAttack == objeto_carta )
-        {
-            Debug.Log("You have already used this card for attack");
-            return;
-        }
-
-        // we check if the card is in the player hand
-            Debug.Log("Attack option");
-            if (card1 == null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4))
-            {
-                card1 = objeto_carta;
-                Debug.Log("Selected card for attack: " + card1.name);
-            }
-        // we check if the card is in the enemy hand
-            else if (card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 5 || Cartas_mano.IndexOf(objeto_carta) == 6))
-            {
+            else if(Attack_Option){
+                // Revisamos si esta carta ya ha sido usada para atacar previamente en el turno
+                if (Selected_card1.GetComponent<Atributos>().canAttack==false ){
+                    Debug.Log("You have already used this card for attack");
+                    return;
+                }
+                Debug.Log("Attack option");
+                //Revisamos si la carta es alguna de las que está jugando el jugador
+                if (Selected_card1 == null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4)){
+                    Selected_card1 = objeto_carta;
+                    Debug.Log("Selected card for attack: " + Selected_card1.name);
+                }
+                // en caso de que sea una de las carta del enemigo la asgnamos a la carta 2
+                else if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 5 || Cartas_mano.IndexOf(objeto_carta) == 6)){
             
-                card2 = objeto_carta;
-                Debug.Log("Selected card for attack: " + card2.name);
-                //resets the cards
-                Attack(card1, card2);
-                card1 = null;
-                card2 = null;
-                Attack_Option = false;
-                //we end the player turn
-                //PlayerTurn = false;
-                counter++;
-                if (counter == 2)
-            {
-                PlayerTurn = false;
-                counter = 0;
-            }
+                    Selected_card2= objeto_carta;
+                    Debug.Log("Selected card for attack: " + Selected_card2.name);
+                    //hacer el ataque de las cartas
+                    Attack(Selected_card1, Selected_card2);
+                    // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
+                    Selected_card1.GetComponent<Atributos>().canAttack=false;
+                    Selected_card1 = null;
+                    Selected_card2 = null;
+                    Attack_Option = false;
+                    //En caso de que ya haya usado los dos ataques ya no permite atacar
+                    counter++;
+                    if (counter == 2){
+                        counter = 0;
+                        Attack_Option=false;
+                        Debug.Log("No more attacks available");
+                    }
             
                 
             }
-            
+                
+            }
         }
-        else
-        {
-          Debug.Log("Invalid option");
-        }
-    
-    }
+     }
+      //If the change option is not active we send error message
+
+        
     //This function is used to change the state of the change option(active in the change button)
 
     public void Change_State()
@@ -262,7 +295,39 @@ public class CardManager : MonoBehaviour
         }
     }
 
+    public void Turn(){
+        /*
+        is called when the player turn is true
 
+        1. Add energy to the bar
+        2. Use button listener to either:
+            a) Use a card's ability
+            b) Change a card
+            c) add the new power up to the hand
+        3. Increase number of turn
+        4. End Turn (set playerTurn to false)
+        5. Call enemyTurn
+
+        */
+    }
+
+    //Increase Energy amount
+    public void IncreaseEnegry(){
+        if(energy + (num_turn-1) * 10 <= max_energy){
+            energy += (num_turn-1) * 10;
+        }
+        else if(energy + (num_turn-1) * 10 > max_energy){
+            energy = 100;
+        }
+
+        Slider sliderComponent = energySlider.GetComponent<Slider>();
+        sliderComponent.value = energy;
+        
+
+        
+    }
+
+    
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Function to attack enemy cards
@@ -278,7 +343,7 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
             Atributos atributosCarta1 = objeto_carta1.GetComponent<Atributos>();
             Atributos atributosCarta2 = objeto_carta2.GetComponent<Atributos>();
             
-            if (atributosCarta1 != null && atributosCarta2 != null)
+            if (atributosCarta1.AbilityCost>energy)
             {
                 // We check if the cards are in the right position 
                 if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
@@ -287,10 +352,16 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
                    // We attack the enemy card 
                     atributosCarta2.HP -= atributosCarta1.Attack;
                     Debug.Log(objeto_carta1.name + " attacked " + objeto_carta2.name + " for " + atributosCarta1.Attack + " damage.");
+                    
+                    //Decrease energy amount-- fix later on with the corresponding value
+                    energy-= atributosCarta1.AbilityCost;
+                    energyText.text=$"{energy}";
+                    Slider sliderComponent = energySlider.GetComponent<Slider>();
+                    sliderComponent.value = energy;
                 }
                 else
                 {
-                    Debug.Log("Invalid cards for attack");
+                    Debug.Log("No enough energy");
                 }
             }
         }
@@ -303,7 +374,7 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
     {
         Debug.Log("Invalid option");
     }
-     cartAttack = objeto_carta1;
+    
 }
 
 
@@ -321,17 +392,8 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
             return;}
 
         else{
-        if (!attackButtonPressed)
-        {
-            Attack_Option = true;
-            attackButtonPressed = true;
-        }
-        else
-        {
-            Attack_Option = false;
-            attackButtonPressed = false;
-        }
-    }
+        Attack_Option=!Attack_Option;
+    }
  }
 
 // Function to create the power up button
@@ -348,7 +410,19 @@ public void PU_button()
 
 public void EndTurn()
 {
-    PlayerTurn = false;
+    PlayerTurn = false;
+    ++num_turn;
+    Atributos activeCard1 = Cartas_mano[3].GetComponent<Atributos>();
+    Atributos activeCard2 = Cartas_mano[4].GetComponent<Atributos>();
+
+    activeCard1.CanAttack = true;
+    activeCard2.CanAttack = true;
+
+    IncreaseEnegry();
+    turnText.text = $"Turn: {num_turn}";
+    energyText.text = $"{energy}";
+    
+    
 }
 
 }

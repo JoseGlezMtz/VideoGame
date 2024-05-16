@@ -146,7 +146,6 @@ GameObject:
   - component: {fileID: 5227011890129869002}
   - component: {fileID: 7292807027756781983}
   - component: {fileID: 5216486680587327089}
-  - component: {fileID: -715682840269479277}
   m_Layer: 5
   m_Name: ButtonCard
   m_TagString: Untagged
@@ -256,17 +255,3 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-715682840269479277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6371184064024523833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7e00be82e1ddad428a890e033a59b45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: 0
-  attack: 0

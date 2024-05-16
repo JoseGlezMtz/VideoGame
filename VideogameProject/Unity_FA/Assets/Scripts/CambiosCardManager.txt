@@ -1,0 +1,49 @@
+Card Manager Documentacion
+
+Pending changes
+-create a turn method
+
+Variables:
+-
+
+Metodos actuales:
+- void start():
+    called at the start of the game
+    calls init game
+    declares initial values for some variables
+
+- void InitGame()
+    calls the coroutine Create Board
+
+-IEnumerator Creat_Board()
+    calls the card base method
+    calls PU button
+
+- public void Card_base()
+    instantiates character cards from prefab
+        sets atributes and adds image
+    adds a button property to each card (register card)
+
+    !!!!!LLamar el method Player Turn que se va a ciclar con Enemy Turn
+
+- public void PU_Button()
+    creates PU card
+
+PlayerTurn()
+    1. Select a card
+    2. Can call Attack() o Change() + EndTurn()
+    3. Enemy Turn
+
+EnemyTurn()
+    when finished: PlayerTurn()
+
+
+- public void PU_Base()
+- public void Change_Cards()
+- public void registerCard()
+- public void Change_State()
+- public void Attack()
+- public void Attack_button()
+
+- pubic void EndTurn()
+    sets variable to false
