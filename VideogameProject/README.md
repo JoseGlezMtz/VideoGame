@@ -111,17 +111,18 @@ The fisrt instance, the play will optain a "Power-up" card, and will have two op
 
 After this, the player will have several option:
 
-1. Attack the enemy: this attack will cost certain amount of energy, choosing between the normal or special attack that have each character
-2. Change a card: the player can change a character with one card of their hand, this will cost the end of the turn of the player
-3. End turn: The player can just end his turn in order to save energy or strategic descition that the player wants to do
+1. Attack the enemy: this attack will cost certain amount of energy.
+2. Change a card: The player can swap a character with one card from their hand. The player can only perform this action if they haven't attacked an enemy card.
+3. End turn: The player can end their turn if they finish all their movement options or if they want to conserve energy or execute any other strategic maneuver.
 
-At the end of the turn, the energy bar will restore a certain amount of energy
+   
+At the end of the turn, the energy bar will restore 20 points of energy. 
 
 After the player's turn, the enemy will follow a similar flow, and the loop will reapeat.
 
 ## _Level Design_
 
-The levels will be formed by diferent enemies, by each level the dificultie of the enemies will increase, but also the player will recieve diferent cards at the time advance in the levels
+The levels will be formed by diferent enemies, by each level the dificultie of the enemies will increase.
 
 ### **Themes**
 
