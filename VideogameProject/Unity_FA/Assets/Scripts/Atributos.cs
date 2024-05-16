@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Atributos : MonoBehaviour
 {
-    [SerializeField] private int hp; 
-    [SerializeField] private int attack; 
-    [SerializeField] private int abilityCost;
+    [SerializeField] private int hp=100; 
+    [SerializeField] private int attack=20; 
+    [SerializeField] private int abilityCost=5;
     [SerializeField] private int curation;
-    [SerializeField] private bool canAttack;
+    [SerializeField] public bool canAttack=true;
 
     public int HP 
     { 
