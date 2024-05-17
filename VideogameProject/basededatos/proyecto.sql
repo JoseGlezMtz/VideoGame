@@ -184,5 +184,30 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (39, 'Flotador', 'Protege a uno de tus personajes de los daños continuos', 39),
 (40, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 40);
 
+DELIMITER $$
+CREATE PROCEDURE  Character_Ability_pro () 
+BEGIN
+Select * from character_ability;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE Powerup_Ability_pro ()
+BEGIN
+Select * from powerup_ability;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE Deck_pro ()
+BEGIN
+Select * from deck_character;
+END $$
+DELIMITER ; 
+
+
+
+
+
 
 
