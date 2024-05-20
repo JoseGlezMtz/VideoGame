@@ -174,13 +174,11 @@ g.cards AS num_cards,
 g.duration AS game_duration,
  g.enemies_played AS num_enemies_played
 FROM Game g;
-
 CREATE VIEW Character_Health_Speed AS
 SELECT cc.name AS character_name, 
 cc.health AS character_health,
  cc.speed AS character_speed
 FROM Character_card cc;*/
-
 
 
 
@@ -206,26 +204,26 @@ INSERT INTO `Ability` (`id`,`amount`, `cost`, `cards_affected`, `effect`) VALUES
 (13,  0, 0, 'mismo', 'escudo'),
 (14,  0, 0, 'mismo', 'escudo'),
 (15, 0, 0, 'Mike', 'mejora_dano'), 
-(17,  0, 0, 'mismo', 'curacion'),
-(18, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(19, 0, 0, 'mismo', 'curacion'),
-(20, 0, 0, 'mismo', 'restaura_energia'),
-(22, 0, 0, 'mismo', 'mejora_resistencia'),
-(24, 0, 0, 'Brick', 'mejora_dano'),
-(25, 0, 0, 'Brick', 'mejora_dano'),
-(26, 0, 0, 'mismo', 'restaura_energia'),
-(27, 0, 0, 'Eduardo', 'mejora_dano'),
-(28, 0, 0, 'Entrenador', 'mejora_dano'),
-(29, 0, 0, 'activos', 'mejora_dano'),
-(30, 0, 0, 'Martha', 'mejora_curacion'),
-(32, 0, 0, 'mismo', 'mejora_velocidad'),
-(33, 0, 0, 'mismo', 'restaura_energia'),
-(34, 0, 0, 'Brick', 'mejora_dano'),
-(36, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(37, 0, 0, 'Martha', 'mejora_curacion'),
-(38, 0, 0, 'Jack', 'bloquea_dano'),
-(39, 0, 0, 'mismo', 'bloquea_dano'),
-(40, 0, 0, 'Mike', 'mejora_dano');
+(16,  0, 0, 'mismo', 'curacion'),
+(17, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
+(18, 0, 0, 'mismo', 'curacion'),
+(19, 0, 0, 'mismo', 'restaura_energia'),
+(20, 0, 0, 'mismo', 'mejora_resistencia'),
+(21, 0, 0, 'Brick', 'mejora_dano'),
+(22, 0, 0, 'Brick', 'mejora_dano'),
+(23, 0, 0, 'mismo', 'restaura_energia'),
+(24, 0, 0, 'Eduardo', 'mejora_dano'),
+(25, 0, 0, 'Entrenador', 'mejora_dano'),
+(26, 0, 0, 'activos', 'mejora_dano'),
+(27, 0, 0, 'Martha', 'mejora_curacion'),
+(28, 0, 0, 'mismo', 'mejora_velocidad'),
+(29, 0, 0, 'mismo', 'restaura_energia'),
+(30, 0, 0, 'Brick', 'mejora_dano'),
+(31, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
+(32, 0, 0, 'Martha', 'mejora_curacion'),
+(33, 0, 0, 'Jack', 'bloquea_dano'),
+(34, 0, 0, 'mismo', 'bloquea_dano'),
+(35, 0, 0, 'Mike', 'mejora_dano');
 
 INSERT INTO `Character_card` (`id`, `name`,`nameAbility`, `description`, `ability`, `resistance`, `health`, `speed`) VALUES
 (1, 'Martha', 'Chef','Curacion con Queso', 1, 12, 70, 4),
@@ -246,26 +244,27 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (13, 'Repelente de mosquitos', 'Equípalo a alguno de tus personajes para protegerlos por (x) de daño durante 2 turnos. Esta carta no se puede equipar a Wendy', 13),
 (14, 'Fogata', 'Colócala en el centro de tus cartas para otorgarle un escudo temporal a tus personajes de (x) cantidad durante 3 turnos', 14),
 (15, 'Enciclopedia', 'Mejora la habilidad especial de Mike por 5 de daño', 15),
-(17, 'Barra de Granola', 'Equípala a uno de tus personajes para restaurarles (x) cantidad de vida', 17),
-(18, 'Linterna', 'Cólocala en el centro de tus cartas para cegar a un oponente aleatorio durante 1 turno (esto le impedirá atacar en el siguiente turno)', 18),
-(19, 'Curita', 'Cura al personaje al que se lo equipes por (x) de vida', 19),
-(20, 'Bebida energética', 'Restaura (x) cantidad de energía a tu barra', 20),
-(22, 'Camisa de Franela', 'Equipa esta carta al leñador para mejorar su resistencia por 2 puntos', 22),
-(24, 'Espada de madera', 'Equipa esta carta a Brick para mejorar su ataque básico 5 de daño', 24),
-(25, 'Arco', 'Equipa esta carta a Brick para cambiar su resortera por un arco pero ten cuidado porque el arco sólo puede utilizarse si también obtienes la carta Flecha', 25),
-(26, 'Insignia', 'Equipa esta carta a alguno de los campistas (Wendy/Brick/Mike) para inspirarlos y reducir el costo de energía de sus dos habilidades por 5 de manera permanente', 26),
-(27, 'Afilador', 'Equipa esta carta al leñador para que su ataque básico genere el efecto sangrar (hace daño continuo al enemigo por 2 turnos)', 27),
-(28, 'Mancuerna', 'Aumenta el poder del entrenador en 2 puntos', 28),
-(29, 'Piedra extraña', 'Encuentras una piedra extraña que aumenta el poder de todos tus personajes en juego durante 2 turnos', 29),
-(30, 'Sartén', 'Equipa esta carta a la Chef para permitirle cocinar una hamburguesa extra durante este turno (aumenta la cantidad de la curación)', 30),
-(32, 'Dulce', 'Aumenta la velocidad de tus personajes durante 1 turno', 32),
-(33, 'Café de olla', 'Permite a uno de los personajes realizar un ataque sin gastar energía', 33),
-(34, 'Flechas', 'Estas te permiten usar el arco', 34),
-(36, 'Red de pescar', 'Permite atrapar a uno de los personajes de tu oponente para que no pueda atacar en su siguiente turno', 36),
-(37, 'Espátula', 'Permite al chef hacer comida más rápido para que puedan recuperar HP (si son jugadores que están en la baraja dos podrán recuperar hp, si es el jugador en ataque solo él podrá)', 37),
-(38, 'Jetski', 'Equipar al salvavidas para esquivar un ataque', 38),
-(39, 'Flotador', 'Protege a uno de tus personajes de los daños continuos', 39),
-(40, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 40);
+(16, 'Barra de Granola', 'Equípala a uno de tus personajes para restaurarles (x) cantidad de vida', 16),
+(17, 'Linterna', 'Cólocala en el centro de tus cartas para cegar a un oponente aleatorio durante 1 turno (esto le impedirá atacar en el siguiente turno)', 17),
+(18, 'Curita', 'Cura al personaje al que se lo equipes por (x) de vida', 18),
+(19, 'Bebida energética', 'Restaura (x) cantidad de energía a tu barra', 19),
+(20, 'Camisa de Franela', 'Equipa esta carta al leñador para mejorar su resistencia por 2 puntos', 20),
+
+(21, 'Espada de madera', 'Equipa esta carta a Brick para mejorar su ataque básico 5 de daño', 21),
+(22, 'Arco', 'Equipa esta carta a Brick para cambiar su resortera por un arco pero ten cuidado porque el arco sólo puede utilizarse si también obtienes la carta Flecha', 22),
+(23, 'Insignia', 'Equipa esta carta a alguno de los campistas (Wendy/Brick/Mike) para inspirarlos y reducir el costo de energía de sus dos habilidades por 5 de manera permanente',23),
+(24, 'Afilador', 'Equipa esta carta al leñador para que su ataque básico genere el efecto sangrar (hace daño continuo al enemigo por 2 turnos)', 24),
+(25, 'Mancuerna', 'Aumenta el poder del entrenador en 2 puntos', 25),
+(26, 'Piedra extraña', 'Encuentras una piedra extraña que aumenta el poder de todos tus personajes en juego durante 2 turnos', 26),
+(27, 'Sartén', 'Equipa esta carta a la Chef para permitirle cocinar una hamburguesa extra durante este turno (aumenta la cantidad de la curación)', 27),
+(28, 'Dulce', 'Aumenta la velocidad de tus personajes durante 1 turno',28),
+(29, 'Café de olla', 'Permite a uno de los personajes realizar un ataque sin gastar energía', 29),
+(30, 'Flechas', 'Estas te permiten usar el arco', 30),
+(31, 'Red de pescar', 'Permite atrapar a uno de los personajes de tu oponente para que no pueda atacar en su siguiente turno', 31),
+(32, 'Espátula', 'Permite al chef hacer comida más rápido para que puedan recuperar HP (si son jugadores que están en la baraja dos podrán recuperar hp, si es el jugador en ataque solo él podrá)', 32),
+(33, 'Jetski', 'Equipar al salvavidas para esquivar un ataque', 33),
+(34, 'Flotador', 'Protege a uno de tus personajes de los daños continuos', 34),
+(35, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 35),
 
 DELIMITER $$
 CREATE PROCEDURE  Character_Ability_pro () 
