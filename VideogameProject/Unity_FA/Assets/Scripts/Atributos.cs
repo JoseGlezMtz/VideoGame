@@ -5,11 +5,19 @@ using UnityEngine;
 
 public class Atributos : MonoBehaviour
 {
-    [SerializeField] private int hp=100; 
-    [SerializeField] private int attack=20; 
-    [SerializeField] private int abilityCost=5;
+    [SerializeField] private int id; 
+    [SerializeField] private int hp = 100; 
+    [SerializeField] private int attack = 20; 
+    [SerializeField] private int abilityCost = 5;
     [SerializeField] private int curation;
     [SerializeField] public bool canAttack=true;
+    [SerializeField] public int shield = 0;
+
+    public int Id 
+    { 
+        get { return id; } 
+        set { id = value; } 
+    }
 
     public int HP 
     { 
@@ -39,6 +47,12 @@ public class Atributos : MonoBehaviour
     { 
         get { return curation; } 
         set { curation = value; } 
+    }
+
+    public int Shield 
+    { 
+        get { return shield; } 
+        set { shield = value; } 
     }
 
     public void Heal(int amount)
