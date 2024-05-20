@@ -3,6 +3,20 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
+
+/*
+TO-DO
+1. Definir variables para PU
+    lista de PU en la pila
+    lista de PU en la mano
+    lista de PU descartados
+2. Inicializar las cartas en la pila de PU
+3. Ordenar la lista de manera aleatoria
+4. Agregar funcionalidad de sumar las cartas a la mano cuando le das click a su botón
+5. Agregar método para mover la carta a la pila de descarte cuando finalice el turno
+6. 
+*/
 
 public class CardManager : MonoBehaviour
 {
@@ -13,13 +27,25 @@ public class CardManager : MonoBehaviour
     [SerializeField] Transform parentPrefab;
     [SerializeField] Transform PUParentPrefab;
 
+    [SerializeField] Transform PUSlot;
+
     [SerializeField] public List<GameObject> Cartas_mano = new List<GameObject>();
     [SerializeField] public List<GameObject> Panels = new List<GameObject>();
-    [SerializeField] public List<GameObject> PUs = new List<GameObject>();
+    
+
+    [SerializeField] List<GameObject> pu_Hand;
+    [SerializeField] List<int> pu_Pile;
+    [SerializeField] List<int> pu_Discarded;
+
+    [SerializeField] GameObject AddPUBtn;
+
+    int maxPuPile = 30;
 
     [SerializeField] TMP_Text turnText;
     [SerializeField] TMP_Text energyText;
     [SerializeField]  GameObject energySlider;
+
+    public bool puAdded;
 
     private bool changeButtonPressed = false;
     public bool PlayerTurn = false;
@@ -69,15 +95,12 @@ public class CardManager : MonoBehaviour
 
     void Start()
     {
-
         num_turn = 1;
         energy = 20;
         max_energy = 100;
 
         turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
-
-        
 
         InitGame();
     }
@@ -119,19 +142,27 @@ public class CardManager : MonoBehaviour
     }
 
     //template of all the power ups in the board
-    public void PU_Base(List<GameObject> Lista)
+    //INITIALIZE PU BASED ON ID
+    public void Create_PU()
     {
+        //Agregar for loop para crear los 30 power ups
+        //Agregar los objects a la lista de pile
         GameObject PU = Instantiate(PUPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
-        PU.AddComponent<Atributos>();
-        PU.name = "PU" + Lista.Count;
-        Lista.Add(PU);
-        Debug.Log("Creating: " + PU.name);
-        Button button = PU.GetComponent<Button>();
-        
-    }
-    // creat cards in the board
+        PU.AddComponent<AtributosPU>();
+        AtributosPU puAtributos = PU.GetComponent<AtributosPU>();
 
-    IEnumerator Creat_Board()
+        
+        Debug.Log("Creating: " + PU.name);
+
+    
+        //Button button = PU.GetComponent<Button>();
+        //button.onClick.AddListener(() => AddPU(PU));
+    }
+
+
+    // create cards in the board
+
+    IEnumerator Create_Board()
     {
         int i = 0;
         while (i < Panels.Count)
@@ -140,6 +171,7 @@ public class CardManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             i++;
         }
+        Init_PU_ID();
         //We create the power up button
         PU_button();
         //We set the player turn to true
@@ -149,9 +181,50 @@ public class CardManager : MonoBehaviour
 
     void InitGame()
     {
-        StartCoroutine(Creat_Board());
+        StartCoroutine(Create_Board());
        
     }
+
+    
+    public void AddPU(){
+        GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
+
+        if(pu_Hand.Count == 3){
+            Debug.LogError("Can't add more power ups");
+        }
+        else{
+            PowerUp.transform.SetParent(PUSlot);
+            pu_Hand.Add(PowerUp);
+
+        }
+        if (pu_Pile.Count==0){
+            Init_PU_ID();
+        }
+        
+    }
+
+    public void DiscardPU(){
+        GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
+        if (PowerUp != null){
+            Destroy(PowerUp);
+            pu_Hand.Remove(PowerUp);
+
+            AtributosPU atributosPU = PowerUp.GetComponent<AtributosPU>();
+            pu_Discarded.Add(atributosPU.pu_id);
+        }
+        
+    }
+
+    public void Init_PU_ID(){
+        for(int i = 8; i <= 35; i++){
+            pu_Pile.Add(i);
+        }
+    }
+
+    public int RandomId(){
+        return Random.Range(8, 35);
+    }
+
     //This function changes the position of two cards
 
     public void Change_Cards(GameObject obj1, GameObject obj2)
@@ -291,7 +364,6 @@ public class CardManager : MonoBehaviour
         }
             
 
-        
         }
     }
 
@@ -403,7 +475,7 @@ public void PU_button()
         GameObject PU = Instantiate(PuButtonPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
         Button button = PU.GetComponent<Button>();
         //We add that we the button is clicked we create a power up
-        button.onClick.AddListener(() => PU_Base(PUs));
+        button.onClick.AddListener(() => Create_PU());
         
     }
 
@@ -415,6 +487,8 @@ public void EndTurn()
     Atributos activeCard1 = Cartas_mano[3].GetComponent<Atributos>();
     Atributos activeCard2 = Cartas_mano[4].GetComponent<Atributos>();
 
+    DiscardPU();
+
     activeCard1.CanAttack = true;
     activeCard2.CanAttack = true;
 
@@ -423,6 +497,5 @@ public void EndTurn()
     energyText.text = $"{energy}";
     
     
-}
-
+    }
 }
