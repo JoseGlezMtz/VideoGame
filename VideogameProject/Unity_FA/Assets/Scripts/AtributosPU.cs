@@ -6,9 +6,11 @@ using UnityEngine;
 public class AtributosPU : MonoBehaviour
 {
     public int pu_id;
-    public string pu_name;
-    public int pu_amount;    
-    public string pu_effect;
+    public string name;
+
+    public string description;
+    public int ability_amount;    
+    public string ability_effect;
     public GameObject pu_cardAffected;
 
     //

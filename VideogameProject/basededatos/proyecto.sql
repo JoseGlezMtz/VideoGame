@@ -98,12 +98,12 @@ CREATE TABLE IF NOT EXISTS Deck (
 
 
 CREATE VIEW Character_Ability AS
-SELECT cc.id AS character_id,
+SELECT cc.id AS id,
  cc.name AS character_name, 
- a.amount AS ability_amount, 
- a.cost AS ability_cost, 
+ a.amount AS attack, 
+ a.cost AS abilityCost, 
  a.cards_affected, 
- a.effect AS ability_effect,
+ a.effect AS effect,
  cc.resistance,cc.health,cc.speed
 FROM Character_card cc
 JOIN Ability a ON cc.ability = a.id;
@@ -118,7 +118,7 @@ FROM Powerup_card pc
 JOIN Ability a ON pc.ability = a.id;
 
 CREATE VIEW Deck_Character AS
-SELECT d.id AS deck_id, 
+SELECT d.id AS id, 
 p.name AS player_name, 
 cc.name AS character_name, 
 cc.description AS character_description
@@ -126,7 +126,8 @@ FROM Deck d
 JOIN Character_card cc ON d.card1 = cc.id OR d.card2 = cc.id OR d.card3 = cc.id OR d.card4 = cc.id OR d.card5 = cc.id
 JOIN Player p ON d.player_id = p.id;
 
-
+select*from character_ability;
+#select * from powerup_ability;
 
 /*
 CREATE VIEW Player_Deck_Character AS
