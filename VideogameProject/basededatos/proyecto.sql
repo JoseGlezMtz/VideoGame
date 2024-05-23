@@ -6,9 +6,11 @@ USE  FA_DataBase;
 CREATE TABLE IF NOT EXISTS Player (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
-  level INT NOT NULL,
-  deck INT NOT NULL,
+  password VARCHAR(45) NOT NULL,
+  level INT DEFAULT 1,
+  #deck_id INT NOT NULL,
   PRIMARY KEY (id)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -67,9 +69,9 @@ CREATE TABLE IF NOT EXISTS Deck (
   card3 INT NOT NULL,
   card4 INT NOT NULL,
   card5 INT NOT NULL,
-  powerup1 INT NOT NULL DEFAULT 0,
-  powerup2 INT  NOT NULL DEFAULT 0,
-  powerup3 INT  NOT NULL DEFAULT 0,
+  powerup1 INT DEFAULT NULL,
+  powerup2 INT  DEFAULT NULL,
+  powerup3 INT   DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT fk_deck_player FOREIGN KEY (player_id) REFERENCES Player(id),
   CONSTRAINT fk_deck_card1 FOREIGN KEY (card1) REFERENCES Character_card(id),
@@ -181,8 +183,7 @@ cc.health AS character_health,
  cc.speed AS character_speed
 FROM Character_card cc;*/
 
-
-
+select * from powerup_card;
 
 
 
@@ -190,50 +191,51 @@ FROM Character_card cc;*/
 
 
 INSERT INTO `Ability` (`id`,`amount`, `cost`, `cards_affected`, `effect`) VALUES
-(1,  0, 20, 'aliado', 'curacion'),
-(2,  0, 12, 'enemigo seleccionado', 'dano'),
-(3,  0, 10, 'enemigo seleccionado', 'dano'),
-(4,  0, 25, 'ambos enemigos', 'dano'),
-(5,  0, 20, 'aliado', 'mejora_dano'),
-(6,  0, 30, 'carta de tu mazo', 'curacion'),
-(7,  0, 15, 'enemigo seleccionado', 'dano'),
+(1,  15, 20, 'aliado', 'curacion'),
+(2,  12, 12, 'enemigo seleccionado', 'dano'),
+(3,  10, 10, 'enemigo seleccionado', 'dano'),
+(4,  15, 30, 'ambos enemigos', 'dano'),
+(5,  10, 15, 'aliado', 'mejora_dano'),
+(6,  50, 30, 'carta de tu mazo', 'curacion'),
+(7,  20, 20, 'enemigo seleccionado', 'dano'),
 (8,  0, 0, 'mismo', 'curacion'),
 (9,  0, 0, 'mismo', 'curacion'),
 (10, 0, 0, 'mismo', 'curacion'),
-(11,  0, 0, 'mismo', 'escudo'),
-(12,  0, 0, 'mismo', 'escudo'),
-(13,  0, 0, 'mismo', 'escudo'),
-(14,  0, 0, 'mismo', 'escudo'),
-(15, 0, 0, 'Mike', 'mejora_dano'), 
-(16,  0, 0, 'mismo', 'curacion'),
+(11,  100, 0, 'mismo', 'escudo'),
+(12,  10, 0, 'mismo', 'escudo'),
+(13,  10, 0, 'mismo', 'escudo'),
+(14,  15, 0, 'mismo', 'escudo'),
+(15, 5, 0, 'Mike', 'mejora_dano'), 
+(16,  10, 0, 'mismo', 'curacion'),
 (17, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(18, 0, 0, 'mismo', 'curacion'),
-(19, 0, 0, 'mismo', 'restaura_energia'),
-(20, 0, 0, 'mismo', 'mejora_resistencia'),
-(21, 0, 0, 'Brick', 'mejora_dano'),
-(22, 0, 0, 'Brick', 'mejora_dano'),
-(23, 0, 0, 'mismo', 'restaura_energia'),
+(18, 5, 0, 'mismo', 'curacion'),
+(19, 10, 0, 'mismo', 'restaura_energia'),
+(20, 0, 0, 'Eduardo', 'mejora_resistencia'),
+(21, 5, 0, 'Brick', 'mejora_dano'),
+(22, 5, 0, 'Brick', 'mejora_dano'),
+(23, 5, 0, 'mismo', 'restaura_energia'),
 (24, 0, 0, 'Eduardo', 'mejora_dano'),
-(25, 0, 0, 'Entrenador', 'mejora_dano'),
-(26, 0, 0, 'activos', 'mejora_dano'),
-(27, 0, 0, 'Martha', 'mejora_curacion'),
-(28, 0, 0, 'mismo', 'mejora_velocidad'),
+(25, 2, 0, 'Entrenador', 'mejora_dano'),
+(26, 5, 0, 'activos', 'mejora_dano'),
+(27, 5, 0, 'Martha', 'mejora_curacion'),
+(28, 5, 0, 'mismo', 'mejora_velocidad'),
 (29, 0, 0, 'mismo', 'restaura_energia'),
 (30, 0, 0, 'Brick', 'mejora_dano'),
-(31, 0, 0, 'enemigo_seleccionado', 'bloquea_dano'),
-(32, 0, 0, 'Martha', 'mejora_curacion'),
-(33, 0, 0, 'Jack', 'bloquea_dano'),
+(31, 100, 0, 'enemigo_seleccionado', 'bloquea_dano'),
+(32, 10, 0, 'Martha', 'mejora_curacion'),
+(33, 100, 0, 'Jack', 'bloquea_dano'),
 (34, 0, 0, 'mismo', 'bloquea_dano'),
-(35, 0, 0, 'Mike', 'mejora_dano');
+(35, 0, 0, 'Mike', 'mejora_dano'),
+(36, 50, 0, 'aliados', 'curacion');
 
 INSERT INTO `Character_card` (`id`, `name`,`nameAbility`, `description`, `ability`, `resistance`, `health`, `speed`) VALUES
-(1, 'Martha', 'Chef','Curacion con Queso', 1, 12, 70, 4),
-(2, 'Wendy', 'Campista Insectos','Rana Venenosa', 2, 9, 40, 10),
-(3, 'Brick', 'Campista Armas','Destruccion DIY', 3, 13, 40, 8),
-(4, 'Eduardo', 'Leñador','Golpe de Lenador', 4, 15, 80, 3),
+(1, 'Martha', 'Chef','Curacion con Queso', 1, 12, 100, 4),
+(2, 'Wendy', 'Campista Insectos','Rana Venenosa', 2, 9, 100, 10),
+(3, 'Brick', 'Campista Armas','Destruccion DIY', 3, 13, 100, 8),
+(4, 'Eduardo', 'Leñador','Golpe de Lenador', 4, 15, 100, 3),
 (5, 'Coach', 'Entrenador','Pep-talk', 5, 20, 100, 6),
-(6, 'Jack', 'Salvavidas','RCP', 6, 17, 70, 7),
-(7, 'Mike', 'Campista Rayos','Juicio Celestial', 7, 10, 40, 5);
+(6, 'Jack', 'Salvavidas','RCP', 6, 17, 100, 7),
+(7, 'Mike', 'Campista Rayos','Juicio Celestial', 7, 10, 100, 5);
 
 
 INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
@@ -250,7 +252,6 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (18, 'Curita', 'Cura al personaje al que se lo equipes por (x) de vida', 18),
 (19, 'Bebida energética', 'Restaura (x) cantidad de energía a tu barra', 19),
 (20, 'Camisa de Franela', 'Equipa esta carta al leñador para mejorar su resistencia por 2 puntos', 20),
-
 (21, 'Espada de madera', 'Equipa esta carta a Brick para mejorar su ataque básico 5 de daño', 21),
 (22, 'Arco', 'Equipa esta carta a Brick para cambiar su resortera por un arco pero ten cuidado porque el arco sólo puede utilizarse si también obtienes la carta Flecha', 22),
 (23, 'Insignia', 'Equipa esta carta a alguno de los campistas (Wendy/Brick/Mike) para inspirarlos y reducir el costo de energía de sus dos habilidades por 5 de manera permanente',23),
@@ -265,7 +266,7 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (32, 'Espátula', 'Permite al chef hacer comida más rápido para que puedan recuperar HP (si son jugadores que están en la baraja dos podrán recuperar hp, si es el jugador en ataque solo él podrá)', 32),
 (33, 'Jetski', 'Equipar al salvavidas para esquivar un ataque', 33),
 (34, 'Flotador', 'Protege a uno de tus personajes de los daños continuos', 34),
-(35, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 35),
+(35, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 35);
 
 DELIMITER $$
 CREATE PROCEDURE  Character_Ability_pro () 
@@ -288,6 +289,100 @@ Select * from deck_character;
 END $$
 DELIMITER ; 
 
+DELIMITER $$
+
+CREATE PROCEDURE register_player(
+    IN registered_name VARCHAR(45),
+    IN registered_password VARCHAR(45)
+)
+BEGIN
+    DECLARE username_exists INT;
+
+    SELECT COUNT(*) INTO username_exists
+    FROM player
+    WHERE name = registered_name;
+
+    IF username_exists > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ese nombre de usuario no se encuentra disponible';
+    ELSE
+        
+        INSERT INTO player (name, password) VALUES (registered_name, registered_password);
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER before_player_insert
+BEFORE INSERT ON player
+FOR EACH ROW
+BEGIN
+    DECLARE username_exists INT;
+
+    SELECT COUNT(*) INTO username_exists
+    FROM player
+    WHERE name = NEW.name;
+
+    IF username_exists > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ese nombre de usuario no esta disponible';
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE PROCEDURE validate_login(
+    IN registered_name VARCHAR(45),
+    IN registered_password VARCHAR(45),
+    OUT registered_id INT,
+    OUT login_successful BOOL,
+    OUT status_message VARCHAR(45)
+)
+BEGIN 
+    DECLARE db_password VARCHAR(45);
+    DECLARE db_id INT;
+
+    SET registered_id = NULL;
+    SET login_successful = FALSE;
+    SET status_message = 'Login failed';
+
+    SELECT id, password 
+    INTO db_id, db_password
+    FROM player
+    WHERE name = registered_name;
+
+    IF db_id IS NOT NULL AND db_password = registered_password THEN
+        SET registered_id = db_id;
+        SET login_successful = TRUE;
+        SET status_message = 'Login successful';
+    END IF;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE update_deck(
+	IN 	deck_id INT,
+	IN card1_id INT,
+    IN card2_id INT,
+    IN card3_id INT,
+    IN card4_id INT,
+    IN card5_id INT,
+    OUT status_message VARCHAR(45)
+)
+BEGIN
+	UPDATE deck
+    SET card1 = card1_id, card2 = card2_id, card3 = card3_id, card4 = card4_id, card5 = card5_id
+    WHERE id = deck_id;
+    SET status_message = 'Deck Updated succesfully';
+END $$
+
+    
+        
 
 
 
