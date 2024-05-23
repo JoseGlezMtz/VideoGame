@@ -227,7 +227,7 @@ public class CardManager : MonoBehaviour
             pu_Hand.Remove(PowerUp);
 
             AtributosPU atributosPU = PowerUp.GetComponent<AtributosPU>();
-            pu_Discarded.Add(atributosPU.pu_id);
+            //pu_Discarded.Add(atributosPU.pu_id);
         }
         
     }
@@ -319,22 +319,22 @@ public class CardManager : MonoBehaviour
                 //Revisamos si la carta es alguna de las que está jugando el jugador
                 if (Selected_card1 == null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4)){
                     Selected_card1 = objeto_carta;
-                    Debug.Log("Selected card for attack: " + Selected_card1.name);
+                    Debug.Log("Selected card for attacking: " + Selected_card1.name);
                 }
                 // en caso de que sea una de las carta del enemigo la asgnamos a la carta 2
                 else if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 5 || Cartas_mano.IndexOf(objeto_carta) == 6)){
             
                     Selected_card2= objeto_carta;
-                    Debug.Log("Selected card for attack: " + Selected_card2.name);
+                    Debug.Log("Selected card to attack: " + Selected_card2.name);
                     //hacer el ataque de las cartas
                     Attack(Selected_card1, Selected_card2);
                     // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
-                    Selected_card1.GetComponent<CardScript>().atributos.canAttack=false;
+                    
                     Selected_card1 = null;
                     Selected_card2 = null;
                     Attack_Option = false;
                     //En caso de que ya haya usado los dos ataques ya no permite atacar
-                    counter++;
+                    
                     if (counter == 2){
                         counter = 0;
                         Attack_Option=false;
@@ -432,8 +432,10 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
             Atributos atributosCarta1 = objeto_carta1.GetComponent<CardScript>().atributos;
             Atributos atributosCarta2 = objeto_carta2.GetComponent<CardScript>().atributos;
             
-            if (atributosCarta1.AbilityCost>energy)
+            if (atributosCarta1.AbilityCost<=energy)
             {
+                Debug.Log("objeto 1:"+Cartas_mano.IndexOf(objeto_carta1));
+                Debug.Log("objeto 2:"+Cartas_mano.IndexOf(objeto_carta2));
                 // We check if the cards are in the right position 
                 if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
                     (Cartas_mano.IndexOf(objeto_carta2) == 5 || Cartas_mano.IndexOf(objeto_carta2) == 6))
@@ -447,12 +449,18 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
                     energyText.text=$"{energy}";
                     Slider sliderComponent = energySlider.GetComponent<Slider>();
                     sliderComponent.value = energy;
+                    objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
+                    counter++;
                 }
                 else
                 {
                     Debug.Log("No enough energy");
                 }
             }
+            else{
+                Debug.Log("No enough energy");
+            }
+            
         }
         else
         {
