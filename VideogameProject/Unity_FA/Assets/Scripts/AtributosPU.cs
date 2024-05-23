@@ -7,7 +7,6 @@ public class AtributosPU : MonoBehaviour
 {
     public int pu_id;
     public string name;
-
     public string description;
     public int ability_amount;    
     public string ability_effect;
@@ -16,15 +15,7 @@ public class AtributosPU : MonoBehaviour
     //
     public Atributos atributosCardAffected;
 
-    public AtributosPU(int Id, string Name, int Amount, string Effect){
-
-        pu_id = Id;
-        pu_name = Name;
-        pu_amount = Id;
-        pu_effect = Effect;
-        pu_amount = Amount;
-        
-    }    
+    
 
     /*
     Ability Options:
