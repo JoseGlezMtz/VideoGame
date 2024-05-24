@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS Ability (
   PRIMARY KEY (id)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE IF NOT EXISTS Character_card (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS Character_card (
   PRIMARY KEY (id),
   CONSTRAINT fk_character_ability FOREIGN KEY (ability) REFERENCES Ability(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE IF NOT EXISTS Powerup_card (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
@@ -41,6 +43,7 @@ CREATE TABLE IF NOT EXISTS Powerup_card (
   PRIMARY KEY (id),
   CONSTRAINT fk_powerup_ability FOREIGN KEY (ability) REFERENCES Ability(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE IF NOT EXISTS Game (
   id INT NOT NULL AUTO_INCREMENT,
   cards INT NOT NULL,
@@ -48,6 +51,7 @@ CREATE TABLE IF NOT EXISTS Game (
   enemies_played INT NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE IF NOT EXISTS Deck (
   id INT NOT NULL AUTO_INCREMENT,
   player_id INT NOT NULL,
@@ -75,13 +79,25 @@ CREATE TABLE IF NOT EXISTS Cards_played (
   id INT NOT NULL AUTO_INCREMENT,
   game_id INT NOT NULL,
   player_id INT NOT NULL,
-  card_id INT NOT NULL,
-  is_powerup BOOLEAN NOT NULL DEFAULT FALSE,
+  character_card_id INT DEFAULT NULL,
+  powerup_card_id INT DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT fk_played_game FOREIGN KEY (game_id) REFERENCES Game(id),
   CONSTRAINT fk_played_player FOREIGN KEY (player_id) REFERENCES Player(id),
-  CONSTRAINT fk_played_card FOREIGN KEY (card_id) REFERENCES Character_card(id),
-  CONSTRAINT chk_is_powerup CHECK (is_powerup IN (0, 1))
+  CONSTRAINT fk_played_character_card FOREIGN KEY (character_card_id) REFERENCES Character_card(id),
+  CONSTRAINT fk_played_powerup_card FOREIGN KEY (powerup_card_id) REFERENCES Powerup_card(id),
+  CONSTRAINT chk_one_card CHECK ((character_card_id IS NOT NULL AND powerup_card_id IS NULL) OR (character_card_id IS NULL AND powerup_card_id IS NOT NULL))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE IF NOT EXISTS Game_results (
+  id INT NOT NULL AUTO_INCREMENT,
+  game_id INT NOT NULL,
+  player_id INT NOT NULL,
+  result ENUM('WIN', 'LOSE') NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_results_game FOREIGN KEY (game_id) REFERENCES Game(id),
+  CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE VIEW Character_Ability AS
@@ -103,6 +119,7 @@ pc.description,
  a.amount AS ability_amount
 FROM Powerup_card pc
 JOIN Ability a ON pc.ability = a.id;
+
 CREATE VIEW Deck_Character AS
 SELECT d.id AS deck_id, 
 p.name AS player_name, 
@@ -112,6 +129,59 @@ FROM Deck d
 JOIN Character_card cc ON d.card1 = cc.id OR d.card2 = cc.id OR d.card3 = cc.id OR d.card4 = cc.id OR d.card5 = cc.id
 JOIN Player p ON d.player_id = p.id;
 
+
+
+CREATE VIEW Game_Results AS
+SELECT
+    gr.id AS result_id,
+    gr.game_id,
+    g.cards,
+    g.duration,
+    g.enemies_played,
+    gr.player_id,
+    gr.result
+FROM
+    Game_results gr
+JOIN
+    Game g ON gr.game_id = g.id;
+
+
+CREATE VIEW Cards_Played_Character AS
+SELECT
+    cp.id AS played_id,
+    cp.game_id,
+    cp.player_id,
+    cp.character_card_id,
+    cc.name AS character_name,
+    cc.nameAbility AS character_ability,
+    cc.description AS character_description,
+    cc.resistance,
+    cc.health,
+    cc.speed
+FROM
+    Cards_played cp
+JOIN
+    Character_card cc ON cp.character_card_id = cc.id
+WHERE
+    cp.character_card_id IS NOT NULL;
+    
+    CREATE VIEW Cards_Played_Powerup AS
+SELECT
+    cp.id AS played_id,
+    cp.game_id,
+    cp.player_id,
+    cp.powerup_card_id,
+    pc.name AS powerup_name,
+    pc.image AS powerup_image,
+    pc.description AS powerup_description
+FROM
+    Cards_played cp
+JOIN
+    Powerup_card pc ON cp.powerup_card_id = pc.id
+WHERE
+    cp.powerup_card_id IS NOT NULL;
+
+/*----*/
 CREATE VIEW Player_Deck_Character AS
 SELECT p.name AS player_name,
  dc.character_name, 
@@ -119,25 +189,23 @@ SELECT p.name AS player_name,
 FROM Player p
 JOIN Deck d ON p.id = d.player_id
 JOIN Deck_Character dc ON d.id = dc.deck_id;
-CREATE VIEW Player_Cards_Played AS
-SELECT g.id AS game_id,
- p.name AS player_name, 
- cp.card_id, cp.is_powerup
-FROM Game g
-JOIN Cards_played cp ON g.id = cp.game_id
-JOIN Player p ON cp.player_id = p.id;
+
+
 CREATE VIEW Character_Ability_Cost AS
 SELECT cc.name AS character_name, 
 a.effect AS ability_effect,
  a.cost AS ability_cost
 FROM Character_card cc
 JOIN Ability a ON cc.ability = a.id;
+
+
 CREATE VIEW Powerup_Effects AS
 SELECT pc.name AS powerup_name,
  pc.description AS powerup_description, 
  a.effect AS ability_effect
 FROM Powerup_card pc
 JOIN Ability a ON pc.ability = a.id;
+
 CREATE VIEW Player_Deck_Powerups AS
 SELECT p.name AS player_name, 
 d.powerup1, 
@@ -145,17 +213,8 @@ d.powerup2,
  d.powerup3
 FROM Player p
 JOIN Deck d ON p.id = d.player_id;
-CREATE VIEW Game_Statistics AS
-SELECT g.id AS game_id, 
-g.cards AS num_cards, 
-g.duration AS game_duration,
- g.enemies_played AS num_enemies_played
-FROM Game g;
-CREATE VIEW Character_Health_Speed AS
-SELECT cc.name AS character_name, 
-cc.health AS character_health,
- cc.speed AS character_speed
-FROM Character_card cc;
+
+
 
 
 
