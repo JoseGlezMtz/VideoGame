@@ -730,6 +730,7 @@ MonoBehaviour:
   energySlider: {fileID: 801110365}
   puAdded: 0
   PlayerTurn: 0
+  CountCountEnemyTurn: 0
   Change_Option: 0
   Attack_Option: 0
   Selected_card1: {fileID: 0}
@@ -744,6 +745,7 @@ MonoBehaviour:
   APIData: 
   Dataready: 0
   GameStarted: 0
+  PowerUp_created: 0
 --- !u!114 &316479427
 MonoBehaviour:
   m_ObjectHideFlags: 0
