@@ -45,10 +45,13 @@ public class CardManager : MonoBehaviour
     [SerializeField] TMP_Text energyText;
     [SerializeField]  GameObject energySlider;
 
+
+
     public bool puAdded;
 
     private bool changeButtonPressed = false;
     public bool PlayerTurn = false;
+    public bool CountCountEnemyTurn = false;
     public bool Change_Option = false;
     public bool Attack_Option = false;
     int card_Index1;
@@ -68,6 +71,7 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] public bool Dataready = false;
     [SerializeField] bool GameStarted = false;
+    [SerializeField] bool PowerUp_created = false;
 
     /*
     PlayerTurn()
@@ -159,6 +163,7 @@ public class CardManager : MonoBehaviour
 
         
         Debug.Log("Creating: " + PU.name);
+        PowerUp_created = true;
 
     
         //Button button = PU.GetComponent<Button>();
@@ -204,6 +209,9 @@ public class CardManager : MonoBehaviour
 
     
     public void AddPU(){
+        
+
+        
         GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
 
         if(pu_Hand.Count == 3){
@@ -221,13 +229,17 @@ public class CardManager : MonoBehaviour
     }
 
     public void DiscardPU(){
-        GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
-        if (PowerUp != null){
+        if (PowerUp_created){
+            GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
+            Debug.Log(PowerUp);
             Destroy(PowerUp);
             pu_Hand.Remove(PowerUp);
 
             AtributosPU atributosPU = PowerUp.GetComponent<AtributosPU>();
             //pu_Discarded.Add(atributosPU.pu_id);
+        }
+        else{
+            Debug.LogError("No power up to discard");
         }
         
     }
@@ -395,13 +407,14 @@ public class CardManager : MonoBehaviour
             c) add the new power up to the hand
         3. Increase number of turn
         4. End Turn (set playerTurn to false)
-        5. Call enemyTurn
+        5. Call CountCountEnemyTurn
 
         */
     }
 
     //Increase Energy amount
     public void IncreaseEnegry(){
+        Debug.Log("Energy increased");
         if(energy + (num_turn-1) * 10 <= max_energy){
             energy += (num_turn-1) * 10;
         }
@@ -520,7 +533,56 @@ public void EndTurn()
     IncreaseEnegry();
     turnText.text = $"Turn: {num_turn}";
     energyText.text = $"{energy}";
+    CountCountEnemyTurn = true;
+    EnemyTurn();
     
     
+    
+    
+    
+}
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //enemy turn
+    
+
+    public void EnemyAttack(GameObject enemyCard, GameObject playerCard)
+{
+    if (enemyCard != null && playerCard != null )
+    {
+        Atributos enemyCardAtributos = enemyCard.GetComponent<CardScript>().atributos;
+        Atributos playerCardAtributos = playerCard.GetComponent<CardScript>().atributos;
+        
+        playerCardAtributos.health -= enemyCardAtributos.Attack;
+
+        Debug.Log(enemyCard.name + " attacked " + playerCard.name + " for " + enemyCardAtributos.Attack + " damage.");
+        
+    }else{
+        Debug.Log("error en el ataque del enemigo");
     }
+    
+}
+
+void EnemyTurn()
+{
+    if (CountCountEnemyTurn==true)
+    {
+        int playerCardIndex = Random.Range(3, 5); // Asegúrate de seleccionar una carta válida del jugador
+        GameObject playerCard = Cartas_mano[playerCardIndex];
+        Debug.Log("Player card selected: " + playerCard.name); // Agregar línea de depuración
+
+        int enemyCardIndex = Random.Range(5, 7); 
+        GameObject enemyCard = Cartas_mano[enemyCardIndex];
+        Debug.Log("Enemy card selected: " + enemyCard.name); 
+
+        EnemyAttack(enemyCard, playerCard);
+
+        CountCountEnemyTurn = false;
+        PlayerTurn = true;
+    }
+}
+
+
+
+
 }
