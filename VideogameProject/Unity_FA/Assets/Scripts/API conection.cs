@@ -34,4 +34,23 @@ public class APIconection : MonoBehaviour
             }
         }
     }
+
+    public void get_PU_cards(){
+        StartCoroutine(Request_PU_Cards("http://localhost:4444/api/Pu_card"));
+    }
+
+    IEnumerator Request_PU_Cards(string url){
+        using(UnityWebRequest www = UnityWebRequest.Get(url)){
+            yield return www.SendWebRequest();
+            if(www.isNetworkError || www.isHttpError){
+                Debug.Log("request error" + www.error);
+            }else{
+                string result=www.downloadHandler.text;
+                Debug.Log( result);
+                controller.pu_Cards_Data=result;
+                controller.PU_Dataready=true;
+                //controller.Create_Board();
+            }
+        }
+    }
 }

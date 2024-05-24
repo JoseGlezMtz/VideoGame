@@ -1,19 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AtributosPU : MonoBehaviour
+[System.Serializable]
+public class AtributosPU 
 {
-    public int pu_id;
+    public int id;
     public string name;
     public string description;
-    public int ability_amount;    
     public string ability_effect;
+    public int ability_amount;    
     public GameObject pu_cardAffected;
 
     //
-    public Atributos atributosCardAffected;
 
     
 
@@ -34,4 +35,9 @@ public class AtributosPU : MonoBehaviour
 
     */
 
+}
+
+[System.Serializable]
+public class PUs{
+    public List<AtributosPU> powerUps;
 }

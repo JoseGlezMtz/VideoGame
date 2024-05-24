@@ -56,3 +56,31 @@ app.get("/api/Character_card", async (request, response) => {
     }
   }
 });
+
+app.get("/api/Pu_card", async (request, response) => {
+  let connection = null;
+
+  try {
+
+
+    connection = await connectToDB();
+
+    const [results, fields] = await connection.execute("Select * from powerup_ability" );
+
+    console.log(`${results.length} rows returned`);
+    const c={"powerUps":results};
+    response.status(200).json(c);
+  }
+  catch (error) {
+    response.status(500);
+    response.json(error);
+    console.log(error);
+  }
+  finally {
+    
+    if (connection !== null) {
+      connection.end();
+      console.log("Connection closed succesfully!");
+    }
+  }
+});
