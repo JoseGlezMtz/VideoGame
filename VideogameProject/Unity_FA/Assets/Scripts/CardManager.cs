@@ -67,9 +67,12 @@ public class CardManager : MonoBehaviour
     public int energy;
     public int max_energy;
     [SerializeField]  Cards allCards;
+    [SerializeField]  PUs puCards;
     public string APIData;
+    public string pu_Cards_Data;
 
     [SerializeField] public bool Dataready = false;
+    [SerializeField] public bool PU_Dataready = false;
     [SerializeField] bool GameStarted = false;
     [SerializeField] bool PowerUp_created = false;
 
@@ -111,12 +114,13 @@ public class CardManager : MonoBehaviour
         turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
         GetComponent<APIconection>().get_Character_cards();
+        GetComponent<APIconection>().get_PU_cards();
         //InitGame();
     }
 
     void Update()
     {
-        if (Dataready && !GameStarted)
+        if ((Dataready && PU_Dataready) && !GameStarted)
         {
             InitGame();
             GameStarted = true;
@@ -136,38 +140,40 @@ public class CardManager : MonoBehaviour
         button.onClick.AddListener(() => registerCard(Card));
         
         
-        //We set the attributes of the cards
-        //Atributos atributosCarta = Card.GetComponent<Atributos>();
-        /*if (Lista.Count == 6 || Lista.Count==7)
-        {
-            atributosCarta.HP = 100;
-        }
-        else if (i == 4 || i == 3 || i==0 || i==1 || i==2 )
-       
-      
-        {
-            atributosCarta.Attack = 50;
-            atributosCarta.AbilityCost = 20;
-        }*/
     }
 
     //template of all the power ups in the board
     //INITIALIZE PU BASED ON ID
     public void Create_PU()
     {
+        if (PowerUp_created)
+        {
+            Debug.Log("Power up already created");
+            return;
+        }
+        else if (!PlayerTurn)
+        {
+            Debug.Log("It's not your turn");
+        }
+        else{
         //Agregar for loop para crear los 30 power ups
         //Agregar los objects a la lista de pile
         GameObject PU = Instantiate(PUPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
-        PU.AddComponent<AtributosPU>();
-        AtributosPU puAtributos = PU.GetComponent<AtributosPU>();
-
+        Debug.Log(pu_Pile[0]);
+        foreach (AtributosPU pu in puCards.powerUps)
+        {
+            Debug.Log("in for loop");
+            if (pu.id == pu_Pile[0])
+            {
+                PU.GetComponent<PUscript>().Init(pu);
+            }
+        }
         
         Debug.Log("Creating: " + PU.name);
+        pu_Pile.RemoveAt(0);
         PowerUp_created = true;
+        }
 
-    
-        //Button button = PU.GetComponent<Button>();
-        //button.onClick.AddListener(() => AddPU(PU));
     }
 
 
@@ -176,12 +182,14 @@ public class CardManager : MonoBehaviour
     IEnumerator Create_Board()
     {
         int i = 0;
-        Debug.Log("log"+APIData);
+        //Debug.Log("log"+APIData);
         allCards=JsonUtility.FromJson<Cards>(APIData);
+        puCards =JsonUtility.FromJson<PUs>(pu_Cards_Data);
         Debug.Log(allCards.cards);
+        Debug.Log(puCards.powerUps);
         foreach (Atributos atributosCarta in allCards.cards)
         {
-            Debug.Log(atributosCarta);
+            //Debug.Log(atributosCarta);
             Card_base(Cartas_mano, i, atributosCarta);
             yield return new WaitForSeconds(0.1f);
             i++;
@@ -534,6 +542,8 @@ public void EndTurn()
     turnText.text = $"Turn: {num_turn}";
     energyText.text = $"{energy}";
     CountCountEnemyTurn = true;
+    counter = 0;
+    PowerUp_created = false;
     EnemyTurn();
     
     
@@ -579,6 +589,7 @@ void EnemyTurn()
 
         CountCountEnemyTurn = false;
         PlayerTurn = true;
+
     }
 }
 
