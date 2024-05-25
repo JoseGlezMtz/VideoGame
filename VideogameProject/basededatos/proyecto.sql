@@ -131,7 +131,7 @@ JOIN Player p ON d.player_id = p.id;
 
 
 
-CREATE VIEW Game_Results AS
+CREATE VIEW Game_Resultado AS
 SELECT
     gr.id AS result_id,
     gr.game_id,
