@@ -15,6 +15,7 @@ public class Atributos
      public string effect;
      public int resistance;
      public bool canAttack=true;
+     public int isShielded = 0;
      public int speed = 0;
 
 /*    public int Id 
@@ -64,16 +65,15 @@ public class Atributos
         health += amount;
     }*/
     
-    public void SetAtributos(Atributos atributos){
-        this.id=atributos.id;
-        this.health=atributos.health;
-        this.attack=atributos.attack;
-        this.abilityCost=atributos.abilityCost;
-        this.effect=atributos.effect;
-        
-        this.speed=atributos.speed;
+    
 
+    public void Update_Shield(){
+        if(isShielded>0){
+            isShielded-=1;
+        }
     }
+
+    
 }
 [System.Serializable]
 public class Cards{
