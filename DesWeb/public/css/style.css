@@ -1,0 +1,43 @@
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+nav{
+    background-color: #005f73;
+    color:white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+nav img{
+    width: 200px;
+    margin: 10px;
+}
+
+.Links{
+    display: flex;
+    flex-direction: row;
+}
+
+.Links a{
+    margin-left: 15px;
+    margin-right: 15px;
+    color: white;
+}
+
+.Scene{
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    margin: 20px;
+}
+
+.Scene img{
+    width: 100%;
+    height: 100%;
+}
+
+html{
+    background-color: #001219;
+}
