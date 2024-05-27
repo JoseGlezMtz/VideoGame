@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardScript : MonoBehaviour
+public class PUscript : MonoBehaviour
 {
-    public Atributos atributos;
+    public AtributosPU atributosPU;
     
     // Start is called before the first frame update
-    public void Init(Atributos _atributos)
-    {
-        atributos = _atributos;
+    public void Init(AtributosPU pu)
+    {   
+        atributosPU = pu;
         Image imageComponent = GetComponent<Image>();
-   
-            if (imageComponent == null)
+        if (imageComponent == null)
             {
                 //Debug.LogError("Image component not found on newCard.");
             }
             else
             {
                 // Image component found, proceed to set sprite
-                imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{atributos.id -1}");
+                imageComponent.sprite = Resources.Load<Sprite>($"Powerups/{atributosPU.id}");
             }
+        
+       
     }
 
     // Update is called once per frame
@@ -29,4 +30,6 @@ public class CardScript : MonoBehaviour
     {
         
     }
+
+
 }

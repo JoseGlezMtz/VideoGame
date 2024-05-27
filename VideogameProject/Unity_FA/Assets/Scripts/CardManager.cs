@@ -45,10 +45,13 @@ public class CardManager : MonoBehaviour
     [SerializeField] TMP_Text energyText;
     [SerializeField]  GameObject energySlider;
 
+
+
     public bool puAdded;
 
     private bool changeButtonPressed = false;
     public bool PlayerTurn = false;
+    public bool CountCountEnemyTurn = false;
     public bool Change_Option = false;
     public bool Attack_Option = false;
     int card_Index1;
@@ -63,6 +66,15 @@ public class CardManager : MonoBehaviour
 
     public int energy;
     public int max_energy;
+    [SerializeField]  Cards allCards;
+    [SerializeField]  PUs puCards;
+    public string APIData;
+    public string pu_Cards_Data;
+
+    [SerializeField] public bool Dataready = false;
+    [SerializeField] public bool PU_Dataready = false;
+    [SerializeField] bool GameStarted = false;
+    [SerializeField] bool PowerUp_created = false;
 
     /*
     PlayerTurn()
@@ -101,62 +113,67 @@ public class CardManager : MonoBehaviour
 
         turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
+        GetComponent<APIconection>().get_Character_cards();
+        GetComponent<APIconection>().get_PU_cards();
+        //InitGame();
+    }
 
-        InitGame();
+    void Update()
+    {
+        if ((Dataready && PU_Dataready) && !GameStarted)
+        {
+            InitGame();
+            GameStarted = true;
+        }
     }
     //template of all  the cards in the board 
 
-    public void Card_base(List<GameObject> Lista, int i)
+    public void Card_base(List<GameObject> Lista, int i, Atributos atributosCarta)
     {
         GameObject Card = Instantiate(CardPrefab, Panels[i].transform.position, Quaternion.identity, parentPrefab);
-        Card.AddComponent<Atributos>();
+       // Card.AddComponent<Atributos>().SetAtributos(atributosCarta);
+        Card.GetComponent<CardScript>().Init(atributosCarta);
         Card.name = "Card" + Lista.Count;
         Lista.Add(Card);
         Debug.Log("Creating: " + Card.name);
         Button button = Card.GetComponent<Button>();
         button.onClick.AddListener(() => registerCard(Card));
         
-        Image imageComponent = Card.GetComponent<Image>();
-            if (imageComponent == null)
-            {
-                //Debug.LogError("Image component not found on newCard.");
-            }
-            else
-            {
-                // Image component found, proceed to set sprite
-                imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{i}");
-            }
-        //We set the attributes of the cards
-        //Atributos atributosCarta = Card.GetComponent<Atributos>();
-        /*if (Lista.Count == 6 || Lista.Count==7)
-        {
-            atributosCarta.HP = 100;
-        }
-        else if (i == 4 || i == 3 || i==0 || i==1 || i==2 )
-       
-      
-        {
-            atributosCarta.Attack = 50;
-            atributosCarta.AbilityCost = 20;
-        }*/
+        
     }
 
     //template of all the power ups in the board
     //INITIALIZE PU BASED ON ID
     public void Create_PU()
     {
+        if (PowerUp_created)
+        {
+            Debug.Log("Power up already created");
+            return;
+        }
+        else if (!PlayerTurn)
+        {
+            Debug.Log("It's not your turn");
+        }
+        else{
         //Agregar for loop para crear los 30 power ups
         //Agregar los objects a la lista de pile
         GameObject PU = Instantiate(PUPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
-        PU.AddComponent<AtributosPU>();
-        AtributosPU puAtributos = PU.GetComponent<AtributosPU>();
-
+        Debug.Log(pu_Pile[0]);
+        foreach (AtributosPU pu in puCards.powerUps)
+        {
+            Debug.Log("in for loop");
+            if (pu.id == pu_Pile[0])
+            {
+                PU.GetComponent<PUscript>().Init(pu);
+            }
+        }
         
         Debug.Log("Creating: " + PU.name);
+        pu_Pile.RemoveAt(0);
+        PowerUp_created = true;
+        }
 
-    
-        //Button button = PU.GetComponent<Button>();
-        //button.onClick.AddListener(() => AddPU(PU));
     }
 
 
@@ -165,12 +182,24 @@ public class CardManager : MonoBehaviour
     IEnumerator Create_Board()
     {
         int i = 0;
-        while (i < Panels.Count)
+        //Debug.Log("log"+APIData);
+        allCards=JsonUtility.FromJson<Cards>(APIData);
+        puCards =JsonUtility.FromJson<PUs>(pu_Cards_Data);
+        Debug.Log(allCards.cards);
+        Debug.Log(puCards.powerUps);
+        foreach (Atributos atributosCarta in allCards.cards)
+        {
+            //Debug.Log(atributosCarta);
+            Card_base(Cartas_mano, i, atributosCarta);
+            yield return new WaitForSeconds(0.1f);
+            i++;
+        }
+        /*while (i < Panels.Count)
         {
             Card_base(Cartas_mano, i);
             yield return new WaitForSeconds(0.1f);
             i++;
-        }
+        }*/
         Init_PU_ID();
         //We create the power up button
         PU_button();
@@ -181,12 +210,16 @@ public class CardManager : MonoBehaviour
 
     void InitGame()
     {
+        
         StartCoroutine(Create_Board());
        
     }
 
     
     public void AddPU(){
+        
+
+        
         GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
 
         if(pu_Hand.Count == 3){
@@ -204,13 +237,17 @@ public class CardManager : MonoBehaviour
     }
 
     public void DiscardPU(){
-        GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
-        if (PowerUp != null){
+        if (PowerUp_created){
+            GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
+            Debug.Log(PowerUp);
             Destroy(PowerUp);
             pu_Hand.Remove(PowerUp);
 
             AtributosPU atributosPU = PowerUp.GetComponent<AtributosPU>();
-            pu_Discarded.Add(atributosPU.pu_id);
+            //pu_Discarded.Add(atributosPU.pu_id);
+        }
+        else{
+            Debug.LogError("No power up to discard");
         }
         
     }
@@ -294,7 +331,7 @@ public class CardManager : MonoBehaviour
                 }
             else if(Attack_Option){
                 // Revisamos si esta carta ya ha sido usada para atacar previamente en el turno
-                if (Selected_card1.GetComponent<Atributos>().canAttack==false ){
+                if (Selected_card1.GetComponent<CardScript>().atributos.canAttack==false ){
                     Debug.Log("You have already used this card for attack");
                     return;
                 }
@@ -302,22 +339,22 @@ public class CardManager : MonoBehaviour
                 //Revisamos si la carta es alguna de las que está jugando el jugador
                 if (Selected_card1 == null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4)){
                     Selected_card1 = objeto_carta;
-                    Debug.Log("Selected card for attack: " + Selected_card1.name);
+                    Debug.Log("Selected card for attacking: " + Selected_card1.name);
                 }
                 // en caso de que sea una de las carta del enemigo la asgnamos a la carta 2
                 else if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 5 || Cartas_mano.IndexOf(objeto_carta) == 6)){
             
                     Selected_card2= objeto_carta;
-                    Debug.Log("Selected card for attack: " + Selected_card2.name);
+                    Debug.Log("Selected card to attack: " + Selected_card2.name);
                     //hacer el ataque de las cartas
                     Attack(Selected_card1, Selected_card2);
                     // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
-                    Selected_card1.GetComponent<Atributos>().canAttack=false;
+                    
                     Selected_card1 = null;
                     Selected_card2 = null;
                     Attack_Option = false;
                     //En caso de que ya haya usado los dos ataques ya no permite atacar
-                    counter++;
+                    
                     if (counter == 2){
                         counter = 0;
                         Attack_Option=false;
@@ -378,13 +415,14 @@ public class CardManager : MonoBehaviour
             c) add the new power up to the hand
         3. Increase number of turn
         4. End Turn (set playerTurn to false)
-        5. Call enemyTurn
+        5. Call CountCountEnemyTurn
 
         */
     }
 
     //Increase Energy amount
     public void IncreaseEnegry(){
+        Debug.Log("Energy increased");
         if(energy + (num_turn-1) * 10 <= max_energy){
             energy += (num_turn-1) * 10;
         }
@@ -412,17 +450,19 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
         if (objeto_carta1 != null && objeto_carta2 != null)
         {
             // We set the attributes of the cards atrributesCarta1 for the player card and atributosCarta2 for the enemy card
-            Atributos atributosCarta1 = objeto_carta1.GetComponent<Atributos>();
-            Atributos atributosCarta2 = objeto_carta2.GetComponent<Atributos>();
+            Atributos atributosCarta1 = objeto_carta1.GetComponent<CardScript>().atributos;
+            Atributos atributosCarta2 = objeto_carta2.GetComponent<CardScript>().atributos;
             
-            if (atributosCarta1.AbilityCost>energy)
+            if (atributosCarta1.AbilityCost<=energy)
             {
+                Debug.Log("objeto 1:"+Cartas_mano.IndexOf(objeto_carta1));
+                Debug.Log("objeto 2:"+Cartas_mano.IndexOf(objeto_carta2));
                 // We check if the cards are in the right position 
                 if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
                     (Cartas_mano.IndexOf(objeto_carta2) == 5 || Cartas_mano.IndexOf(objeto_carta2) == 6))
                 {
                    // We attack the enemy card 
-                    atributosCarta2.HP -= atributosCarta1.Attack;
+                    atributosCarta2.health -= atributosCarta1.Attack;
                     Debug.Log(objeto_carta1.name + " attacked " + objeto_carta2.name + " for " + atributosCarta1.Attack + " damage.");
                     
                     //Decrease energy amount-- fix later on with the corresponding value
@@ -430,12 +470,18 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
                     energyText.text=$"{energy}";
                     Slider sliderComponent = energySlider.GetComponent<Slider>();
                     sliderComponent.value = energy;
+                    objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
+                    counter++;
                 }
                 else
                 {
                     Debug.Log("No enough energy");
                 }
             }
+            else{
+                Debug.Log("No enough energy");
+            }
+            
         }
         else
         {
@@ -484,8 +530,8 @@ public void EndTurn()
 {
     PlayerTurn = false;
     ++num_turn;
-    Atributos activeCard1 = Cartas_mano[3].GetComponent<Atributos>();
-    Atributos activeCard2 = Cartas_mano[4].GetComponent<Atributos>();
+    Atributos activeCard1 = Cartas_mano[3].GetComponent<CardScript>().atributos;
+    Atributos activeCard2 = Cartas_mano[4].GetComponent<CardScript>().atributos;
 
     DiscardPU();
 
@@ -495,7 +541,59 @@ public void EndTurn()
     IncreaseEnegry();
     turnText.text = $"Turn: {num_turn}";
     energyText.text = $"{energy}";
+    CountCountEnemyTurn = true;
+    counter = 0;
+    PowerUp_created = false;
+    EnemyTurn();
     
     
+    
+    
+    
+}
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //enemy turn
+    
+
+    public void EnemyAttack(GameObject enemyCard, GameObject playerCard)
+{
+    if (enemyCard != null && playerCard != null )
+    {
+        Atributos enemyCardAtributos = enemyCard.GetComponent<CardScript>().atributos;
+        Atributos playerCardAtributos = playerCard.GetComponent<CardScript>().atributos;
+        
+        playerCardAtributos.health -= enemyCardAtributos.Attack;
+
+        Debug.Log(enemyCard.name + " attacked " + playerCard.name + " for " + enemyCardAtributos.Attack + " damage.");
+        
+    }else{
+        Debug.Log("error en el ataque del enemigo");
     }
+    
+}
+
+void EnemyTurn()
+{
+    if (CountCountEnemyTurn==true)
+    {
+        int playerCardIndex = Random.Range(3, 5); // Asegúrate de seleccionar una carta válida del jugador
+        GameObject playerCard = Cartas_mano[playerCardIndex];
+        Debug.Log("Player card selected: " + playerCard.name); // Agregar línea de depuración
+
+        int enemyCardIndex = Random.Range(5, 7); 
+        GameObject enemyCard = Cartas_mano[enemyCardIndex];
+        Debug.Log("Enemy card selected: " + enemyCard.name); 
+
+        EnemyAttack(enemyCard, playerCard);
+
+        CountCountEnemyTurn = false;
+        PlayerTurn = true;
+
+    }
+}
+
+
+
+
 }

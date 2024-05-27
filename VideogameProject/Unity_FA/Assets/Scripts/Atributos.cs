@@ -3,27 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Atributos : MonoBehaviour
+[System.Serializable]
+public class Atributos 
 {
-    [SerializeField] private int id; 
-    [SerializeField] private int hp = 100; 
-    [SerializeField] private int attack = 20; 
-    [SerializeField] private int abilityCost = 5;
-    [SerializeField] private int curation;
-    [SerializeField] public bool canAttack=true;
-    [SerializeField] public int shield = 0;
+     public int id = 0; 
+     public string character_name;
+     public int health = 100; 
+     public int attack = 20; 
+     public int abilityCost = 5;
+     public string cards_affectted;
+     public string effect;
+     public int resistance;
+     public bool canAttack=true;
+     public int speed = 0;
 
-    public int Id 
+/*    public int Id 
     { 
         get { return id; } 
         set { id = value; } 
     }
 
-    public int HP 
+    /*public int HP 
     { 
-        get { return hp; } 
-        set { hp = value; } 
-    }
+        get { return health; } 
+        set { health = value; } 
+    }*/
 
     public int Attack 
     { 
@@ -43,13 +47,13 @@ public class Atributos : MonoBehaviour
         set { attack = abilityCost; } 
     }
 
-    public int Curation 
+    /*public int Curation 
     { 
         get { return curation; } 
         set { curation = value; } 
-    }
+    }*/
 
-    public int Shield 
+    /*public int Shield 
     { 
         get { return shield; } 
         set { shield = value; } 
@@ -57,6 +61,45 @@ public class Atributos : MonoBehaviour
 
     public void Heal(int amount)
     {
-        HP += amount;
+        health += amount;
+    }*/
+    
+    public void SetAtributos(Atributos atributos){
+        this.id=atributos.id;
+        this.health=atributos.health;
+        this.attack=atributos.attack;
+        this.abilityCost=atributos.abilityCost;
+        this.effect=atributos.effect;
+        
+        this.speed=atributos.speed;
+
+    }
+}
+[System.Serializable]
+public class Cards{
+    public List<Atributos> cards;
+}
+
+public class Carta : MonoBehaviour
+{
+     public int id = 0; 
+     public string character_name;
+     public int health = 100; 
+     public int attack = 20; 
+     public int abilityCost = 5;
+     public string cards_affectted;
+     public string effect;
+     public int resistance;
+     public int speed = 0;
+
+    public void SetAtributos(Carta atributos){
+        this.id=atributos.id;
+        this.health=atributos.health;
+        this.attack=atributos.attack;
+        this.abilityCost=atributos.abilityCost;
+        this.effect=atributos.effect;
+        
+        this.speed=atributos.speed;
+
     }
 }
