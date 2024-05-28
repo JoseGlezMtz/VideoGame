@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class CardScript : MonoBehaviour
 {
     public Atributos atributos;
+    public CardManager cardManager;
+
+    [SerializeField] public GameObject selfCard;
     
     // Start is called before the first frame update
     public void Init(Atributos _atributos)
@@ -28,5 +31,17 @@ public class CardScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+     public bool check_alive(){
+        if(atributos.health <= 0){
+            
+            atributos.Alive=false;
+            
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }
