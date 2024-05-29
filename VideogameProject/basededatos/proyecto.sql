@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Player (
   name VARCHAR(45) NOT NULL,
   password VARCHAR(45) NOT NULL,
   level INT DEFAULT 1,
-  #deck_id INT NOT NULL,
+  deck_id INT NOT NULL ,
   PRIMARY KEY (id)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS Game (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS Deck (
-  id INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL,
   player_id INT NOT NULL,
   card1 INT NOT NULL,
   card2 INT NOT NULL,
@@ -61,10 +61,10 @@ CREATE TABLE IF NOT EXISTS Deck (
   card4 INT NOT NULL,
   card5 INT NOT NULL,
   powerup1 INT DEFAULT NULL,
-  powerup2 INT  DEFAULT NULL,
-  powerup3 INT   DEFAULT NULL,
+  powerup2 INT DEFAULT NULL,
+  powerup3 INT DEFAULT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT fk_deck_player FOREIGN KEY (player_id) REFERENCES Player(id),
+  CONSTRAINT fk_deck_player FOREIGN KEY (id) REFERENCES Player(id),
   CONSTRAINT fk_deck_card1 FOREIGN KEY (card1) REFERENCES Character_card(id),
   CONSTRAINT fk_deck_card2 FOREIGN KEY (card2) REFERENCES Character_card(id),
   CONSTRAINT fk_deck_card3 FOREIGN KEY (card3) REFERENCES Character_card(id),
@@ -181,7 +181,7 @@ JOIN
 WHERE
     cp.powerup_card_id IS NOT NULL;
 
-/*----*/
+
 CREATE VIEW Player_Deck_Character AS
 SELECT p.name AS player_name,
  dc.character_name, 

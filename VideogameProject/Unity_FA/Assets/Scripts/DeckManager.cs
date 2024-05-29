@@ -1,5 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +12,8 @@ public class DeckManager : MonoBehaviour
     //Lists to store the cards
     [SerializeField] List<GameObject> cards;
     [SerializeField] List<GameObject> deck;
+
+    public List<int> deck_ids;
 
     int numCards = 7;
     int maxDeck = 5;
@@ -26,6 +32,9 @@ public class DeckManager : MonoBehaviour
     //Add and remove buttons
     [SerializeField] GameObject AddBtn;
     [SerializeField] GameObject RemoveBtn;
+    [SerializeField] GameObject FavoriteBtn;
+
+    [SerializeField] GameObject SaveBtn;
 
     //Start the scene, intialize the empty lists and cards
     void Start()
@@ -33,6 +42,9 @@ public class DeckManager : MonoBehaviour
         cards = new List<GameObject>();
         deck = new List<GameObject>(); 
         InitializeCards();
+
+        Button saveButton = SaveBtn.GetComponent<Button>();
+        saveButton.onClick.AddListener(() => SaveDeck());
     }
 
     //Generate the cards 
@@ -48,7 +60,7 @@ public class DeckManager : MonoBehaviour
             Image imageComponent = newCard.GetComponent<Image>();
             if (imageComponent == null)
             {
-                //Debug.LogError("Image component not found on newCard.");
+                Debug.LogError("Image component not found on newCard.");
             }
             else
             {
@@ -59,7 +71,7 @@ public class DeckManager : MonoBehaviour
             OptionsCards optionsCardsComponent = newCard.GetComponent<OptionsCards>();
             if (optionsCardsComponent == null)
             {
-                //Debug.LogError("OptionsCards component not found on newCard.");
+                Debug.LogError("OptionsCards component not found on newCard.");
             }
             else
             {
@@ -79,6 +91,12 @@ public class DeckManager : MonoBehaviour
                 // Button component found add onClick listener
                 buttonComponent.onClick.AddListener(() => DisplayCard(newCard));
             }
+
+            //Button favoriteButton = newCard.GetComponentInChildren<Button>();
+            //favoriteButton.onClick.AddListener(() => AddFavorite(newCard));
+            //cardButton.onClick.AddListener(() => DisplayCard(cardToAdd));
+
+
         }
     }
 
@@ -92,6 +110,7 @@ public class DeckManager : MonoBehaviour
         //define the buttons
         Button addButton = AddBtn.GetComponent<Button>();
         Button removeButton = RemoveBtn.GetComponent<Button>();
+        Button favoriteButton = FavoriteBtn.GetComponent<Button>();
 
         //assign the clicked card to the variable: selectedCard
         OptionsCards cardComponent = card.GetComponent<OptionsCards>();
@@ -104,6 +123,7 @@ public class DeckManager : MonoBehaviour
         //Detect clicks on the add or remove buttons and call methods
         addButton.onClick.AddListener(() => AddDeck(selectedCard));
         removeButton.onClick.AddListener(() => RemoveDeck(selectedCard));
+        favoriteButton.onClick.AddListener(() =>AddFavorite(selectedCard));
         
     }
 
@@ -150,6 +170,31 @@ public class DeckManager : MonoBehaviour
         }
     }
 
+    void AddFavorite(GameObject cardToAdd){
+        deck.Remove(cardToAdd);
+        deck.Add(cardToAdd);
+
+        UpdateIcons();
+    }
+
+    void UpdateIcons(){
+        Debug.Log("Updating Icons...");
+        for(int i = 0; i < maxDeck; i++){
+            OptionsCards cardComponent =  deck[i].GetComponent<OptionsCards>();
+            if(i == 3 || i == 4){
+                cardComponent.favSprite.sprite =  Resources.Load<Sprite>($"star_button");
+            }
+            else if(i < 3){
+                cardComponent.favSprite = null;
+            } 
+        }
+        foreach(GameObject card in cards){
+                OptionsCards cardComponent = card.GetComponent<OptionsCards>();
+                cardComponent.favSprite.sprite = null;
+            }
+        
+    }
+
 
     //Method to remove card
     void RemoveDeck(GameObject cardToRemove){
@@ -157,13 +202,36 @@ public class DeckManager : MonoBehaviour
         
         //Check if the card is in the deck, if so, remove
         if(deck.Contains(cardToRemove)){
+            cardToRemove.GetComponentInChildren<TMP_Text>().text = "";
             cards.Add(cardToRemove);
             cardToRemove.transform.SetParent(cardsParent);
             deck.Remove(cardToRemove);
+
+           
 
         }
         else{
             //Debug.LogError($"The card with index: {optionsCardsComponent.cardIndex} is not in the deck");
         }
+    }
+
+    void SaveDeck(){
+        deck_ids.Clear();
+        if(deck.Count != 5){
+            Debug.Log("Deck does not meet size requirements");
+        }
+        else{
+            for(int i = 0; i < maxDeck; i++){
+                OptionsCards cardAtributos = deck[i].GetComponent<OptionsCards>();
+                Debug.Log(cardAtributos.cardIndex + 1);
+                deck_ids.Add(cardAtributos.cardIndex + 1);
+            }
+
+            
+        }
+
+        
+
+        //displayedCardImage.sprite = Resources.Load<Sprite>($"CardImages/{index}");
     }
 }
