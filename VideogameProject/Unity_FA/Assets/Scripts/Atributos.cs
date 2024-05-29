@@ -17,6 +17,7 @@ public class Atributos
      public bool canAttack=true;
      public int isShielded = 0;
      public int speed = 0;
+     public bool Alive = true;
 
 /*    public int Id 
     { 
@@ -30,24 +31,7 @@ public class Atributos
         set { health = value; } 
     }*/
 
-    public int Attack 
-    { 
-        get { return attack; } 
-        set { attack = value; } 
-    }
-
-    public bool CanAttack 
-    { 
-        get { return canAttack; } 
-        set { canAttack = value; } 
-    }
-
-    public int AbilityCost
-    { 
-        get { return abilityCost; } 
-        set { attack = abilityCost; } 
-    }
-
+    
     /*public int Curation 
     { 
         get { return curation; } 
@@ -91,6 +75,7 @@ public class Carta : MonoBehaviour
      public string effect;
      public int resistance;
      public int speed = 0;
+     public bool Alive = true;
 
     public void SetAtributos(Carta atributos){
         this.id=atributos.id;

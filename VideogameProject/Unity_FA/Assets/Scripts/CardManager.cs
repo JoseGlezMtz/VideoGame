@@ -78,6 +78,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] bool PowerUp_created = false;
     [SerializeField] bool pu_saved = false;
 
+
     /*
     PlayerTurn()
     atributos:
@@ -135,6 +136,7 @@ public class CardManager : MonoBehaviour
         GameObject Card = Instantiate(CardPrefab, Panels[i].transform.position, Quaternion.identity, parentPrefab);
        // Card.AddComponent<Atributos>().SetAtributos(atributosCarta);
         Card.GetComponent<CardScript>().Init(atributosCarta);
+        Card.GetComponent<CardScript>().selfCard=Card;
         Card.name = "Card" + Lista.Count;
         Lista.Add(Card);
         Debug.Log("Creating: " + Card.name);
@@ -269,7 +271,7 @@ public class CardManager : MonoBehaviour
     }
 
     public void Init_PU_ID(){
-        for(int i = 14; i <= 35; i++){
+        for(int i = 19; i <= 35; i++){
             RandomId();
             pu_Pile.Add(i);
         }
@@ -325,10 +327,10 @@ public class CardManager : MonoBehaviour
             Debug.Log("Health boosted by: " + healthBoost);
             break;
         // En caso de que el efecto sea restar de energía
-        case  "restaene":
+        case  "restaura_energia":
             Debug.Log("Applying energy restore power-up");
             int energyBoost = powerUpScript.atributosPU.ability_amount;
-            cardScript.atributos.AbilityCost -= energyBoost;
+            cardScript.atributos.abilityCost -= energyBoost;
             Debug.Log("Energy boosted by: " + energyBoost);
             break;
         
@@ -336,7 +338,7 @@ public class CardManager : MonoBehaviour
         case "mejora_dano":
             Debug.Log("Applying damage boost power-up");
             int damageBoost = powerUpScript.atributosPU.ability_amount;
-            cardScript.atributos.Attack += damageBoost;
+            cardScript.atributos.attack += damageBoost;
             Debug.Log("Damage boosted by: " + damageBoost);
             break;
         // En caso de que el efecto sea aumentar la resistencia
@@ -390,11 +392,17 @@ public class CardManager : MonoBehaviour
 
     public void Change_Cards(GameObject obj1, GameObject obj2)
     {
-        Vector3 temp = obj1.transform.position;
+        int card_Index1=Cartas_mano.IndexOf(obj1);
+        int card_Index2=Cartas_mano.IndexOf(obj2);
+        Vector3 tempV = obj1.transform.position;
         obj1.transform.position = obj2.transform.position;
-        obj2.transform.position = temp;
+        obj2.transform.position = tempV;
         Debug.Log("index1 change " + Cartas_mano.IndexOf(obj1));
         Debug.Log("index2 change " +Cartas_mano.IndexOf(obj2));
+        GameObject temp = obj1;
+        Cartas_mano[card_Index1]=obj2;
+        //Debug.Log("Card Index al que se mueve carta 2:" + card_Index1);
+        Cartas_mano[card_Index2]=temp;
     }
 
     public void registerCard(GameObject objeto_carta)
@@ -422,6 +430,9 @@ public class CardManager : MonoBehaviour
                     
                     Debug.Log("Selecting " + card_Index1);
                     //Debug.Log("Selecting " + Selected_card1.name);
+                    if (!Selected_card1.GetComponent<CardScript>().atributos.Alive){
+                        Debug.Log("This card is Death");
+                        Selected_card1 = null;}
                 }
                 }
             else{
@@ -448,10 +459,10 @@ public class CardManager : MonoBehaviour
                             //Intercambia las posiciones de los objetos en la lista
                             Debug.Log("index 1" + card_Index1);
                             Debug.Log("index 2" + card_Index2);
-                            GameObject temp = Selected_card1    ;
+                            /*GameObject temp = Selected_card1    ;
                             Cartas_mano[card_Index1]=Selected_card2;
                             Debug.Log("Card Index al que se mueve carta 2:" + card_Index1);
-                            Cartas_mano[card_Index2]=temp;
+                            Cartas_mano[card_Index2]=temp;*/
                             Selected_card1 = null;
                             Selected_card2 = null;
                             Change_Option = false;
@@ -509,14 +520,19 @@ public class CardManager : MonoBehaviour
                         Attack_Option=false;
                         Debug.Log("No more attacks available");
                     }
-            
-                
-            }
+                    if (Cartas_mano[5].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[6].GetComponent<CardScript>().atributos.health <= 0)
+                    {
+                        Debug.Log("You win");
+                        PlayerTurn = false;
+
+                    }
+                    
                 
             }
         }
         }
      }
+}
       //If the change option is not active we send error message
 
         
@@ -603,7 +619,7 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
             Atributos atributosCarta1 = objeto_carta1.GetComponent<CardScript>().atributos;
             Atributos atributosCarta2 = objeto_carta2.GetComponent<CardScript>().atributos;
             
-            if (atributosCarta1.AbilityCost<=energy)
+            if (atributosCarta1.abilityCost<=energy)
             {
                 Debug.Log("objeto 1:"+Cartas_mano.IndexOf(objeto_carta1));
                 Debug.Log("objeto 2:"+Cartas_mano.IndexOf(objeto_carta2));
@@ -612,11 +628,11 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
                     (Cartas_mano.IndexOf(objeto_carta2) == 5 || Cartas_mano.IndexOf(objeto_carta2) == 6))
                 {
                    // We attack the enemy card 
-                    atributosCarta2.health -= atributosCarta1.Attack;
-                    Debug.Log(objeto_carta1.name + " attacked " + objeto_carta2.name + " for " + atributosCarta1.Attack + " damage.");
+                    atributosCarta2.health -= atributosCarta1.attack;
+                    Debug.Log(objeto_carta1.name + " attacked " + objeto_carta2.name + " for " + atributosCarta1.attack + " damage.");
                     
                     //Decrease energy amount-- fix later on with the corresponding value
-                    energy-= atributosCarta1.AbilityCost;
+                    energy-= atributosCarta1.abilityCost;
                     energyText.text=$"{energy}";
                     Slider sliderComponent = energySlider.GetComponent<Slider>();
                     sliderComponent.value = energy;
@@ -678,8 +694,8 @@ public void EndTurn()
     
     DiscardPU();
 
-    activeCard1.CanAttack = true;
-    activeCard2.CanAttack = true;
+    activeCard1.canAttack = true;
+    activeCard2.canAttack = true;
     activeCard1.Update_Shield();
     activeCard2.Update_Shield();
 
@@ -723,8 +739,32 @@ public void EndTurn()
         // We check if the player card is not shielded
         if (playerCardAtributos.isShielded==0)
         {
-            playerCardAtributos.health -= enemyCardAtributos.Attack;
-            Debug.Log(enemyCard.name + " attacked " + playerCard.name + " for " + enemyCardAtributos.Attack + " damage.");
+            playerCardAtributos.health -= enemyCardAtributos.attack;
+            Debug.Log(enemyCard.name + " attacked " + playerCard.name + " for " + enemyCardAtributos.attack + " damage.");
+            //revisar si la carta que atacaron murió
+            if (!playerCard.GetComponent<CardScript>().check_alive()){
+
+                if (Cartas_mano[0].GetComponent<CardScript>().atributos.Alive){
+                Change_Cards(playerCard, Cartas_mano[0]);}
+
+                else if (Cartas_mano[1].GetComponent<CardScript>().atributos.Alive){
+                Change_Cards(playerCard, Cartas_mano[1]);}
+
+                else if (Cartas_mano[2].GetComponent<CardScript>().atributos.Alive){
+                Change_Cards(playerCard, Cartas_mano[2]);}
+                
+                //CONDICIÓN DE PERDER
+                else{
+                    Debug.Log("No more cards to change");
+                    if(Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
+                    {
+                        Debug.Log("You lose");
+                        PlayerTurn = false;
+                    }
+                    
+                }
+
+            }
         }
         else
         {
@@ -760,7 +800,7 @@ void EnemyTurn()
         PlayerTurn = true;
 
     }
-}
+    }
 
     
     
