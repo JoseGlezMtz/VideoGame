@@ -39,7 +39,7 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] GameObject AddPUBtn;
 
-    int maxPuPile = 30;
+    int maxPuPile = 28;
 
     [SerializeField] TMP_Text turnText;
     [SerializeField] TMP_Text energyText;
@@ -271,14 +271,19 @@ public class CardManager : MonoBehaviour
     }
 
     public void Init_PU_ID(){
-        for(int i = 19; i <= 35; i++){
-            RandomId();
-            pu_Pile.Add(i);
-        }
+        HashSet<int> usedIds = new HashSet<int>();
+      while(pu_Pile.Count < maxPuPile){
+          int id = RandomId();
+          if (!usedIds.Contains(id)){
+              pu_Pile.Add(id);
+              usedIds.Add(id);
+          }
+      }
+
     }
 
     public int RandomId(){
-        return Random.Range(8, 35);
+        return Random.Range(8, 36);
     }
     public void SelectPowerUp(GameObject powerUpObject)
 {
@@ -353,7 +358,18 @@ public class CardManager : MonoBehaviour
         case "escudo":
             Debug.Log("Applying shield power-up");
             cardScript.atributos.isShielded = powerUpScript.atributosPU.ability_amount;
-            
+            Debug.Log("Shield applied");
+            break;
+        
+         case "bloquea_dano":
+            Debug.Log("Applying damage block power-up");
+            break;
+        
+        case "mejo_velocidad":
+            Debug.Log("Applying speed boost power-up");
+            int speedBoost = powerUpScript.atributosPU.ability_amount;
+            cardScript.atributos.speed += speedBoost;
+            Debug.Log("Speed boosted by: " + speedBoost);
             break;
 
             
@@ -490,6 +506,9 @@ public class CardManager : MonoBehaviour
                     
                 }
             else if(Attack_Option){
+                //Check the effect of the card of selected_card1 so we can know his effect in the switch
+                CardScript selectedCardScript = Selected_card1.GetComponent<CardScript>();
+
                 // Revisamos si esta carta ya ha sido usada para atacar previamente en el turno
                 if (Selected_card1.GetComponent<CardScript>().atributos.canAttack==false ){
                     Debug.Log("You have already used this card for attack");
@@ -501,8 +520,15 @@ public class CardManager : MonoBehaviour
                     Selected_card1 = objeto_carta;
                     Debug.Log("Selected card for attacking: " + Selected_card1.name);
                 }
+                
+                // switch to check the effect of the card
+                switch (selectedCardScript.atributos.effect) 
+                {
+               // in case the effect is to deal damage
+                case "dano":
+                Debug.Log("Attack option");
                 // en caso de que sea una de las carta del enemigo la asgnamos a la carta 2
-                else if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 5 || Cartas_mano.IndexOf(objeto_carta) == 6)){
+                 if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 5 || Cartas_mano.IndexOf(objeto_carta) == 6)){
             
                     Selected_card2= objeto_carta;
                     Debug.Log("Selected card to attack: " + Selected_card2.name);
@@ -526,11 +552,76 @@ public class CardManager : MonoBehaviour
                         PlayerTurn = false;
 
                     }
+                }
+                break;
+                //In case the effect is to heal a card
+                case "curacion":
+                Debug.Log("Heal option");
+                 if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4)){
+            
+                    Selected_card2= objeto_carta;
+                    Debug.Log("Selected card to heal: " + Selected_card2.name);
+                    //hacer el ataque de las cartas
+                    Heal(Selected_card1, Selected_card2);
+                    // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
                     
+                    Selected_card1 = null;
+                    Selected_card2 = null;
+                    Attack_Option = false;
+                    //En caso de que ya haya usado los dos ataques ya no permite atacar
+                    
+                    if (counter == 2){
+                        counter = 0;
+                        Attack_Option=false;
+                        Debug.Log("No more attacks available");
+                    }
+                    if (Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
+                    {
+                        Debug.Log("You win");
+                        PlayerTurn = false;
+
+                    }
+                }
+                break;
+                //In case the effect is to boost the damage of a card
+                case "mejora_dano":
+                Debug.Log("Damage boost option");
+                 if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4)){
+
+            
+                    Selected_card2= objeto_carta;
+                    Debug.Log("Selected card to boost damage: " + Selected_card2.name);
+                    //hacer el ataque de las cartas
+                    mejoradano(Selected_card1, Selected_card2);
+                    // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
+                    
+                    Selected_card1 = null;
+                    Selected_card2 = null;
+                    Attack_Option = false;
+                    //En caso de que ya haya usado los dos ataques ya no permite atacar
+                    
+                    if (counter == 2){
+                        counter = 0;
+                        Attack_Option=false;
+                        Debug.Log("No more attacks available");
+                    }
+                    if (Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
+                    {
+                        Debug.Log("You win");
+                        PlayerTurn = false;
+
+                    }
+                }
+                break;
+
+                default:
+                Debug.Log("No se a implementado la funcion todavia");
+                break;
                 
             }
+            
         }
-        }
+    }
      }
 }
       //If the change option is not active we send error message
@@ -621,14 +712,23 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
             
             if (atributosCarta1.abilityCost<=energy)
             {
+                
                 Debug.Log("objeto 1:"+Cartas_mano.IndexOf(objeto_carta1));
                 Debug.Log("objeto 2:"+Cartas_mano.IndexOf(objeto_carta2));
                 // We check if the cards are in the right position 
                 if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
                     (Cartas_mano.IndexOf(objeto_carta2) == 5 || Cartas_mano.IndexOf(objeto_carta2) == 6))
                 {
+                 int damageDealt = atributosCarta1.attack - atributosCarta2.resistance;
+                    // We check if the damage dealt is greater than 0
+                    if (damageDealt <= 0)
+                    {
+                        Debug.Log("No damage dealt because the enemy card has more resistance than the player card's attack");
+                        counter++;
+                    }else{
+
                    // We attack the enemy card 
-                    atributosCarta2.health -= atributosCarta1.attack;
+                    atributosCarta2.health -= damageDealt;
                     Debug.Log(objeto_carta1.name + " attacked " + objeto_carta2.name + " for " + atributosCarta1.attack + " damage.");
                     
                     //Decrease energy amount-- fix later on with the corresponding value
@@ -638,6 +738,7 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
                     sliderComponent.value = energy;
                     objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                     counter++;
+                    }
                 }
                 else
                 {
@@ -659,6 +760,65 @@ public void Attack(GameObject objeto_carta1, GameObject objeto_carta2)
         Debug.Log("Invalid option");
     }
     
+}
+//Function to heal player cards 
+public void Heal (GameObject objeto_carta1, GameObject objeto_carta2){
+ 
+    Atributos atributosCarta1 = objeto_carta1.GetComponent<CardScript>().atributos;
+    Atributos atributosCarta2 = objeto_carta2.GetComponent<CardScript>().atributos;
+   
+    if (atributosCarta1.abilityCost<=energy)
+    {
+        if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
+            (Cartas_mano.IndexOf(objeto_carta2) == 3 || Cartas_mano.IndexOf(objeto_carta2) == 4))
+        {
+            int healthBoost = atributosCarta1.attack;
+            atributosCarta2.health += healthBoost;
+              if (atributosCarta2.health > 100) {
+                atributosCarta2.health = 100;
+              }
+            Debug.Log(objeto_carta1.name + " healed " + objeto_carta2.name + " for " + atributosCarta1.attack + " health.");
+            energy-= atributosCarta1.abilityCost;
+            energyText.text=$"{energy}";
+            Slider sliderComponent = energySlider.GetComponent<Slider>();
+            sliderComponent.value = energy;
+            objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
+            counter++;
+        }
+        else
+        {
+            Debug.Log("No valid cards to heal");
+        }
+    }
+    else
+    {
+        Debug.Log("No enough energy");
+    }
+
+}
+//Function to boost the damage of a player card
+public void mejoradano(GameObject objeto_carta1, GameObject objeto_carta2)
+{
+    Atributos atributosCarta1 = objeto_carta1.GetComponent<CardScript>().atributos;
+    Atributos atributosCarta2 = objeto_carta2.GetComponent<CardScript>().atributos;
+
+    if (atributosCarta1.abilityCost<=energy)
+    {
+        if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
+           (Cartas_mano.IndexOf(objeto_carta2) == 3 || Cartas_mano.IndexOf(objeto_carta2) == 4))
+        {
+            int damageBoost = atributosCarta1.attack;
+            atributosCarta2.attack += damageBoost;
+            Debug.Log(objeto_carta1.name + " boosted " + objeto_carta2.name + " for " + atributosCarta1.attack + " damage.");
+            energy-= atributosCarta1.abilityCost;
+            energyText.text=$"{energy}";
+            Slider sliderComponent = energySlider.GetComponent<Slider>();
+            sliderComponent.value = energy;
+            objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
+            counter++;
+        }
+     
+    }
 }
 
 
@@ -714,9 +874,11 @@ public void EndTurn()
     Change_Option = false;
     pu_saved = false;
     
-    //We call the function to end the player turn
-    EnemyTurn();
-    
+    EnemyScript enemyScript = GetComponent<EnemyScript>();
+    enemyScript.EnemyTurn();
+
+
+       
     
     
     
@@ -727,85 +889,7 @@ public void EndTurn()
     //enemy turn
     
 
-   // Function to attack player cards 
-    public void EnemyAttack(GameObject enemyCard, GameObject playerCard)
-{
-    // First we check if the enemy card and the player card are not null
-    if (enemyCard != null && playerCard != null)
-    {
-        // We set the attributes of the cards enemyCardAtributos for the enemy card and playerCardAtributos for the player card
-        Atributos enemyCardAtributos = enemyCard.GetComponent<CardScript>().atributos;
-        Atributos playerCardAtributos = playerCard.GetComponent<CardScript>().atributos;
-        // We check if the player card is not shielded
-        if (playerCardAtributos.isShielded==0)
-        {
-            playerCardAtributos.health -= enemyCardAtributos.attack;
-            Debug.Log(enemyCard.name + " attacked " + playerCard.name + " for " + enemyCardAtributos.attack + " damage.");
-            //revisar si la carta que atacaron murió
-            if (!playerCard.GetComponent<CardScript>().check_alive()){
-
-                if (Cartas_mano[0].GetComponent<CardScript>().atributos.Alive){
-                Change_Cards(playerCard, Cartas_mano[0]);}
-
-                else if (Cartas_mano[1].GetComponent<CardScript>().atributos.Alive){
-                Change_Cards(playerCard, Cartas_mano[1]);}
-
-                else if (Cartas_mano[2].GetComponent<CardScript>().atributos.Alive){
-                Change_Cards(playerCard, Cartas_mano[2]);}
-                
-                //CONDICIÓN DE PERDER
-                else{
-                    Debug.Log("No more cards to change");
-                    if(Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
-                    {
-                        Debug.Log("You lose");
-                        PlayerTurn = false;
-                    }
-                    
-                }
-
-            }
-        }
-        else
-        {
-            // If the player card is shielded we print a message
-            Debug.Log(playerCard.name + " is shielded and cannot be attacked this turn.");
-        }
-    }
-    else
-    {
-        Debug.Log("Error en el ataque del enemigo");
-    }
-}
-
-
-void EnemyTurn()
-{
-    // We check if it's the enemy turn
-    if (CountCountEnemyTurn==true)
-    {
-        // We select a random card from the enemy hand
-        int playerCardIndex = Random.Range(3, 5); 
-        GameObject playerCard = Cartas_mano[playerCardIndex];
-        Debug.Log("Player card selected: " + playerCard.name); 
-        // We select a random card from the player hand
-        int enemyCardIndex = Random.Range(5, 7); 
-        GameObject enemyCard = Cartas_mano[enemyCardIndex];
-        Debug.Log("Enemy card selected: " + enemyCard.name); 
-        //llamamos a la funcion de ataque
-        EnemyAttack(enemyCard, playerCard);
-        // We end the enemy turn
-        CountCountEnemyTurn = false;
-        // We set the player turn to true
-        PlayerTurn = true;
-
-    }
-    }
-
     
-    
-
-
 
 
 
