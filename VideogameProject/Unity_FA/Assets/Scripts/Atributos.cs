@@ -15,7 +15,9 @@ public class Atributos
      public string effect;
      public int resistance;
      public bool canAttack=true;
+     public int isShielded = 0;
      public int speed = 0;
+     public bool Alive = true;
 
 /*    public int Id 
     { 
@@ -29,24 +31,7 @@ public class Atributos
         set { health = value; } 
     }*/
 
-    public int Attack 
-    { 
-        get { return attack; } 
-        set { attack = value; } 
-    }
-
-    public bool CanAttack 
-    { 
-        get { return canAttack; } 
-        set { canAttack = value; } 
-    }
-
-    public int AbilityCost
-    { 
-        get { return abilityCost; } 
-        set { attack = abilityCost; } 
-    }
-
+    
     /*public int Curation 
     { 
         get { return curation; } 
@@ -64,16 +49,15 @@ public class Atributos
         health += amount;
     }*/
     
-    public void SetAtributos(Atributos atributos){
-        this.id=atributos.id;
-        this.health=atributos.health;
-        this.attack=atributos.attack;
-        this.abilityCost=atributos.abilityCost;
-        this.effect=atributos.effect;
-        
-        this.speed=atributos.speed;
+    
 
+    public void Update_Shield(){
+        if(isShielded>0){
+            isShielded-=1;
+        }
     }
+
+    
 }
 [System.Serializable]
 public class Cards{
@@ -91,6 +75,7 @@ public class Carta : MonoBehaviour
      public string effect;
      public int resistance;
      public int speed = 0;
+     public bool Alive = true;
 
     public void SetAtributos(Carta atributos){
         this.id=atributos.id;
