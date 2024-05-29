@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CardScript : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class CardScript : MonoBehaviour
     public CardManager cardManager;
 
     [SerializeField] public GameObject selfCard;
+    [SerializeField] TMP_Text health_text;
     
     // Start is called before the first frame update
     public void Init(Atributos _atributos)
@@ -24,6 +26,8 @@ public class CardScript : MonoBehaviour
             {
                 // Image component found, proceed to set sprite
                 imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{atributos.id -1}");
+                
+                health_text.text=atributos.health.ToString();
             }
     }
 
@@ -34,9 +38,11 @@ public class CardScript : MonoBehaviour
     }
 
      public bool check_alive(){
+        UpdateHealth();
         if(atributos.health <= 0){
             
             atributos.Alive=false;
+            
             
             return false;
         }
@@ -44,4 +50,11 @@ public class CardScript : MonoBehaviour
             return true;
         }
     }
+    public void UpdateHealth(){
+        if(atributos.health<=0){
+            health_text.text="0";
+        }
+        else{
+        health_text.text=atributos.health.ToString();
+    }}
 }

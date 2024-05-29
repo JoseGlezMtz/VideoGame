@@ -668,6 +668,7 @@ GameObject:
   - component: {fileID: 316479425}
   - component: {fileID: 316479426}
   - component: {fileID: 316479427}
+  - component: {fileID: 316479428}
   m_Layer: 5
   m_Name: CardManager
   m_TagString: Untagged
@@ -735,6 +736,7 @@ MonoBehaviour:
   Attack_Option: 0
   Selected_card1: {fileID: 0}
   Selected_card2: {fileID: 0}
+  Selectpowerup: {fileID: 0}
   cartAttack: {fileID: 0}
   counter: 0
   num_turn: 0
@@ -742,10 +744,15 @@ MonoBehaviour:
   max_energy: 100
   allCards:
     cards: []
+  puCards:
+    powerUps: []
   APIData: 
+  pu_Cards_Data: 
   Dataready: 0
+  PU_Dataready: 0
   GameStarted: 0
   PowerUp_created: 0
+  pu_saved: 0
 --- !u!114 &316479427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,6 +767,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   url: 
   getEndpoint: 
+--- !u!114 &316479428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316479424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4865bee27adce84ba0a8ea709d43135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardManager: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
