@@ -7,25 +7,25 @@ public class EnemyScript : MonoBehaviour
      public CardManager cardManager;
         void Start()
     {
-        if (cardManager == null)
-        {
+        
             cardManager = FindObjectOfType<CardManager>();
-            if (cardManager == null)
-            {
-                Debug.LogError("CardManager not found in the scene.");
-            }
-        }
+            
+            // Debug.LogError("CardManager not found in the scene.");
+            // We set the attributes of the cards enemyCardAtributos for the enemy card and playerCardAtributos for the player card
+            
+        
+            
+        
     }
 
     
     public void EnemyAttack(GameObject enemyCard, GameObject playerCard)
 {
+    Atributos enemyCardAtributos = enemyCard.GetComponent<CardScript>().atributos;
+    Atributos playerCardAtributos = playerCard.GetComponent<CardScript>().atributos;
     // First we check if the enemy card and the player card are not null
     if (enemyCard != null && playerCard != null)
     {
-        // We set the attributes of the cards enemyCardAtributos for the enemy card and playerCardAtributos for the player card
-        Atributos enemyCardAtributos = enemyCard.GetComponent<CardScript>().atributos;
-        Atributos playerCardAtributos = playerCard.GetComponent<CardScript>().atributos;
         // We check if the player card is not shielded
         if (playerCardAtributos.isShielded==0)
         {
@@ -80,10 +80,57 @@ public void EnemyTurn()
     // We check if it's the enemy turn
     if (cardManager.CountCountEnemyTurn)
     {
-        // We select a random card from the enemy hand
-        int playerCardIndex = Random.Range(3, 5); 
-        GameObject playerCard = cardManager.Cartas_mano[playerCardIndex];
-        Debug.Log("Player card selected: " + playerCard.name); 
+       Atributos playerCardAtributos = cardManager.Cartas_mano[3].GetComponent<CardScript>().atributos;
+       
+       Atributos playerCardAtributos2 = cardManager.Cartas_mano[4].GetComponent<CardScript>().atributos;
+
+       Atributos enemyCardAtributos = cardManager.Cartas_mano[5].GetComponent<CardScript>().atributos;
+
+       Atributos enemyCardAtributos2 = cardManager.Cartas_mano[6].GetComponent<CardScript>().atributos;
+       int index ; 
+       GameObject playerCard = null; 
+
+        if (playerCardAtributos.health < playerCardAtributos2.health )
+        {
+            if(playerCardAtributos.health > 0){
+            index = 3;
+            }
+            else{
+                index = 4;
+            }
+        }
+        else if (playerCardAtributos.health > playerCardAtributos2.health)
+        {
+            if(playerCardAtributos2.health > 0){
+            index = 4;
+            }
+            else{
+                index = 3;
+            }
+        }
+        else if (playerCardAtributos.resistance < playerCardAtributos2.resistance)
+        {
+            index = 3;
+        }
+        else if (playerCardAtributos.resistance > playerCardAtributos2.resistance)
+        {
+            index = 4;
+        }
+        else 
+        {
+            index= Random.Range(3, 5);
+
+        }
+
+        // Assign playerCard after index is determined
+        playerCard = cardManager.Cartas_mano[index];
+        
+        // Log the selected card
+        Debug.Log("Player card selected: " + playerCard.name);
+
+        
+
+        
         
         // We select a random card from the player hand
         int enemyCardIndex = Random.Range(5, 7); 
