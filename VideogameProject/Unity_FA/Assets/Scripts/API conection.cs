@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -53,4 +54,22 @@ public class APIconection : MonoBehaviour
             }
         }
     }
+
+    /*
+    public void registerPlayer(){
+        StartCoroutine(Request_SP_register_player("http://localhost:4444/api/Pu_card"));
+    }
+
+    IEnumerator Request_SP_register_player(string url){
+        using(UnityWebRequest www = UnityWebRequest.Get(url)){
+            yield return www.SendWebRequest();
+            if(www.isNetworkError || www.isHttpError){
+                Debug.Log("request error" + www.error);
+            }
+            
+        }
+    }
+    */
+
+    
 }

@@ -157,17 +157,18 @@ public class DeckManager : MonoBehaviour
 
                     }
 
-                //Debug.Log("Card Added Successfully");
+                Debug.Log("Card Added Successfully");
             }
             else
             {
-                //Debug.LogError("Card Already in Deck");
+                Debug.LogError("Card Already in Deck");
             }
         }
         else
         {
-            //Debug.LogError("Deck is Full");
+            Debug.LogError("Deck is Full");
         }
+        UpdateIcons();
     }
 
     void AddFavorite(GameObject cardToAdd){
@@ -177,28 +178,32 @@ public class DeckManager : MonoBehaviour
         UpdateIcons();
     }
 
-    void UpdateIcons(){
+     void UpdateIcons()
+    {
         Debug.Log("Updating Icons...");
-        for(int i = 0; i < maxDeck; i++){
-            OptionsCards cardComponent =  deck[i].GetComponent<OptionsCards>();
-            if(i == 3 || i == 4){
-                cardComponent.favSprite.sprite =  Resources.Load<Sprite>($"star_button");
+        for (int i = 0; i < deck.Count; i++)
+        {
+            OptionsCards cardComponent = deck[i].GetComponent<OptionsCards>();
+            if (i >= maxDeck - 2)
+            {
+                cardComponent.favSprite.gameObject.SetActive(true);
             }
-            else if(i < 3){
-                cardComponent.favSprite = null;
-            } 
+            else
+            {
+                cardComponent.favSprite.gameObject.SetActive(false);
+            }
         }
-        foreach(GameObject card in cards){
-                OptionsCards cardComponent = card.GetComponent<OptionsCards>();
-                cardComponent.favSprite.sprite = null;
-            }
         
+        // Ensure all cards not in deck have their favSprite deactivated
+        foreach (GameObject card in cards)
+        {
+            OptionsCards cardComponent = card.GetComponent<OptionsCards>();
+            cardComponent.favSprite.gameObject.SetActive(false);
+        }
     }
-
 
     //Method to remove card
     void RemoveDeck(GameObject cardToRemove){
-        //Debug.Log($"Removing card with index: {optionsCardsComponent.cardIndex}");
         
         //Check if the card is in the deck, if so, remove
         if(deck.Contains(cardToRemove)){
@@ -206,13 +211,9 @@ public class DeckManager : MonoBehaviour
             cards.Add(cardToRemove);
             cardToRemove.transform.SetParent(cardsParent);
             deck.Remove(cardToRemove);
-
-           
-
+            UpdateIcons();
         }
-        else{
-            //Debug.LogError($"The card with index: {optionsCardsComponent.cardIndex} is not in the deck");
-        }
+
     }
 
     void SaveDeck(){
@@ -226,12 +227,7 @@ public class DeckManager : MonoBehaviour
                 Debug.Log(cardAtributos.cardIndex + 1);
                 deck_ids.Add(cardAtributos.cardIndex + 1);
             }
-
-            
         }
-
-        
-
-        //displayedCardImage.sprite = Resources.Load<Sprite>($"CardImages/{index}");
+        UpdateIcons();
     }
 }
