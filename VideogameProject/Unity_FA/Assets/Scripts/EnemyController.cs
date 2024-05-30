@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyScript : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
      public CardManager cardManager;
         void Start()
@@ -10,8 +10,6 @@ public class EnemyScript : MonoBehaviour
         
             cardManager = FindObjectOfType<CardManager>();
             
-            // Debug.LogError("CardManager not found in the scene.");
-            // We set the attributes of the cards enemyCardAtributos for the enemy card and playerCardAtributos for the player card
             
         
             

@@ -206,6 +206,7 @@ public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
 
     Destroy(powerUpObject);
     pu_Hand.Remove(powerUpObject);
+    cardObject.GetComponent<CardScript>().UpdateHealth();
     // Se setea el power-up seleccionado a null al igual que la carta seleccionada
     cardManager.Selectpowerup = null;
     cardManager.Selected_card1 = null;
