@@ -9,10 +9,12 @@ public class APIconection : MonoBehaviour
     [SerializeField] string url;
     [SerializeField] string getEndpoint;
     CardManager controller;
+    PU_controller pu_controller;
     // Start is called before the first frame update
     void Start()
     {
         controller=GetComponent<CardManager>();
+        pu_controller=GetComponent<PU_controller>();
     }
 
     // Update is called once per frame
@@ -48,7 +50,7 @@ public class APIconection : MonoBehaviour
             }else{
                 string result=www.downloadHandler.text;
                 Debug.Log( result);
-                controller.pu_Cards_Data=result;
+                pu_controller.pu_Cards_Data=result;
                 controller.PU_Dataready=true;
                 //controller.Create_Board();
             }

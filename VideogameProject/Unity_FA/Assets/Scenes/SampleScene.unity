@@ -669,6 +669,7 @@ GameObject:
   - component: {fileID: 316479426}
   - component: {fileID: 316479427}
   - component: {fileID: 316479428}
+  - component: {fileID: 316479429}
   m_Layer: 5
   m_Name: CardManager
   m_TagString: Untagged
@@ -747,7 +748,6 @@ MonoBehaviour:
   puCards:
     powerUps: []
   APIData: 
-  pu_Cards_Data: 
   Dataready: 0
   PU_Dataready: 0
   GameStarted: 0
@@ -780,6 +780,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardManager: {fileID: 0}
+--- !u!114 &316479429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316479424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57f44594de7da884cae311c098b70a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardManager: {fileID: 316479426}
+  pu_Hand: []
+  PuButtonPrefab: {fileID: 229009951391983366, guid: 2b38211596265c14d949ddc642c31236, type: 3}
+  PUPrefab: {fileID: 4126059691923458827, guid: c04e6634be9a9734c94c48d705739190, type: 3}
+  PUParentPrefab: {fileID: 113428236}
+  PUSlot: {fileID: 1137866227}
+  pu_Pile: 
+  puAdded: 0
+  PowerUp_created: 0
+  pu_saved: 0
+  pu_Cards_Data: 
+  puCards:
+    powerUps: []
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1104,8 +1129,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 316479426}
-        m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
+      - m_Target: {fileID: 316479429}
+        m_TargetAssemblyTypeName: PU_controller, Assembly-CSharp
         m_MethodName: AddPU
         m_Mode: 1
         m_Arguments:
