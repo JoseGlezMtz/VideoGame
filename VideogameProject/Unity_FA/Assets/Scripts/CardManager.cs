@@ -510,6 +510,8 @@ public class CardManager : MonoBehaviour
                 sliderComponent.value = energy;
                 objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                 counter++;
+                objeto_carta2.GetComponent<CardScript>().UpdateHealth();
+                
             }
             else
             {
@@ -600,8 +602,7 @@ public class CardManager : MonoBehaviour
         Change_Option = false;
         GetComponent<PU_controller>().pu_saved = false;
         
-        EnemyScript enemyScript = GetComponent<EnemyScript>();
-        enemyScript.EnemyTurn();
+         GetComponent<EnemyController>().EnemyTurn();
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -28,6 +28,8 @@ public class CardScript : MonoBehaviour
                 imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{atributos.id -1}");
                 
                 health_text.text=atributos.health.ToString();
+                health_text.fontSize = 10; 
+                health_text.color = Color.black;
             }
     }
 
