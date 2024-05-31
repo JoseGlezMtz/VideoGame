@@ -29,7 +29,7 @@ public class CardManager : MonoBehaviour
     
 
    
-    [SerializeField] TMP_Text turnText;
+    [SerializeField] public TMP_Text turnText;
     [SerializeField] TMP_Text energyText;
     [SerializeField]  GameObject energySlider;
 
@@ -79,7 +79,10 @@ public class CardManager : MonoBehaviour
         GetComponent<APIconection>().get_Character_cards();
         GetComponent<APIconection>().get_PU_cards();
         //InitGame();
+
+        Application.logMessageReceived += HandleLog;
     }
+
 
     void Update()
     {
@@ -104,7 +107,8 @@ public class CardManager : MonoBehaviour
         allCards=JsonUtility.FromJson<Cards>(APIData);
         
         Debug.Log(allCards.cards);
-        
+
+        Debug.Log("Game started");
         foreach (Atributos atributosCarta in allCards.cards)
         {
             Card_base(Cartas_mano, i, atributosCarta);
@@ -118,6 +122,16 @@ public class CardManager : MonoBehaviour
     
         PlayerTurn = true;
     }
+        void OnDestroy()
+    {
+        Application.logMessageReceived -= HandleLog;
+    }
+
+    void HandleLog(string logString, string stackTrace, LogType type)
+    {
+        turnText.text = logString;
+    }
+    
 
     public void Card_base(List<GameObject> Lista, int i, Atributos atributosCarta)
     {
@@ -126,7 +140,6 @@ public class CardManager : MonoBehaviour
         Card.GetComponent<CardScript>().selfCard=Card;
         Card.name = "Card" + Lista.Count;
         Lista.Add(Card);
-        Debug.Log("Creating: " + Card.name);
         Button button = Card.GetComponent<Button>();
         button.onClick.AddListener(() => registerCard(Card));
         
@@ -400,7 +413,7 @@ public class CardManager : MonoBehaviour
 
     //Increase Energy amount
     public void IncreaseEnegry(){
-        Debug.Log("Energy increased");
+       // Debug.Log("Energy increased");
         if(energy + (num_turn-1) * 10 <= max_energy)
         {
             energy += (num_turn-1) * 10;
@@ -590,7 +603,7 @@ public class CardManager : MonoBehaviour
 
 
         IncreaseEnegry();
-        turnText.text = $"Turn: {num_turn}";
+       // turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
         CountCountEnemyTurn = true;
         counter = 0;
@@ -601,9 +614,15 @@ public class CardManager : MonoBehaviour
         Selected_card2 = null;
         Change_Option = false;
         GetComponent<PU_controller>().pu_saved = false;
-        
-         GetComponent<EnemyController>().EnemyTurn();
+        Debug.Log("Enemy turn started");
+        StartCoroutine(WaitAndExecute(3f, () => GetComponent<EnemyController>().EnemyTurn()));
     }
+    private IEnumerator WaitAndExecute(float waitTime, System.Action action)
+    {
+        yield return new WaitForSeconds(waitTime);
+        action();
+    }
+
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
