@@ -15,6 +15,14 @@ public class EnemyController : MonoBehaviour
             
         
     }
+     
+
+    private IEnumerator delaymesage( float delay)
+    {
+        string message = $"Turn: {cardManager.num_turn}"; 
+        yield return new WaitForSeconds(delay);
+        cardManager.turnText.text = message;
+    }
 
     
     public void EnemyAttack(GameObject enemyCard, GameObject playerCard)
@@ -31,9 +39,11 @@ public class EnemyController : MonoBehaviour
           if (damageDealt <= 0)
             {
                 Debug.Log("No damage dealt because the player card has more resistance than the enemy card's attack");
+                StartCoroutine(delaymesage(3f));
             }else{
             playerCardAtributos.health -= damageDealt;
             Debug.Log(enemyCard.name + " attacked " + playerCard.name + " for " + enemyCardAtributos.attack + " damage.");
+            StartCoroutine(delaymesage(3f));
             //revisar si la carta que atacaron murió
             if (!playerCard.GetComponent<CardScript>().check_alive()){
 
@@ -64,6 +74,7 @@ public class EnemyController : MonoBehaviour
         {
             // If the player card is shielded we print a message
             Debug.Log(playerCard.name + " is shielded and cannot be attacked this turn.");
+            StartCoroutine(delaymesage(3f));
         }
     }
     else
