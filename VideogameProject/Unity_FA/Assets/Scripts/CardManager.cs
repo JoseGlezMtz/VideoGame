@@ -558,6 +558,10 @@ public class CardManager : MonoBehaviour
                 objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                 counter++;
             }
+            else 
+            {
+                Debug.Log("No valid cards to boost damage");
+            }
         }
     }
 
