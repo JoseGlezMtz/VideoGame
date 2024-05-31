@@ -113,7 +113,8 @@ public class PU_controller : MonoBehaviour
  public void SelectPowerUp(GameObject powerUpObject)
 {
     cardManager.Selectpowerup = powerUpObject;
-    Debug.Log("Selected PowerUp: " + cardManager.Selectpowerup.name);
+    Debug.Log("Selected PowerUp: " + cardManager.Selectpowerup.GetComponent<PUscript>().atributosPU.name + 
+    " pu efect " + cardManager.Selectpowerup.GetComponent<PUscript>().atributosPU.ability_effect + ". Press card to use power up" );
 }
 
 
@@ -154,15 +155,23 @@ public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
         case "curacion":
             Debug.Log("Applying healing power-up");
             int healthBoost = PU_ability_amount;
+            if (cardScript.atributos.health + healthBoost > 100)
+            {
+                cardScript.atributos.health = 100;
+            }
+            else
+            {
             cardScript.atributos.health += healthBoost;
-            Debug.Log("Health boosted by: " + healthBoost);
+            Debug.Log("Health boosted of card: " + cardScript.atributos.character_name + " by " + healthBoost);
+            }
             break;
+
         // En caso de que el efecto sea restar de energía
         case  "restaura_energia":
             Debug.Log("Applying energy restore power-up");
             int energyBoost = PU_ability_amount;
             cardScript.atributos.abilityCost -= energyBoost;
-            Debug.Log("Energy boosted by: " + energyBoost);
+            Debug.Log("Energy cost reduced of card: " + cardScript.atributos.character_name + " by " + energyBoost);
             break;
         
         // En caso de que el efecto sea aumentar el daño
@@ -170,26 +179,26 @@ public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
             Debug.Log("Applying damage boost power-up");
             int damageBoost = PU_ability_amount;
             cardScript.atributos.attack += damageBoost;
-            Debug.Log("Damage boosted by: " + damageBoost);
+            Debug.Log("Damage boosted of card: " + cardScript.atributos.character_name + " by " + damageBoost); 
             break;
         // En caso de que el efecto sea aumentar la resistencia
         case "mejora_resistencia":
             Debug.Log("Applying resistance boost power-up");
             int resistanceBoost = PU_ability_amount;
             cardScript.atributos.resistance += resistanceBoost;
-            Debug.Log("Resistance boosted by: " + resistanceBoost);
+            Debug.Log("Resistance boosted of card: " + cardScript.atributos.character_name + " by " + resistanceBoost);
             break;
 
         // En caso de que el efecto aplicar un escudo
         case "escudo":
             Debug.Log("Applying shield power-up");
             cardScript.atributos.isShielded = PU_ability_amount;
-            Debug.Log("Shield applied");
+            Debug.Log("Shield applied to card: " + cardScript.atributos.character_name + " for " + PU_ability_amount + " turns");
             break;
         
-         case "bloquea_dano":
+         /*case "bloquea_dano":
             Debug.Log("Applying damage block power-up");
-            break;
+            break;*/
         
         case "mejo_velocidad":
             Debug.Log("Applying speed boost power-up");
@@ -199,7 +208,7 @@ public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
             break;
         // En caso de que el efecto sea desconocido se imprime un mensaje de error esto tambien se uso para debuggear
         default:
-            Debug.Log("Unhandled power-up effect: " + powerUpScript.atributosPU.ability_effect);
+            Debug.Log("This power-up has no effect yet");
             break;
     }
     // Se destruye el power-up y se remueve de la lista de power-ups en la mano
@@ -210,7 +219,6 @@ public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
     // Se setea el power-up seleccionado a null al igual que la carta seleccionada
     cardManager.Selectpowerup = null;
     cardManager.Selected_card1 = null;
-    Debug.Log("Power-up applied successfully");
 }
 
 public void DiscardPU(){

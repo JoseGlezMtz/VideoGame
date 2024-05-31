@@ -154,8 +154,7 @@ public class CardManager : MonoBehaviour
         Vector3 tempV = obj1.transform.position;
         obj1.transform.position = obj2.transform.position;
         obj2.transform.position = tempV;
-        Debug.Log("index1 change " + Cartas_mano.IndexOf(obj1));
-        Debug.Log("index2 change " +Cartas_mano.IndexOf(obj2));
+        Debug.Log("Character " + obj1.GetComponent<CardScript>().atributos.character_name + " changed with " + obj2.GetComponent<CardScript>().atributos.character_name);
         GameObject temp = obj1;
         Cartas_mano[card_Index1]=obj2;
         Cartas_mano[card_Index2]=temp;
@@ -185,7 +184,7 @@ public class CardManager : MonoBehaviour
                 {
                     Selected_card1= objeto_carta;
                     
-                    Debug.Log("Selecting " + card_Index1);
+                    Debug.Log("Selecting " + Selected_card1.GetComponent<CardScript>().atributos.character_name);
                     //Debug.Log("Selecting " + Selected_card1.name);
                     if (!Selected_card1.GetComponent<CardScript>().atributos.Alive)
                     {
@@ -204,6 +203,14 @@ public class CardManager : MonoBehaviour
                     int card_Index2=Cartas_mano.IndexOf(Selected_card2);
                     //We check if the cards are the same so you can't change the card with itself
                     Debug.Log("Changing with " + card_Index2);
+                    if(card_Index1>4 && card_Index2<=4 ||card_Index1<=4 && card_Index2>4 )
+                    {
+                        Debug.Log("You can't change the card with the enemy");
+                        Selected_card1 = null;
+                        Selected_card2 = null;
+                        return;
+                    }
+                    else
                     if (Selected_card1 == Selected_card2)
                     {       //Revisamos que la carta no sea la misma
                         Debug.Log("You can't change the card with itself");
@@ -291,8 +298,8 @@ public class CardManager : MonoBehaviour
                                 if (counter == 2){
                                     counter = 0;
                                     Attack_Option=false;
-                                    Debug.Log("No more attacks available");
-                                }
+                                    StartCoroutine(Waitformessage());
+                                    }
                                 if (Cartas_mano[5].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[6].GetComponent<CardScript>().atributos.health <= 0)
                                 {
                                 Debug.Log("You win");
@@ -302,7 +309,6 @@ public class CardManager : MonoBehaviour
                             break;
                         //In case the effect is to heal a card
                         case "curacion":
-                            Debug.Log("Heal option");
                             if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4))
                             {
                         
@@ -321,7 +327,7 @@ public class CardManager : MonoBehaviour
                                 {
                                     counter = 0;
                                     Attack_Option=false;
-                                    Debug.Log("No more attacks available");
+                                    StartCoroutine(Waitformessage());
                                 }
                                 if (Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
                                 {
@@ -330,9 +336,13 @@ public class CardManager : MonoBehaviour
 
                                 }
                             }
+                            else
+                            {
+                                Debug.Log("You can't heal the enemy card");
+                            }
                             break;
                         //In case the effect is to boost the damage of a card
-                        case "mejora_dano":
+                            case "mejora_dano":
                             Debug.Log("Damage boost option");
                             if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4))
                             {
@@ -353,7 +363,8 @@ public class CardManager : MonoBehaviour
                                 {
                                     counter = 0;
                                     Attack_Option=false;
-                                    Debug.Log("No more attacks available");
+                                    StartCoroutine(Waitformessage());
+
                                 }
                                 if (Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
                                 {
@@ -447,8 +458,7 @@ public class CardManager : MonoBehaviour
                 if (atributosCarta1.abilityCost<=energy)
                 {
                     
-                    Debug.Log("objeto 1:"+Cartas_mano.IndexOf(objeto_carta1));
-                    Debug.Log("objeto 2:"+Cartas_mano.IndexOf(objeto_carta2));
+                    
                     // We check if the cards are in the right position 
                     if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
                         (Cartas_mano.IndexOf(objeto_carta2) == 5 || Cartas_mano.IndexOf(objeto_carta2) == 6))
@@ -465,8 +475,7 @@ public class CardManager : MonoBehaviour
 
                             // We attack the enemy card 
                             atributosCarta2.health -= damageDealt;
-                            Debug.Log(objeto_carta1.name + " attacked " + objeto_carta2.name + " for " + atributosCarta1.attack + " damage.");
-                            
+                            Debug.Log(atributosCarta1.character_name + " dealt " + damageDealt + " damage to " + atributosCarta2.character_name);
                             //Decrease energy amount-- fix later on with the corresponding value
                             energy-= atributosCarta1.abilityCost;
                             energyText.text=$"{energy}";
@@ -474,6 +483,7 @@ public class CardManager : MonoBehaviour
                             sliderComponent.value = energy;
                             objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                             counter++;
+                            objeto_carta2.GetComponent<CardScript>().UpdateHealth();
                         }
                     }
                     else
@@ -516,7 +526,7 @@ public class CardManager : MonoBehaviour
                 {
                     atributosCarta2.health = 100;
                 }
-                Debug.Log(objeto_carta1.name + " healed " + objeto_carta2.name + " for " + atributosCarta1.attack + " health.");
+                Debug.Log(atributosCarta1.character_name + " healed " + atributosCarta2.character_name + " for " + atributosCarta1.attack + " health.");
                 energy-= atributosCarta1.abilityCost;
                 energyText.text=$"{energy}";
                 Slider sliderComponent = energySlider.GetComponent<Slider>();
@@ -547,21 +557,35 @@ public class CardManager : MonoBehaviour
         {
             if ((Cartas_mano.IndexOf(objeto_carta1) == 3 || Cartas_mano.IndexOf(objeto_carta1) == 4) &&
             (Cartas_mano.IndexOf(objeto_carta2) == 3 || Cartas_mano.IndexOf(objeto_carta2) == 4))
+            if(Cartas_mano.IndexOf(objeto_carta1) == Cartas_mano.IndexOf(objeto_carta2))
+            {
+                Debug.Log("You can't boost the damage of the same card");
+            }
+            else
+            if (atributosCarta2.alredyboosted)
+            {
+                Debug.Log("You can't boost the damage of a card that has already been boosted");
+            }
+            else
+            
             {
                 int damageBoost = atributosCarta1.attack;
                 atributosCarta2.attack += damageBoost;
-                Debug.Log(objeto_carta1.name + " boosted " + objeto_carta2.name + " for " + atributosCarta1.attack + " damage.");
+                Debug.Log(atributosCarta1.character_name + " boosted " + atributosCarta2.character_name + " for " + atributosCarta1.attack + " damage.");
                 energy-= atributosCarta1.abilityCost;
                 energyText.text=$"{energy}";
                 Slider sliderComponent = energySlider.GetComponent<Slider>();
                 sliderComponent.value = energy;
                 objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
+                objeto_carta2.GetComponent<CardScript>().atributos.alredyboosted = true;
                 counter++;
             }
             else 
             {
                 Debug.Log("No valid cards to boost damage");
             }
+        }else {
+            Debug.Log("No enough energy");
         }
     }
 
@@ -592,6 +616,7 @@ public class CardManager : MonoBehaviour
 
     public void EndTurn()
     {
+        if (PlayerTurn ){
         PlayerTurn = false;
         ++num_turn;
         Atributos activeCard1 = Cartas_mano[3].GetComponent<CardScript>().atributos;
@@ -619,12 +644,22 @@ public class CardManager : MonoBehaviour
         Change_Option = false;
         GetComponent<PU_controller>().pu_saved = false;
         Debug.Log("Enemy turn started");
-        StartCoroutine(WaitAndExecute(3f, () => GetComponent<EnemyController>().EnemyTurn()));
+        
+        StartCoroutine(Waitforenemy());
+
+        }
     }
-    private IEnumerator WaitAndExecute(float waitTime, System.Action action)
+     IEnumerator Waitforenemy()
     {
-        yield return new WaitForSeconds(waitTime);
-        action();
+         
+        yield return new WaitForSeconds(4f);
+        GetComponent<EnemyController>().EnemyTurn();
+    }  
+    IEnumerator Waitformessage()
+    {
+        
+        yield return new WaitForSeconds(3f);
+        turnText.text = "No more attacks available";
     }
 
 

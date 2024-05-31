@@ -17,10 +17,10 @@ public class EnemyController : MonoBehaviour
     }
      
 
-    private IEnumerator delaymesage( float delay)
+    private IEnumerator delaymesage( )
     {
         string message = $"Turn: {cardManager.num_turn}"; 
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(4f);
         cardManager.turnText.text = message;
     }
 
@@ -39,11 +39,11 @@ public class EnemyController : MonoBehaviour
           if (damageDealt <= 0)
             {
                 Debug.Log("No damage dealt because the player card has more resistance than the enemy card's attack");
-                StartCoroutine(delaymesage(3f));
+                StartCoroutine(delaymesage());
             }else{
             playerCardAtributos.health -= damageDealt;
-            Debug.Log(enemyCard.name + " attacked " + playerCard.name + " for " + enemyCardAtributos.attack + " damage.");
-            StartCoroutine(delaymesage(3f));
+            Debug.Log(enemyCardAtributos.character_name + " attacked " + playerCardAtributos.character_name + " dealing " + damageDealt + " damage."); 
+            StartCoroutine(delaymesage());
             //revisar si la carta que atacaron murió
             if (!playerCard.GetComponent<CardScript>().check_alive()){
 
@@ -74,7 +74,7 @@ public class EnemyController : MonoBehaviour
         {
             // If the player card is shielded we print a message
             Debug.Log(playerCard.name + " is shielded and cannot be attacked this turn.");
-            StartCoroutine(delaymesage(3f));
+            StartCoroutine(delaymesage());
         }
     }
     else
@@ -135,22 +135,23 @@ public void EnemyTurn()
         playerCard = cardManager.Cartas_mano[index];
         
         // Log the selected card
-        Debug.Log("Player card selected: " + playerCard.name);
 
         
 
+        int indexenemy ;
+        GameObject enemyCard = null;
+        if (enemyCardAtributos.health <= 0){
+            indexenemy = 6;
+        }
+        else if (enemyCardAtributos2.health <= 0){
+            indexenemy = 5;
+        }
+        else 
+        {
+            indexenemy= Random.Range(5, 7);
+        }
         
-        
-        // We select a random card from the player hand
-        int enemyCardIndex = Random.Range(5, 7); 
-        GameObject enemyCard = cardManager.Cartas_mano[enemyCardIndex];
-        Debug.Log("Enemy card selected: " + enemyCard.name); 
-        //llamamos a la funcion de ataque
-        EnemyAttack(enemyCard, playerCard);
-        // We end the enemy turn
-        cardManager.CountCountEnemyTurn = false;
-        // We set the player turn to true
-        cardManager.PlayerTurn = true;
+        enemyCard = cardManager.Cartas_mano[indexenemy];
         
 
     }
