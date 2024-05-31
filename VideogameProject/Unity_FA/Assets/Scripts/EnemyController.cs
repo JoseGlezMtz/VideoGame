@@ -151,6 +151,7 @@ public void EnemyTurn()
         cardManager.CountCountEnemyTurn = false;
         // We set the player turn to true
         cardManager.PlayerTurn = true;
+        
 
     }
     }

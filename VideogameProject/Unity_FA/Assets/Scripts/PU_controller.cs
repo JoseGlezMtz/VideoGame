@@ -78,7 +78,7 @@ public class PU_controller : MonoBehaviour
             }
         }
         
-        Debug.Log("Creating: " + PU.name);
+        Debug.Log("Power UP " + PU.GetComponent<PUscript>().atributosPU.name + "press button green to save power up");
         pu_Pile.RemoveAt(0);
         PowerUp_created = true;
         }

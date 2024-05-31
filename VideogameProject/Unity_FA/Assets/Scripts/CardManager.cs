@@ -605,7 +605,7 @@ public class CardManager : MonoBehaviour
         activeCard2.Update_Shield();
 
 
-
+         
         IncreaseEnegry();
        // turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
