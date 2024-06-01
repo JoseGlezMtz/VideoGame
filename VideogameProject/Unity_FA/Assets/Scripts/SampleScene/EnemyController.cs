@@ -147,10 +147,10 @@ public void EnemyTurn()
 
         }  
          else if (enemyCardAtributos.health > 0){
-            indexenemy = 6;
+            indexenemy = 5;
         }
         else if (enemyCardAtributos2.health > 0){
-            indexenemy = 5;
+            indexenemy = 6;
         }
         
         enemyCard = cardManager.Cartas_mano[indexenemy];
