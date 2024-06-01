@@ -140,18 +140,27 @@ public void EnemyTurn()
 
         int indexenemy ;
         GameObject enemyCard = null;
-        if (enemyCardAtributos.health <= 0){
+        if (enemyCardAtributos.health > 0){
             indexenemy = 6;
         }
-        else if (enemyCardAtributos2.health <= 0){
+        else if (enemyCardAtributos2.health > 0){
             indexenemy = 5;
         }
         else 
         {
             indexenemy= Random.Range(5, 7);
         }
-        
         enemyCard = cardManager.Cartas_mano[indexenemy];
+        /*
+        // We select a random card from the player hand
+        int enemyCardIndex = Random.Range(5, 7); 
+        GameObject enemyCard = cardManager.Cartas_mano[enemyCardIndex];
+        //llamamos a la funcion de ataque*/
+        EnemyAttack(enemyCard, playerCard);
+        // We end the enemy turn
+        cardManager.CountCountEnemyTurn = false;
+        // We set the player turn to true
+        cardManager.PlayerTurn = true;
         
 
     }
