@@ -138,8 +138,9 @@ public void EnemyTurn()
 
         
 
-        int indexenemy ;
+        int indexenemy=0;
         GameObject enemyCard = null;
+
         if (enemyCardAtributos.health >0 && enemyCardAtributos2.health > 0){
 
         indexenemy= Random.Range(5, 7);
@@ -151,6 +152,7 @@ public void EnemyTurn()
         else if (enemyCardAtributos2.health > 0){
             indexenemy = 5;
         }
+        
         enemyCard = cardManager.Cartas_mano[indexenemy];
         /*
         // We select a random card from the player hand
