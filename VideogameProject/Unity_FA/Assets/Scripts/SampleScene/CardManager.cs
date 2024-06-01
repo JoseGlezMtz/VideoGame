@@ -263,6 +263,7 @@ public class CardManager : MonoBehaviour
                     if (Selected_card1.GetComponent<CardScript>().atributos.canAttack==false )
                     {
                         Debug.Log("You have already used this card for attack");
+                        Selected_card1 = null;
                         return;
                     }
 

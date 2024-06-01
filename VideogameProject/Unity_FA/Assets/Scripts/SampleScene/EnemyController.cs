@@ -140,15 +140,16 @@ public void EnemyTurn()
 
         int indexenemy ;
         GameObject enemyCard = null;
-        if (enemyCardAtributos.health > 0){
+        if (enemyCardAtributos.health >0 && enemyCardAtributos2.health > 0){
+
+        indexenemy= Random.Range(5, 7);
+
+        }  
+         else if (enemyCardAtributos.health > 0){
             indexenemy = 6;
         }
         else if (enemyCardAtributos2.health > 0){
             indexenemy = 5;
-        }
-        else 
-        {
-            indexenemy= Random.Range(5, 7);
         }
         enemyCard = cardManager.Cartas_mano[indexenemy];
         /*
