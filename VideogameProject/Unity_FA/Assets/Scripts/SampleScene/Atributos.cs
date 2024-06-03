@@ -18,6 +18,7 @@ public class Atributos
      public int isShielded = 0;
      public int speed = 0;
      public bool Alive = true;
+     public bool alredyboosted = false;
 
 /*    public int Id 
     { 
