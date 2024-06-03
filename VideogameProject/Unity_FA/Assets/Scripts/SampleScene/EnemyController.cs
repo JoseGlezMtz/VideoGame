@@ -19,9 +19,11 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator delaymesage( )
     {
-        string message = $"Turn: {cardManager.num_turn}"; 
         yield return new WaitForSeconds(4f);
-        cardManager.turnText.text = message;
+        Debug.Log("player's turn");
+
+        
+        
     }
 
     
