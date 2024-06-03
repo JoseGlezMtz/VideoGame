@@ -26,8 +26,56 @@ async function connectToDB() {
     });
   }
 
+app.post("/api/login", async (request, response) => {
+    const { username, password } = request.body;
+  
+    let connection = null;
+  
+    try {
+      connection = await connectToDB();
 
-
+      const [results] = await connection.execute("CALL validate_login(?, ?, @registered_id, @login_successful, @status_message)", [username, password]);
+      const [output] = await connection.query("SELECT @registered_id AS registered_id, @login_successful AS login_successful, @status_message AS status_message");
+  
+      const { registered_id, login_successful, status_message } = output[0];
+  
+      if (login_successful) {
+        response.status(200).json({ message: 'Login successful', user_id: registered_id });
+      } else {
+        response.status(401).json({ message: 'Invalid credentials', user_id: null });
+      }
+    } finally {
+      if (connection) {
+        connection.end();
+        console.log("Database connection closed");
+      }
+    }
+  });
+  
+  app.post("/api/update_deck", async (request, response) => {
+    const {player_id, card1, card2, card3, card4, card5} = request.body;
+  
+    let connection = null;
+  
+    try {
+      connection = await connectToDB();
+  
+      await connection.execute("CALL update_deck(?, ?, ?, ?, ?, ?, @status_message)", [player_id, card1, card2, card3, card4, card5]);
+      const [output] = await connection.query("SELECT @status_message AS status_message");
+  
+      const { status_message } = output[0];
+  
+      response.status(200).json({ message: status_message });
+    } catch (error) {
+      response.status(500).json({ error: error.message });
+      console.log(error);
+    } finally {
+      if (connection) {
+        connection.end();
+        console.log("Database connection closed");
+      }
+    }
+  });
 
 app.get("/api/Character_card", async (request, response) => {
   let connection = null;
@@ -83,4 +131,6 @@ app.get("/api/Pu_card", async (request, response) => {
       console.log("Connection closed succesfully!");
     }
   }
+
+
 });
