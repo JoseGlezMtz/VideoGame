@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS Player (
   name VARCHAR(45) NOT NULL,
   password VARCHAR(45) NOT NULL,
   level INT DEFAULT 1,
-  deck_id INT NOT NULL ,
   PRIMARY KEY (id)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -53,7 +52,7 @@ CREATE TABLE IF NOT EXISTS Game (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS Deck (
-  id INT NOT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
   player_id INT NOT NULL,
   card1 INT NOT NULL,
   card2 INT NOT NULL,
@@ -214,10 +213,6 @@ d.powerup2,
 FROM Player p
 JOIN Deck d ON p.id = d.player_id;
 
-
-
-
-
 DELIMITER $$
 CREATE PROCEDURE  Character_Ability_pro () 
 BEGIN
@@ -245,6 +240,7 @@ CREATE PROCEDURE register_player(
 )
 BEGIN
     DECLARE username_exists INT;
+    DECLARE p_id INT;
 
     SELECT COUNT(*) INTO username_exists
     FROM player
@@ -254,9 +250,9 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Ese nombre de usuario no se encuentra disponible';
     ELSE
-
         INSERT INTO player (name, password) VALUES (registered_name, registered_password);
-        
+        SELECT id INTO p_id FROM player WHERE name = registered_name;
+        INSERT INTO deck (player_id, card1, card2, card3, card4, card5) VALUES (p_id, 1, 2, 3, 4, 5);
     END IF;
 END $$
 
