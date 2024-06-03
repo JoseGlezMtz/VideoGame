@@ -29,6 +29,7 @@ public class CardManager : MonoBehaviour
     
 
    
+    [SerializeField] public TMP_Text gameText;
     [SerializeField] public TMP_Text turnText;
     [SerializeField] TMP_Text energyText;
     [SerializeField]  GameObject energySlider;
@@ -122,14 +123,14 @@ public class CardManager : MonoBehaviour
     
         PlayerTurn = true;
     }
-        void OnDestroy()
+    void OnDestroy()
     {
         Application.logMessageReceived -= HandleLog;
     }
 
     void HandleLog(string logString, string stackTrace, LogType type)
     {
-        turnText.text = logString;
+        gameText.text = logString;
     }
     
 
@@ -280,7 +281,7 @@ public class CardManager : MonoBehaviour
                     {
                         // in case the effect is to deal damage
                         case "dano":
-                            Debug.Log("Attack option");
+
                             // en caso de que sea una de las carta del enemigo la asgnamos a la carta 2
                             if (Selected_card1 != null && (Cartas_mano.IndexOf(objeto_carta) == 5 || Cartas_mano.IndexOf(objeto_carta) == 6))
                             {
@@ -289,23 +290,8 @@ public class CardManager : MonoBehaviour
                                 Debug.Log("Selected card to attack: " + Selected_card2.name);
                                 //hacer el ataque de las cartas
                                 Attack(Selected_card1, Selected_card2);
-                                // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
                                 
-                                Selected_card1 = null;
-                                Selected_card2 = null;
-                                Attack_Option = false;
-                                //En caso de que ya haya usado los dos ataques ya no permite atacar
-                                
-                                if (counter == 2){
-                                    counter = 0;
-                                    Attack_Option=false;
-                                    StartCoroutine(Waitformessage());
-                                    }
-                                if (Cartas_mano[5].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[6].GetComponent<CardScript>().atributos.health <= 0)
-                                {
-                                Debug.Log("You win");
-                                PlayerTurn = false;
-                                }
+                                ResetSelection();
                             }
                             break;
                         //In case the effect is to heal a card
@@ -318,24 +304,7 @@ public class CardManager : MonoBehaviour
                                 //hacer el ataque de las cartas
                                 Heal(Selected_card1, Selected_card2);
                                 // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
-                                
-                                Selected_card1 = null;
-                                Selected_card2 = null;
-                                Attack_Option = false;
-                                //En caso de que ya haya usado los dos ataques ya no permite atacar
-                                
-                                if (counter == 2)
-                                {
-                                    counter = 0;
-                                    Attack_Option=false;
-                                    StartCoroutine(Waitformessage());
-                                }
-                                if (Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
-                                {
-                                    Debug.Log("You win");
-                                    PlayerTurn = false;
-
-                                }
+                                ResetSelection();
                             }
                             else
                             {
@@ -354,24 +323,8 @@ public class CardManager : MonoBehaviour
                                 //hacer el ataque de las cartas
                                 mejoradano(Selected_card1, Selected_card2);
                                 // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
-                                
-                                Selected_card1 = null;
-                                Selected_card2 = null;
-                                Attack_Option = false;
-                                //En caso de que ya haya usado los dos ataques ya no permite atacar
-                                
-                                if (counter == 2)
-                                {
-                                    counter = 0;
-                                    Attack_Option=false;
-                                    StartCoroutine(Waitformessage());
-
-                                }
-                                if (Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
-                                {
-                                    Debug.Log("You win");
-                                    PlayerTurn = false;
-                                }
+                                ResetSelection();
+                               
                             }
                             break;
 
@@ -383,7 +336,29 @@ public class CardManager : MonoBehaviour
                 }
             }
         }
+
     }
+     void ResetSelection()
+    {
+        Selected_card1 = null;
+        Selected_card2 = null;
+        Attack_Option = false;
+        counter++;
+
+        if (counter == 2)
+        {
+            counter = 0;
+            StartCoroutine(Waitformessage());
+        }
+        if (Cartas_mano[5].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[6].GetComponent<CardScript>().atributos.health <= 0)
+        {
+            Debug.Log("You win");
+            PlayerTurn = false;
+        }
+ 
+}
+
+    
     //If the change option is not active we send error message
 
         
@@ -629,17 +604,14 @@ public class CardManager : MonoBehaviour
         activeCard2.canAttack = true;
         activeCard1.Update_Shield();
         activeCard2.Update_Shield();
-
-
-         
+        
         IncreaseEnegry();
-       // turnText.text = $"Turn: {num_turn}";
+        turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
         CountCountEnemyTurn = true;
         counter = 0;
         GetComponent<PU_controller>().PowerUp_created = false;
-
-        
+   
         Selected_card1 = null;
         Selected_card2 = null;
         Change_Option = false;
@@ -660,7 +632,7 @@ public class CardManager : MonoBehaviour
     {
         
         yield return new WaitForSeconds(3f);
-        turnText.text = "No more attacks available";
+        gameText.text = "No more attacks available";
     }
 
 
