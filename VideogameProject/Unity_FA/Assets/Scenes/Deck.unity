@@ -1144,6 +1144,7 @@ GameObject:
   - component: {fileID: 1131934867}
   - component: {fileID: 1131934866}
   - component: {fileID: 1131934868}
+  - component: {fileID: 1131934869}
   m_Layer: 0
   m_Name: DeckManager
   m_TagString: Untagged
@@ -1175,6 +1176,7 @@ MonoBehaviour:
   RemoveBtn: {fileID: 1568316629}
   FavoriteBtn: {fileID: 60606940}
   SaveBtn: {fileID: 1867672797}
+  apiConnection: {fileID: 0}
 --- !u!4 &1131934867
 Transform:
   m_ObjectHideFlags: 0
@@ -1202,6 +1204,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2718875c587ed458e50d47066d183d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1131934869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131934865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c594b3422e9b0d443b12a7ae151d4887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  url: 
+  getEndpoint: 
+  statusTxtLogin: {fileID: 0}
+  serverURL: http://localhost:4444
+  loginEndpoint: /api/login
+  allowLogin: 0
 --- !u!1 &1198234882
 GameObject:
   m_ObjectHideFlags: 0

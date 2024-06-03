@@ -256,6 +256,7 @@ BEGIN
     ELSE
 
         INSERT INTO player (name, password) VALUES (registered_name, registered_password);
+        
     END IF;
 END $$
 

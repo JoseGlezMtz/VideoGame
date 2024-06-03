@@ -53,14 +53,14 @@ app.post("/api/login", async (request, response) => {
   });
   
   app.post("/api/update_deck", async (request, response) => {
-    const { pl_id, card1_id, card2_id, card3_id, card4_id, card5_id } = request.body;
+    const {player_id, card1, card2, card3, card4, card5} = request.body;
   
     let connection = null;
   
     try {
       connection = await connectToDB();
   
-      await connection.execute("CALL update_deck(?, ?, ?, ?, ?, ?, @status_message)", [pl_id, card1_id, card2_id, card3_id, card4_id, card5_id]);
+      await connection.execute("CALL update_deck(?, ?, ?, ?, ?, ?, @status_message)", [player_id, card1, card2, card3, card4, card5]);
       const [output] = await connection.query("SELECT @status_message AS status_message");
   
       const { status_message } = output[0];

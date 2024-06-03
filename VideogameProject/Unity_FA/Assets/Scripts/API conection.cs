@@ -141,9 +141,12 @@ public class APIconection : MonoBehaviour
 {
     // Create deck update data object
     DeckData deckData = new DeckData(playerId, card1, card2, card3, card4, card5);
+    Debug.Log($"Deck DATA: \n {playerId}, {card1}, {card2}, {card3}, {card4}, {card5}");
+    Debug.Log($"Deck Data card 3: {deckData.card1}");
 
     // Convert deck data object to JSON
     string jsonData = JsonUtility.ToJson(deckData);
+    Debug.Log("Updated json data VALENTINA: " + jsonData);
 
     // Log JSON data and URL for debugging
     Debug.Log("JSON data: " + jsonData);
@@ -154,6 +157,7 @@ public class APIconection : MonoBehaviour
     {
         // Convert JSON string to byte array
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+        Debug.Log("Json Data Deck Test : " + jsonToSend);
 
         // Create an UploadHandlerRaw to send JSON data
         www.uploadHandler = new UploadHandlerRaw(jsonToSend);

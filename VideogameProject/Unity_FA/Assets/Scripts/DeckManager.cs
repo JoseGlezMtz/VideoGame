@@ -36,7 +36,7 @@ public class DeckManager : MonoBehaviour
 
     [SerializeField] GameObject SaveBtn;
 
-    private APIconection apiConnection;
+    public APIconection apiConnection;
 
     //Start the scene, intialize the empty lists and cards
     void Start()
@@ -221,15 +221,20 @@ public class DeckManager : MonoBehaviour
     }
 
     public void updateDeckDB(){
+        Debug.Log("PLAYER PREFS CARDS: ");
         int p_id = PlayerPrefs.GetInt("id");
         int c1 = PlayerPrefs.GetInt("card1");
         int c2 = PlayerPrefs.GetInt("card2");
         int c3 = PlayerPrefs.GetInt("card3");
         int c4 = PlayerPrefs.GetInt("card4");
         int c5 = PlayerPrefs.GetInt("card5");
-        for(int i = 0; i < 5; i++){
-            Debug.Log("Adding card... " + PlayerPrefs.GetInt($"card{i}"));
-        }
+    
+        Debug.Log($"Adding card: {c1} ");
+        Debug.Log($"Adding card: {c2} ");
+        Debug.Log($"Adding card: {c3} ");
+        Debug.Log($"Adding card: {c4} ");
+        Debug.Log($"Adding card: {c5} ");
+        
         apiConnection.SaveDeck(p_id, c1, c2, c3, c4, c5);
     }
 
@@ -239,12 +244,12 @@ public class DeckManager : MonoBehaviour
             Debug.Log("Deck does not meet size requirements");
         }
         else{
-            for(int i = 0; i < maxDeck; i++){
+            for(int i = 0; i <= maxDeck; i++){
                 OptionsCards cardAtributos = deck[i].GetComponent<OptionsCards>();
                 Debug.Log(cardAtributos.cardIndex + 1);
                 deck_ids.Add(cardAtributos.cardIndex + 1);
 
-                PlayerPrefs.SetInt($"card{i}",cardAtributos.cardIndex + 1);
+                PlayerPrefs.SetInt($"card{i+1}",cardAtributos.cardIndex + 1);
                 updateDeckDB();
             }
         }
