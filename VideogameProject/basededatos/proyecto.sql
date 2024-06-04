@@ -226,9 +226,11 @@ Select * from powerup_ability;
 END $$
 DELIMITER ;
 DELIMITER $$
-CREATE PROCEDURE Deck_pro ()
+CREATE PROCEDURE Deck_pro (IN ID int)
 BEGIN
-Select * from deck_character;
+SELECT cc.*
+FROM Character_Ability cc
+JOIN Deck ON cc.id IN (Deck.card1, Deck.card2, Deck.card3, Deck.card4, Deck.card5) where Deck.id=ID;
 END $$
 DELIMITER ; 
 

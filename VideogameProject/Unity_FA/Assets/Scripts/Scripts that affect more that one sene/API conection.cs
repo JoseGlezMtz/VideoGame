@@ -26,6 +26,7 @@ public class APIconection : MonoBehaviour
     void Start()
     {
         controller=GetComponent<CardManager>();
+        pu_controller=GetComponent<PU_controller>();
     }
 
     // Update is called once per frame
@@ -42,8 +43,8 @@ public class APIconection : MonoBehaviour
             }else{
                 string result=www.downloadHandler.text;
                 Debug.Log( result);
-                controller.APIData=result;
-                controller.Dataready=true;
+                controller.Characters_Data=result;
+                controller.Character_Dataready=true;
                 //controller.Create_Board();
             }
         }
@@ -63,6 +64,26 @@ public class APIconection : MonoBehaviour
                 Debug.Log( result);
                 pu_controller.pu_Cards_Data=result;
                 controller.PU_Dataready=true;
+            }
+        }
+    }
+
+    public void get_Deck_cards(int id){
+        StartCoroutine(Request_Deck_Cards($"http://localhost:4444/api/Deck_id/{id}"));
+    }
+
+    IEnumerator Request_Deck_Cards(string url){
+        Debug.Log("ID "+url);   
+        using(UnityWebRequest www = UnityWebRequest.Get(url)){
+            yield return www.SendWebRequest();
+            if(www.isNetworkError || www.isHttpError){
+                Debug.Log("request error" + www.error);
+            }else{
+                string result=www.downloadHandler.text;
+                Debug.Log( result);
+                controller.Deck_Data=result;
+                controller.Deck_Dataready=true;
+                //controller.Create_Board();
             }
         }
     }
