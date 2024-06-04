@@ -69,7 +69,7 @@ public class DeckManager : MonoBehaviour
             else
             {
                 // Image component found, proceed to set sprite
-                imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{index}");
+                imageComponent.sprite = Resources.Load<Sprite>($"Deck/{index}");
             }
 
             OptionsCards optionsCardsComponent = newCard.GetComponent<OptionsCards>();
@@ -122,7 +122,7 @@ public class DeckManager : MonoBehaviour
 
         //ad the corresponding image
         Image displayedCardImage = displayedCard.GetComponent<Image>();
-        displayedCardImage.sprite = Resources.Load<Sprite>($"CardImages/{index}");
+        displayedCardImage.sprite = Resources.Load<Sprite>($"Deck/{index}");
 
         //Detect clicks on the add or remove buttons and call methods
         addButton.onClick.AddListener(() => AddDeck(selectedCard));
@@ -251,6 +251,7 @@ public class DeckManager : MonoBehaviour
 
                 PlayerPrefs.SetInt($"card{i+1}",cardAtributos.cardIndex + 1);
                 updateDeckDB();
+                UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
             }
         }
         UpdateIcons();
