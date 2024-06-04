@@ -57,12 +57,16 @@ public class CardManager : MonoBehaviour
     public int energy;
     public int max_energy;
     [SerializeField]  Cards allCards;
+    [SerializeField]  Cards DeckCards;
     
-    public string APIData;
-    //public string pu_Cards_Data;
+    public string Characters_Data;
+    public string Deck_Data;
+    
+    
 
-    [SerializeField] public bool Dataready = false;
+    [SerializeField] public bool Character_Dataready = false;
     [SerializeField] public bool PU_Dataready = false;
+    public bool Deck_Dataready;
     [SerializeField] bool GameStarted = false;
     [SerializeField] bool PowerUp_created = false;
     [SerializeField] bool pu_saved = false;
@@ -77,8 +81,10 @@ public class CardManager : MonoBehaviour
 
         turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
-        GetComponent<APIconection>().get_Character_cards();
+        
+        GetComponent<APIconection>().get_Deck_cards(PlayerPrefs.GetInt("id"));
         GetComponent<APIconection>().get_PU_cards();
+        GetComponent<APIconection>().get_Character_cards();
         //InitGame();
 
         Application.logMessageReceived += HandleLog;
@@ -87,7 +93,7 @@ public class CardManager : MonoBehaviour
 
     void Update()
     {
-        if ((Dataready && PU_Dataready) && !GameStarted)
+        if ((Character_Dataready && PU_Dataready && Deck_Dataready) && !GameStarted)
         {
             InitGame();
             GameStarted = true;
@@ -105,20 +111,20 @@ public class CardManager : MonoBehaviour
     {
         int i = 0;
         
-        allCards=JsonUtility.FromJson<Cards>(APIData);
-        
+        DeckCards=JsonUtility.FromJson<Cards>(Deck_Data);
+        allCards=JsonUtility.FromJson<Cards>(Characters_Data);
         Debug.Log(allCards.cards);
 
         Debug.Log("Game started");
-        foreach (Atributos atributosCarta in allCards.cards)
+        foreach (Atributos atributosCarta in DeckCards.cards)
         {
             Card_base(Cartas_mano, i, atributosCarta);
             yield return new WaitForSeconds(0.1f);
             i++;
         }
-        
+
+        GetComponent<EnemyController>().Start_Enemy_Cards(allCards);
         GetComponent<PU_controller>().Init_PU_ID();
-        
         GetComponent<PU_controller>().PU_button();
     
         PlayerTurn = true;

@@ -133,4 +133,44 @@ app.get("/api/Pu_card", async (request, response) => {
   }
 
 
+})
+
+app.get("/api/Deck_id/:ID", async (request, response) => {
+  let connection = null;
+  
+  try {
+
+
+    connection = await connectToDB();
+    const [results, fields] = await connection.execute(
+    `SELECT cc.*
+    FROM Character_Ability cc
+    JOIN Deck d ON cc.id IN (d.card1, d.card2, d.card3, d.card4, d.card5)
+    WHERE d.id = ${request.params.ID}
+    ORDER BY 
+      CASE cc.id
+        WHEN d.card1 THEN 1
+        WHEN d.card2 THEN 2
+        WHEN d.card3 THEN 3
+        WHEN d.card4 THEN 4
+        WHEN d.card5 THEN 5
+      END;`);
+
+    console.log(`${results.length} rows returned`);
+    const c={"cards":results};
+    response.status(200).json(c);
+  }
+  catch (error) {
+    
+    response.status(500);
+    response.json(error);
+    console.log(error);
+  }
+  finally {
+    
+    if (connection !== null) {
+      connection.end();
+      console.log("Connection closed succesfully!");
+    }
+  }
 });

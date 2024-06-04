@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
      public CardManager cardManager;
+     public List <int> enemyCards = new List<int> { 4, 5};
         void Start()
     {
         
@@ -86,91 +87,107 @@ public class EnemyController : MonoBehaviour
 }
 
 
-public void EnemyTurn()
-{
-    // We check if it's the enemy turn
-    if (cardManager.CountCountEnemyTurn)
+    public void EnemyTurn()
     {
-       Atributos playerCardAtributos = cardManager.Cartas_mano[3].GetComponent<CardScript>().atributos;
-       
-       Atributos playerCardAtributos2 = cardManager.Cartas_mano[4].GetComponent<CardScript>().atributos;
-
-       Atributos enemyCardAtributos = cardManager.Cartas_mano[5].GetComponent<CardScript>().atributos;
-
-       Atributos enemyCardAtributos2 = cardManager.Cartas_mano[6].GetComponent<CardScript>().atributos;
-       int index ; 
-       GameObject playerCard = null; 
-
-        if (playerCardAtributos.health < playerCardAtributos2.health )
+    // We check if it's the enemy turn
+        if (cardManager.CountCountEnemyTurn)
         {
-            if(playerCardAtributos.health > 0){
-            index = 3;
+            Atributos playerCardAtributos = cardManager.Cartas_mano[3].GetComponent<CardScript>().atributos;
+        
+            Atributos playerCardAtributos2 = cardManager.Cartas_mano[4].GetComponent<CardScript>().atributos;
+
+            Atributos enemyCardAtributos = cardManager.Cartas_mano[5].GetComponent<CardScript>().atributos;
+
+            Atributos enemyCardAtributos2 = cardManager.Cartas_mano[6].GetComponent<CardScript>().atributos;
+            int index ; 
+            GameObject playerCard = null; 
+
+            if (playerCardAtributos.health < playerCardAtributos2.health )
+            {
+                if(playerCardAtributos.health > 0){
+                index = 3;
+                }
+                else{
+                    index = 4;
+                }
             }
-            else{
+            else if (playerCardAtributos.health > playerCardAtributos2.health)
+            {
+                if(playerCardAtributos2.health > 0){
                 index = 4;
+                }
+                else{
+                    index = 3;
+                }
             }
-        }
-        else if (playerCardAtributos.health > playerCardAtributos2.health)
-        {
-            if(playerCardAtributos2.health > 0){
-            index = 4;
-            }
-            else{
+            else if (playerCardAtributos.resistance < playerCardAtributos2.resistance)
+            {
                 index = 3;
             }
-        }
-        else if (playerCardAtributos.resistance < playerCardAtributos2.resistance)
-        {
-            index = 3;
-        }
-        else if (playerCardAtributos.resistance > playerCardAtributos2.resistance)
-        {
-            index = 4;
-        }
-        else 
-        {
-            index= Random.Range(3, 5);
+            else if (playerCardAtributos.resistance > playerCardAtributos2.resistance)
+            {
+                index = 4;
+            }
+            else 
+            {
+                index= Random.Range(3, 5);
 
-        }
+            }
 
-        // Assign playerCard after index is determined
-        playerCard = cardManager.Cartas_mano[index];
-        
-        // Log the selected card
+            // Assign playerCard after index is determined
+            playerCard = cardManager.Cartas_mano[index];
+            
+            // Log the selected card
 
-        
+            
 
-        int indexenemy=0;
-        GameObject enemyCard = null;
+            int indexenemy=0;
+            GameObject enemyCard = null;
 
-        if (enemyCardAtributos.health >0 && enemyCardAtributos2.health > 0){
+            if (enemyCardAtributos.health >0 && enemyCardAtributos2.health > 0){
 
-        indexenemy= Random.Range(5, 7);
+            indexenemy= Random.Range(5, 7);
 
-        }  
-         else if (enemyCardAtributos.health > 0){
-            indexenemy = 5;
-        }
-        else if (enemyCardAtributos2.health > 0){
-            indexenemy = 6;
-        }
-        
-        enemyCard = cardManager.Cartas_mano[indexenemy];
-        /*
-        // We select a random card from the player hand
-        int enemyCardIndex = Random.Range(5, 7); 
-        GameObject enemyCard = cardManager.Cartas_mano[enemyCardIndex];
-        //llamamos a la funcion de ataque*/
-        EnemyAttack(enemyCard, playerCard);
-        // We end the enemy turn
-        cardManager.CountCountEnemyTurn = false;
-        // We set the player turn to true
-        cardManager.PlayerTurn = true;
-        
-
-    }
+            }  
+            else if (enemyCardAtributos.health > 0){
+                indexenemy = 5;
+            }
+            else if (enemyCardAtributos2.health > 0){
+                indexenemy = 6;
+            }
+            
+            enemyCard = cardManager.Cartas_mano[indexenemy];
+            /*
+            // We select a random card from the player hand
+            int enemyCardIndex = Random.Range(5, 7); 
+            GameObject enemyCard = cardManager.Cartas_mano[enemyCardIndex];
+            //llamamos a la funcion de ataque*/
+            EnemyAttack(enemyCard, playerCard);
+            // We end the enemy turn
+            cardManager.CountCountEnemyTurn = false;
+            // We set the player turn to true
+            cardManager.PlayerTurn = true;
+        }
     }
 
+    public void Start_Enemy_Cards(Cards allCards){
+        StartCoroutine(Create_Enemy_Cards(allCards));
+    }
+
+    IEnumerator Create_Enemy_Cards(Cards allCards){
+        int i = 5;
+        foreach (Atributos atributosCarta in allCards.cards)
+        {
+            if (enemyCards.Contains(atributosCarta.id))
+            {
+            cardManager.Card_base(cardManager.Cartas_mano, i, atributosCarta);
+            yield return new WaitForSeconds(0.1f);
+            i++;
+            }
+            
+        }
+    }
+    
     
     
 
