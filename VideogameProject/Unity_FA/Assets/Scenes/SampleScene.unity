@@ -198,6 +198,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 507509}
   m_CullTransparentMesh: 1
+--- !u!1 &36155001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 36155002}
+  m_Layer: 0
+  m_Name: AllyBottom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &36155002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36155001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -2.84, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &47080623
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,6 +822,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163446175}
   m_CullTransparentMesh: 1
+--- !u!1 &314967731
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 314967732}
+  m_Layer: 0
+  m_Name: EnemyTop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &314967732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314967731}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &316479424
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,6 +920,11 @@ MonoBehaviour:
   turnText: {fileID: 1501146303}
   energyText: {fileID: 2113378398}
   energySlider: {fileID: 801110365}
+  explosion: {fileID: 7450794467752143802, guid: 50e5531ab83326742b8293e1386a04ec, type: 3}
+  position1: {fileID: 1473397704}
+  position2: {fileID: 314967732}
+  position3: {fileID: 0}
+  position4: {fileID: 0}
   PlayerTurn: 0
   CountCountEnemyTurn: 0
   Change_Option: 0
@@ -872,9 +939,13 @@ MonoBehaviour:
   max_energy: 100
   allCards:
     cards: []
-  APIData: 
-  Dataready: 0
+  DeckCards:
+    cards: []
+  Characters_Data: 
+  Deck_Data: 
+  Character_Dataready: 0
   PU_Dataready: 0
+  Deck_Dataready: 0
   GameStarted: 0
   PowerUp_created: 0
   pu_saved: 0
@@ -892,6 +963,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   url: 
   getEndpoint: 
+  statusTxtLogin: {fileID: 0}
+  serverURL: http://localhost:4444
+  loginEndpoint: /api/login
+  allowLogin: 0
 --- !u!114 &316479428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -905,6 +980,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardManager: {fileID: 0}
+  enemyCards: 0400000005000000
+  explosion: {fileID: 7450794467752143802, guid: 50e5531ab83326742b8293e1386a04ec, type: 3}
+  position1: {fileID: 672278161}
+  position2: {fileID: 36155002}
 --- !u!114 &316479429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1201,6 +1280,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669526146}
   m_CullTransparentMesh: 1
+--- !u!1 &672278160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 672278161}
+  m_Layer: 0
+  m_Name: AllyTop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &672278161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672278160}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &777448443
 GameObject:
   m_ObjectHideFlags: 0
@@ -2403,6 +2513,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1391906386}
   m_CullTransparentMesh: 1
+--- !u!1 &1473397703
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1473397704}
+  m_Layer: 0
+  m_Name: EnemyBottom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1473397704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473397703}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14, y: -2.84, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1501146301
 GameObject:
   m_ObjectHideFlags: 0
@@ -3321,3 +3462,7 @@ SceneRoots:
   - {fileID: 1739323551}
   - {fileID: 1627151048}
   - {fileID: 1336533804}
+  - {fileID: 314967732}
+  - {fileID: 672278161}
+  - {fileID: 1473397704}
+  - {fileID: 36155002}
