@@ -45,10 +45,10 @@ CREATE TABLE IF NOT EXISTS Powerup_card (
 
 CREATE TABLE IF NOT EXISTS Game (
   id INT NOT NULL AUTO_INCREMENT,
-  cards INT NOT NULL,
-  duration INT NOT NULL,
-  enemies_played INT NOT NULL,
-  PRIMARY KEY (id)
+  player_id INT NOT NULL,
+  result ENUM('WIN', 'LOSE') NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS Deck (
@@ -74,29 +74,30 @@ CREATE TABLE IF NOT EXISTS Deck (
   CONSTRAINT fk_deck_powerup3 FOREIGN KEY (powerup3) REFERENCES Powerup_card(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS Cards_played (
+CREATE TABLE IF NOT EXISTS Characters_Cards_played (
   id INT NOT NULL AUTO_INCREMENT,
-  game_id INT NOT NULL,
+  
   player_id INT NOT NULL,
   character_card_id INT DEFAULT NULL,
-  powerup_card_id INT DEFAULT NULL,
+  amount INT DEFAULT 0,
   PRIMARY KEY (id),
-  CONSTRAINT fk_played_game FOREIGN KEY (game_id) REFERENCES Game(id),
+  
   CONSTRAINT fk_played_player FOREIGN KEY (player_id) REFERENCES Player(id),
-  CONSTRAINT fk_played_character_card FOREIGN KEY (character_card_id) REFERENCES Character_card(id),
-  CONSTRAINT fk_played_powerup_card FOREIGN KEY (powerup_card_id) REFERENCES Powerup_card(id),
-  CONSTRAINT chk_one_card CHECK ((character_card_id IS NOT NULL AND powerup_card_id IS NULL) OR (character_card_id IS NULL AND powerup_card_id IS NOT NULL))
+  CONSTRAINT fk_played_character_card FOREIGN KEY (character_card_id) REFERENCES Character_card(id)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
-CREATE TABLE IF NOT EXISTS Game_results (
+CREATE TABLE IF NOT EXISTS PowerUP_Cards_played (
   id INT NOT NULL AUTO_INCREMENT,
-  game_id INT NOT NULL,
+ 
   player_id INT NOT NULL,
-  result ENUM('WIN', 'LOSE') NOT NULL,
+  PU_card_id INT DEFAULT NULL,
+  amount INT DEFAULT 0,
   PRIMARY KEY (id),
-  CONSTRAINT fk_results_game FOREIGN KEY (game_id) REFERENCES Game(id),
-  CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id)
+  
+  CONSTRAINT fk_played_PU FOREIGN KEY (player_id) REFERENCES Player(id),
+  CONSTRAINT fk_played_PU_card FOREIGN KEY (PU_card_id) REFERENCES powerup_card(id)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE VIEW Character_Ability AS
@@ -128,57 +129,30 @@ FROM Deck d
 JOIN Character_card cc ON d.card1 = cc.id OR d.card2 = cc.id OR d.card3 = cc.id OR d.card4 = cc.id OR d.card5 = cc.id
 JOIN Player p ON d.player_id = p.id;
 
-
-
 CREATE VIEW Game_Resultado AS
 SELECT
-    gr.id AS result_id,
-    gr.game_id,
-    g.cards,
-    g.duration,
-    g.enemies_played,
-    gr.player_id,
-    gr.result
+	g.player_id,
+    g.result
 FROM
-    Game_results gr
-JOIN
-    Game g ON gr.game_id = g.id;
+    Game g ;
 
 
 CREATE VIEW Cards_Played_Character AS
 SELECT
-    cp.id AS played_id,
-    cp.game_id,
-    cp.player_id,
-    cp.character_card_id,
-    cc.name AS character_name,
-    cc.nameAbility AS character_ability,
-    cc.description AS character_description,
-    cc.resistance,
-    cc.health,
-    cc.speed
-FROM
-    Cards_played cp
-JOIN
-    Character_card cc ON cp.character_card_id = cc.id
-WHERE
-    cp.character_card_id IS NOT NULL;
-    
-    CREATE VIEW Cards_Played_Powerup AS
+	cp.character_card_id,
+    cc.name,
+    cp.amount
+    FROM characters_Cards_played cp join character_card cc
+    where cp.character_card_id=cc.id ORDER BY amount DESC;
+  
+CREATE VIEW PowerUp_Played_Character AS
 SELECT
-    cp.id AS played_id,
-    cp.game_id,
-    cp.player_id,
-    cp.powerup_card_id,
-    pc.name AS powerup_name,
-    pc.image AS powerup_image,
-    pc.description AS powerup_description
-FROM
-    Cards_played cp
-JOIN
-    Powerup_card pc ON cp.powerup_card_id = pc.id
-WHERE
-    cp.powerup_card_id IS NOT NULL;
+	Pc.PU_card_id,
+    PUC.name,
+    PC.amount
+    FROM PowerUP_Cards_played PC join powerup_card PUC
+    where PC.PU_card_id=PUC.id ORDER BY amount DESC
+	LIMIT 5;
 
 
 CREATE VIEW Player_Deck_Character AS
@@ -212,6 +186,13 @@ d.powerup2,
  d.powerup3
 FROM Player p
 JOIN Deck d ON p.id = d.player_id;
+
+
+CREATE VIEW Games_porcentage AS
+SELECT
+(SUM(result = 'WIN') / COUNT(*) * 100) AS win_percentage,
+(SUM(result = 'LOSE') / COUNT(*) * 100) AS loss_percentage
+FROM Game G;
 
 DELIMITER $$
 CREATE PROCEDURE  Character_Ability_pro () 
@@ -326,4 +307,43 @@ BEGIN
     SET card1 = card1_id, card2 = card2_id, card3 = card3_id, card4 = card4_id, card5 = card5_id
     WHERE id = deck_id;
     SET status_message = 'Deck Updated succesfully';
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE Register_result(
+	IN Player_ID int,
+    IN Resultado varchar(8),
+    OUT status_message VARCHAR(45)
+)
+BEGIN
+	Insert into Game (player_id,result) values (Player_ID,Resultado);
+    SET status_message = 'Game Registered succesfully';
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE Save_Cards_used(
+	IN Player_ID int,
+    IN ID_carta int,
+    IN Amount int,
+    OUT status_message varchar(255)
+)
+BEGIN
+	Update Characters_Cards_played cc SET amount = amount + Amount WHERE ID_carta=cc.character_card_id;
+    SET status_message = 'Cards registered succesfully';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE Save_PU_used(
+	IN Player_ID int,
+    IN ID_PU int,
+    IN Amount int,
+    OUT status_message varchar(255)
+)
+BEGIN
+	insert into PowerUP_Cards_played (player_id,PU_card_id,amount) values (Player_ID,ID_PU, Amount);
+    SET status_message = 'Cards registered succesfully';
 END $$

@@ -77,4 +77,4 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (34, 'Flotador', 'Protege a uno de tus personajes de los daños continuos', 34),
 (35, 'Telescopio', 'Mejora la habilidad básica de Mike en (x) cantidad', 35);
 
-select * from powerup_ability ;
+
