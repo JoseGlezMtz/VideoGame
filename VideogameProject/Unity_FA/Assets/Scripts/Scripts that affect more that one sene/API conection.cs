@@ -152,6 +152,44 @@ public class APIconection : MonoBehaviour
             }
         }
     }
+public void Register(string username, string password){
+        StartCoroutine(RequestRegister("http://localhost:4444/api/register", username, password));
+    }
+
+    IEnumerator RequestRegister(string url, string username, string password)
+    {
+        RegisterData registerData = new RegisterData(username, password);
+        string jsonData = JsonUtility.ToJson(registerData);
+
+        Debug.Log("JSON data: " + jsonData);
+        Debug.Log("URL: " + url);
+
+        using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Request error: " + www.error);
+            }
+            else
+            {
+                string result = www.downloadHandler.text;
+                Debug.Log("Response: " + result);
+
+                
+            }
+            
+
+        }
+    }
+
 
     public void SaveDeck(int player, int card1, int card2, int card3, int card4, int card5){
         Debug.Log("Calling Coroutine Update Deck...");
