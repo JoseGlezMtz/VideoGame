@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class EnemyController : MonoBehaviour
 {
      public CardManager cardManager;
      public List <int> enemyCards = new List<int> { 4, 5};
+
+     [SerializeField] GameObject explosion;
+
+    [SerializeField] Transform position1;
+    [SerializeField] Transform position2;
+
+
         void Start()
     {
-        
-            cardManager = FindObjectOfType<CardManager>();
-            
-            
-        
-            
-        
+            cardManager = FindObjectOfType<CardManager>(); 
     }
      
 
@@ -46,6 +49,15 @@ public class EnemyController : MonoBehaviour
             }else{
             playerCardAtributos.health -= damageDealt;
             Debug.Log(enemyCardAtributos.character_name + " attacked " + playerCardAtributos.character_name + " dealing " + damageDealt + " damage."); 
+            
+            if(playerCard == cardManager.Cartas_mano[3]){
+                playAnimation(1);
+            }
+            else if (playerCard == cardManager.Cartas_mano[4])
+                {
+                    playAnimation(2);
+                }
+
             StartCoroutine(delaymesage());
             //revisar si la carta que atacaron murió
             if (!playerCard.GetComponent<CardScript>().check_alive()){
@@ -188,9 +200,12 @@ public class EnemyController : MonoBehaviour
         }
     }
     
-    
-    
-
-
-
+    public void playAnimation(int position){
+        if(position == 1){
+            Instantiate(explosion, position1);
+        }
+        else if(position == 2){
+            Instantiate(explosion, position2);
+        }
+    }
 }

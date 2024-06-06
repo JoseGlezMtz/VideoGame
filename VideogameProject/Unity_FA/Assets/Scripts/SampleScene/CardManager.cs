@@ -5,19 +5,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 
-/*
-TO-DO
-1. Definir variables para PU
-    lista de PU en la pila
-    lista de PU en la mano
-    lista de PU descartados
-2. Inicializar las cartas en la pila de PU
-3. Ordenar la lista de manera aleatoria
-4. Agregar funcionalidad de sumar las cartas a la mano cuando le das click a su botón
-5. Agregar método para mover la carta a la pila de descarte cuando finalice el turno
-6. 
-*/
-
 public class CardManager : MonoBehaviour
 {
     [SerializeField] GameObject CardPrefab;
@@ -26,17 +13,16 @@ public class CardManager : MonoBehaviour
     
     [SerializeField] public List<GameObject> Cartas_mano = new List<GameObject>();
     [SerializeField] public List<GameObject> Panels = new List<GameObject>();
-    
-
    
     [SerializeField] public TMP_Text gameText;
     [SerializeField] public TMP_Text turnText;
     [SerializeField] TMP_Text energyText;
     [SerializeField]  GameObject energySlider;
 
+    [SerializeField] GameObject explosion;
 
-
-   
+    [SerializeField] Transform position1;
+    [SerializeField] Transform position2;
 
     private bool changeButtonPressed = false;
     public bool PlayerTurn = false;
@@ -71,7 +57,6 @@ public class CardManager : MonoBehaviour
     [SerializeField] bool PowerUp_created = false;
     [SerializeField] bool pu_saved = false;
 
-    
 
     void Start()
     {
@@ -89,7 +74,6 @@ public class CardManager : MonoBehaviour
 
         Application.logMessageReceived += HandleLog;
     }
-
 
     void Update()
     {
@@ -402,8 +386,6 @@ public class CardManager : MonoBehaviour
         }
     }
 
-   
-
     //Increase Energy amount
     public void IncreaseEnegry(){
        // Debug.Log("Energy increased");
@@ -466,7 +448,8 @@ public class CardManager : MonoBehaviour
                             objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                             counter++;
                             objeto_carta2.GetComponent<CardScript>().UpdateHealth();
-                        }
+                            
+                            playAnimation(Cartas_mano.IndexOf(objeto_carta2));                       }
                     }
                     else
                     {
@@ -571,7 +554,6 @@ public class CardManager : MonoBehaviour
         }
     }
 
-
     // Function to change the state of the attack option (active in the attack button)
     public void Attack_button()
     {
@@ -592,10 +574,6 @@ public class CardManager : MonoBehaviour
     }
 
 // Function to create the power up button
-
-
-
-
     public void EndTurn()
     {
         if (PlayerTurn ){
@@ -641,7 +619,15 @@ public class CardManager : MonoBehaviour
         gameText.text = "No more attacks available";
     }
 
-
+    public void playAnimation(int position){
+        if(position == 5){
+            Instantiate(explosion, position1);
+        }
+        else if (position == 6){
+            Instantiate(explosion, position2);
+        }
+        
+    }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
 }
