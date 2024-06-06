@@ -77,6 +77,33 @@ app.post("/api/login", async (request, response) => {
     }
   });
 
+app.post("/api/register", async (request, response) => {
+  console.log('Request body:', request.body);
+
+    const { registered_name, registered_password } = request.body;
+  
+    let connection = null;
+  
+    try {
+      connection = await connectToDB();
+  
+      await connection.execute("CALL register_player(?, ?)", [registered_name, registered_password]);
+      const [output] = await connection.query("SELECT @status_message AS status_message");
+  
+      const { status_message } = output[0];
+  
+      response.status(200).json({ message: status_message });
+    } catch (error) {
+      response.status(500).json({ error: error.message });
+      console.log(error);
+    } finally {
+      if (connection) {
+        connection.end();
+        console.log("Database connection closed");
+      }
+    }
+  });
+
 app.get("/api/Character_card", async (request, response) => {
   let connection = null;
 
