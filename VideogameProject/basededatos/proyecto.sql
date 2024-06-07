@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS Character_card (
   ability INT NOT NULL UNIQUE,
   resistance INT NOT NULL,
   health INT NOT NULL,
-  speed INT NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT fk_character_ability FOREIGN KEY (ability) REFERENCES Ability(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -46,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Powerup_card (
 CREATE TABLE IF NOT EXISTS Game (
   id INT NOT NULL AUTO_INCREMENT,
   player_id INT NOT NULL,
-  result ENUM('WIN', 'LOSE') NOT NULL,
+  num_roand INT NOT NULL DEFAULT (0),
   PRIMARY KEY (id),
   CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -107,7 +106,7 @@ SELECT cc.id AS id,
  a.cost AS abilityCost, 
  a.cards_affected, 
  a.effect AS effect,
- cc.resistance,cc.health,cc.speed
+ cc.resistance,cc.health
 FROM Character_card cc
 JOIN Ability a ON cc.ability = a.id;
 
@@ -131,10 +130,13 @@ JOIN Player p ON d.player_id = p.id;
 
 CREATE VIEW Game_Resultado AS
 SELECT
+	p.name,
 	g.player_id,
-    g.result
+    g.num_roand
+    
 FROM
-    Game g ;
+    Game g 
+JOIN Player p;
 
 
 CREATE VIEW Cards_Played_Character AS
@@ -188,11 +190,7 @@ FROM Player p
 JOIN Deck d ON p.id = d.player_id;
 
 
-CREATE VIEW Games_porcentage AS
-SELECT
-(SUM(result = 'WIN') / COUNT(*) * 100) AS win_percentage,
-(SUM(result = 'LOSE') / COUNT(*) * 100) AS loss_percentage
-FROM Game G;
+
 
 DELIMITER $$
 CREATE PROCEDURE  Character_Ability_pro () 
@@ -317,7 +315,7 @@ CREATE PROCEDURE Register_result(
     OUT status_message VARCHAR(45)
 )
 BEGIN
-	Insert into Game (player_id,result) values (Player_ID,Resultado);
+	Insert into Game (player_id,num_roand) values (Player_ID,Resultado);
     SET status_message = 'Game Registered succesfully';
 END $$
 DELIMITER ;
