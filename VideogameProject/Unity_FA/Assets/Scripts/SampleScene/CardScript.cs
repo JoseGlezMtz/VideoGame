@@ -7,15 +7,21 @@ using TMPro;
 public class CardScript : MonoBehaviour
 {
     public Atributos atributos;
+    public int Start_Attack;
+    public int Start_cost;
     public CardManager cardManager;
 
     [SerializeField] public GameObject selfCard;
     [SerializeField] TMP_Text health_text;
+
     
     // Start is called before the first frame update
     public void Init(Atributos _atributos)
     {
         atributos = _atributos;
+        Start_Attack = atributos.attack;
+        Start_cost=atributos.abilityCost;
+
         Image imageComponent = GetComponent<Image>();
    
             if (imageComponent == null)
@@ -59,4 +65,11 @@ public class CardScript : MonoBehaviour
         else{
         health_text.text=atributos.health.ToString();
     }}
+
+    public void Reset_card(){
+        atributos.attack = Start_Attack;
+        atributos.alredyboosted = false;
+        atributos.abilityCost = Start_cost;
+    }
+    
 }

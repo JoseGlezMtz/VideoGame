@@ -16,6 +16,7 @@ public class CardManager : MonoBehaviour
    
     [SerializeField] public TMP_Text gameText;
     [SerializeField] public TMP_Text turnText;
+    [SerializeField] public TMP_Text RoundText;
     [SerializeField] TMP_Text energyText;
     [SerializeField]  GameObject energySlider;
 
@@ -56,16 +57,19 @@ public class CardManager : MonoBehaviour
     [SerializeField] bool GameStarted = false;
     [SerializeField] bool PowerUp_created = false;
     [SerializeField] bool pu_saved = false;
+    [SerializeField] public int Rounds;
 
 
     void Start()
     {
         num_turn = 1;
+        Rounds = 1;
         energy = 20;
         max_energy = 100;
 
         turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
+        RoundText.text = $"Round: {Rounds}";
         
         GetComponent<APIconection>().get_Deck_cards(PlayerPrefs.GetInt("id"));
         GetComponent<APIconection>().get_PU_cards();
@@ -168,7 +172,7 @@ public class CardManager : MonoBehaviour
             {
                 if (Cartas_mano.IndexOf(objeto_carta) > 4)
                 {
-                    Debug.Log("Enemy card, can't change it");
+                    Debug.Log("Enemy card, can't select it");
                 }
             //si no, guardamos la primera carta
                 else
@@ -186,6 +190,27 @@ public class CardManager : MonoBehaviour
             }
             else
             {
+                //revisamos si la carta seleccionada es la misma que la que ya estaba seleccionada
+                if (!Change_Option && !Attack_Option)
+                {   
+                    if (Cartas_mano.IndexOf(objeto_carta) > 4)
+                    {
+                        Debug.Log("Enemy card, can't select it");
+                    }
+                    else{
+                        if (Selected_card1 == objeto_carta)
+                        {
+                            Selected_card1 = null;
+                            Debug.Log("Unselecting " + objeto_carta.GetComponent<CardScript>().atributos.character_name);
+                            return;
+                        }
+                        else if (Selected_card1 != objeto_carta)
+                        {
+                            Selected_card1 = objeto_carta;
+                            Debug.Log("Selecting " + Selected_card1.GetComponent<CardScript>().atributos.character_name);
+                        }
+                    }
+                }
                 //revisamos si la opcion cambio está activada
                 if (Change_Option)
                 {
@@ -277,6 +302,13 @@ public class CardManager : MonoBehaviour
                             {
                     
                                 Selected_card2= objeto_carta;
+                                //corroboramos que la carta del enemigo no este muerta
+                                if (Selected_card2.GetComponent<CardScript>().atributos.Alive == false)
+                                {
+                                    Debug.Log("This card is Death");
+                                    Selected_card2 = null;
+                                    return;
+                                }
                                 Debug.Log("Selected card to attack: " + Selected_card2.name);
                                 //hacer el ataque de las cartas
                                 Attack(Selected_card1, Selected_card2);
@@ -337,16 +369,16 @@ public class CardManager : MonoBehaviour
 
         if (counter == 2)
         {
-            counter = 0;
+            
             StartCoroutine(Waitformessage());
         }
         if (Cartas_mano[5].GetComponent<CardScript>().atributos.health <= 0 && Cartas_mano[6].GetComponent<CardScript>().atributos.health <= 0)
         {
             Debug.Log("You win");
-            PlayerTurn = false;
+            Start_New_Round();
         }
  
-}
+    }
 
     
     //If the change option is not active we send error message
@@ -432,7 +464,7 @@ public class CardManager : MonoBehaviour
                         if (damageDealt <= 0)
                         {
                             Debug.Log("No damage dealt because the enemy card has more resistance than the player card's attack");
-                            counter++;
+                            
                         }
                         else
                         {
@@ -446,10 +478,11 @@ public class CardManager : MonoBehaviour
                             Slider sliderComponent = energySlider.GetComponent<Slider>();
                             sliderComponent.value = energy;
                             objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
-                            counter++;
-                            objeto_carta2.GetComponent<CardScript>().UpdateHealth();
                             
-                            playAnimation(Cartas_mano.IndexOf(objeto_carta2));                       }
+                            objeto_carta2.GetComponent<CardScript>().check_alive();
+                            
+                            playAnimation(Cartas_mano.IndexOf(objeto_carta2));
+                        }
                     }
                     else
                     {
@@ -497,8 +530,8 @@ public class CardManager : MonoBehaviour
                 Slider sliderComponent = energySlider.GetComponent<Slider>();
                 sliderComponent.value = energy;
                 objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
-                counter++;
-                objeto_carta2.GetComponent<CardScript>().UpdateHealth();
+                
+                objeto_carta2.GetComponent<CardScript>().check_alive();
                 
             }
             else
@@ -543,7 +576,7 @@ public class CardManager : MonoBehaviour
                 sliderComponent.value = energy;
                 objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                 objeto_carta2.GetComponent<CardScript>().atributos.alredyboosted = true;
-                counter++;
+                
             }
             else 
             {
@@ -630,4 +663,43 @@ public class CardManager : MonoBehaviour
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
+    public void Start_New_Round(){
+        PlayerTurn = false;
+        GetComponent<EnemyController>().Destroy_Cards();
+        foreach (GameObject card in Cartas_mano)
+        {
+            card.GetComponent<CardScript>().Reset_card();
+        }
+        StartCoroutine(New_Round());
+    }
+    IEnumerator New_Round(){
+        yield return new WaitForSeconds(4f);
+        Debug.Log("New Round");
+        Rounds++;
+        num_turn=0;
+
+        yield return new WaitForSeconds(4f);
+        Debug.Log("New Enemies are coming");
+        GetComponent<EnemyController>().Start_Enemy_Cards(allCards);
+
+        Atributos activeCard1 = Cartas_mano[3].GetComponent<CardScript>().atributos;
+        Atributos activeCard2 = Cartas_mano[4].GetComponent<CardScript>().atributos;
+        activeCard1.canAttack = true;
+        activeCard2.canAttack = true;
+
+        IncreaseEnegry();
+        turnText.text = $"Turn: {num_turn}";
+        energyText.text = $"{energy}";
+        RoundText.text = $"Round: {Rounds}";
+
+        GetComponent<PU_controller>().PowerUp_created = false;
+        Selected_card1 = null;
+        Selected_card2 = null;
+        Change_Option = false;
+        GetComponent<PU_controller>().pu_saved = false;
+
+        PlayerTurn = true;
+        CountCountEnemyTurn = false;
+        Debug.Log("Player's turn");
+    }
 }
