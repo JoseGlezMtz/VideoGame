@@ -7,12 +7,13 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
      public CardManager cardManager;
-     public List <int> enemyCards = new List<int> { 4, 5};
+     public List <int> enemyCards = new List<int>();
 
      [SerializeField] GameObject explosion;
 
     [SerializeField] Transform position1;
     [SerializeField] Transform position2;
+   
 
 
         void Start()
@@ -24,6 +25,7 @@ public class EnemyController : MonoBehaviour
     private IEnumerator delaymesage( )
     {
         yield return new WaitForSeconds(4f);
+        cardManager.PlayerTurn = true;
         Debug.Log("player's turn");
 
         
@@ -32,7 +34,7 @@ public class EnemyController : MonoBehaviour
 
     
     public void EnemyAttack(GameObject enemyCard, GameObject playerCard)
-{
+    {
     Atributos enemyCardAtributos = enemyCard.GetComponent<CardScript>().atributos;
     Atributos playerCardAtributos = playerCard.GetComponent<CardScript>().atributos;
     // First we check if the enemy card and the player card are not null
@@ -178,7 +180,7 @@ public class EnemyController : MonoBehaviour
             // We end the enemy turn
             cardManager.CountCountEnemyTurn = false;
             // We set the player turn to true
-            cardManager.PlayerTurn = true;
+            
         }
     }
 
@@ -187,6 +189,18 @@ public class EnemyController : MonoBehaviour
     }
 
     IEnumerator Create_Enemy_Cards(Cards allCards){
+        Debug.Log("Creating enemy cards");
+        enemyCards.Clear();
+        for(int j=0; j<2; j++)
+        {
+            int valorAleatorio = Random.Range(1, 8); // Genera un valor aleatorio
+            if (enemyCards.Contains(valorAleatorio))
+            {
+                j--;
+                continue;
+            }
+            enemyCards.Add(valorAleatorio);
+        }
         int i = 5;
         foreach (Atributos atributosCarta in allCards.cards)
         {
@@ -206,6 +220,17 @@ public class EnemyController : MonoBehaviour
         }
         else if(position == 2){
             Instantiate(explosion, position2);
+        }
+    }
+
+    public void Destroy_Cards(){
+        StartCoroutine(Destroy_Cards_Coroutine());
+    }
+
+    IEnumerator Destroy_Cards_Coroutine(){
+        yield return new WaitForSeconds(2f);
+        for(int i = 5; i < 7; i++){
+            Destroy(cardManager.Cartas_mano[i]);
         }
     }
 }
