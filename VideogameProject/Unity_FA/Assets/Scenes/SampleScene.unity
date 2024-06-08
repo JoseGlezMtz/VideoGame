@@ -964,6 +964,7 @@ MonoBehaviour:
   url: 
   getEndpoint: 
   statusTxtLogin: {fileID: 0}
+  statusTxtRegister: {fileID: 0}
   serverURL: http://localhost:4444
   loginEndpoint: /api/login
   allowLogin: 0
@@ -982,8 +983,8 @@ MonoBehaviour:
   cardManager: {fileID: 0}
   enemyCards: 
   explosion: {fileID: 7450794467752143802, guid: 50e5531ab83326742b8293e1386a04ec, type: 3}
-  position1: {fileID: 672278161}
-  position2: {fileID: 36155002}
+  position1: {fileID: 36155002}
+  position2: {fileID: 672278161}
 --- !u!114 &316479429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1027,14 +1028,13 @@ MonoBehaviour:
     health: 100
     attack: 20
     abilityCost: 5
-    cards_affectted: 
     effect: 
     resistance: 0
     canAttack: 1
     isShielded: 0
-    speed: 0
     Alive: 1
     alredyboosted: 0
+    cannotAttack: 0
   Start_Attack: 0
   Start_cost: 0
   cardManager: {fileID: 0}
