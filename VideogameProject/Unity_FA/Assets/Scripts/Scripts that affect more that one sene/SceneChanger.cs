@@ -16,15 +16,29 @@ public class SceneChanger : MonoBehaviour
     private void Start() {
         currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
     }
-   public static void GoTo(string sceneName){
+    private static string previousScene;
+    private static string currentScene;
+
+    private void Start()
+    {
+        // Guarda el nombre de la escena actual al inicio
+        currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+    }
+
+    public static void GoTo(string sceneName)
+    {
+        if (sceneName == "AudioScene")
+        {
+            // Guarda la escena actual antes de cambiar a AudioScene
+            previousScene = currentScene;
+        }
+
+        // Cambia a la nueva escena
         if (sceneName=="AudioScene")
         {
             previusScene = currentScene;
         }
         
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-    }
-    public static void GoBack(){
-        UnityEngine.SceneManagement.SceneManager.LoadScene(previusScene);
     }
 }

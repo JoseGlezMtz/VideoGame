@@ -157,7 +157,9 @@ public class EnemyController : MonoBehaviour
 
             int indexenemy=0;
             GameObject enemyCard = null;
-
+            if(enemyCardAtributos.cannotAttack>0 && enemyCardAtributos2.cannotAttack>0){
+            indexenemy= Random.Range(5, 7);
+            }
             if (enemyCardAtributos.cannotAttack > 0){
                 indexenemy = 6;
                 } else if (enemyCardAtributos2.cannotAttack > 0)
