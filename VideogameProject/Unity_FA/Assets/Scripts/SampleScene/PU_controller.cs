@@ -143,20 +143,30 @@ public class PU_controller : MonoBehaviour
       if (cardScript.check_alive() == false && PU_ability_id != 36)
         {
             Debug.Log("Card is dead, can't use power-up");
+            cardManager.Selectpowerup = null;
+            cardManager.Selected_card1 = null;
             return;
             
         }
         if(PU_ability_id < 11){
             Debug.Log("Can't use this power up you need Cookie, Chocolate and marshmellow to create smore and use the power up");
+            
+            cardManager.Selectpowerup = null;
+            cardManager.Selected_card1 = null;
             return;
         }
         if (PU_ability_effect == "bloquea_dano" && cardManager.Cartas_mano.IndexOf(cardObject) < 5)
         {
             Debug.Log("Can't use this power up on your own cards");
+            cardManager.Selectpowerup = null;
+            cardManager.Selected_card1 = null;
             return;
         }else if (PU_ability_effect != "bloquea_dano" && cardManager.Cartas_mano.IndexOf(cardObject) >= 5)
         {
+
             Debug.Log("Can't use this power up on opponent's cards");
+            cardManager.Selectpowerup = null;
+            cardManager.Selected_card1 = null;
             return;
         }
 
