@@ -11,7 +11,20 @@ using UnityEngine;
 
 public class SceneChanger : MonoBehaviour
 {
+    private static string previusScene;
+    private static string currentScene;
+    private void Start() {
+        currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+    }
    public static void GoTo(string sceneName){
+        if (sceneName=="AudioScene")
+        {
+            previusScene = currentScene;
+        }
+        
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
+    public static void GoBack(){
+        UnityEngine.SceneManagement.SceneManager.LoadScene(previusScene);
     }
 }
