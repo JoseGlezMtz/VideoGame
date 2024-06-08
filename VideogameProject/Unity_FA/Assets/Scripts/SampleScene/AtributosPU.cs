@@ -13,6 +13,7 @@ public class AtributosPU
     public string ability_effect;
     public int ability_amount;    
     public GameObject pu_cardAffected;
+    
 
     //
 

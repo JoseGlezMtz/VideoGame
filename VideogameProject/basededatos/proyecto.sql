@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS Ability (
   id INT NOT NULL AUTO_INCREMENT,
   amount INT NOT NULL,
   cost INT NOT NULL,
-  cards_affected VARCHAR(45),
   effect VARCHAR(45),
   PRIMARY KEY (id)
   
@@ -104,7 +103,6 @@ SELECT cc.id AS id,
  cc.name AS character_name, 
  a.amount AS attack, 
  a.cost AS abilityCost, 
- a.cards_affected, 
  a.effect AS effect,
  cc.resistance,cc.health
 FROM Character_card cc

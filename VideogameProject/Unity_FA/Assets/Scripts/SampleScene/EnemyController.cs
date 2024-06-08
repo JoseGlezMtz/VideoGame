@@ -103,7 +103,7 @@ public class EnemyController : MonoBehaviour
 
     public void EnemyTurn()
     {
-    // We check if it's the enemy turn
+        // We check if it's the enemy turn
         if (cardManager.CountCountEnemyTurn)
         {
             Atributos playerCardAtributos = cardManager.Cartas_mano[3].GetComponent<CardScript>().atributos;
@@ -158,7 +158,12 @@ public class EnemyController : MonoBehaviour
             int indexenemy=0;
             GameObject enemyCard = null;
 
-            if (enemyCardAtributos.health >0 && enemyCardAtributos2.health > 0){
+            if (enemyCardAtributos.cannotAttack > 0){
+                indexenemy = 6;
+                } else if (enemyCardAtributos2.cannotAttack > 0)
+                {
+                    indexenemy = 5;
+                }else if (enemyCardAtributos.health >0 && enemyCardAtributos2.health > 0){
 
             indexenemy= Random.Range(5, 7);
 
@@ -171,15 +176,14 @@ public class EnemyController : MonoBehaviour
             }
             
             enemyCard = cardManager.Cartas_mano[indexenemy];
-            /*
-            // We select a random card from the player hand
-            int enemyCardIndex = Random.Range(5, 7); 
-            GameObject enemyCard = cardManager.Cartas_mano[enemyCardIndex];
-            //llamamos a la funcion de ataque*/
+            
+            
             EnemyAttack(enemyCard, playerCard);
             // We end the enemy turn
             cardManager.CountCountEnemyTurn = false;
             // We set the player turn to true
+            
+            
             
         }
     }
@@ -189,11 +193,11 @@ public class EnemyController : MonoBehaviour
     }
 
     IEnumerator Create_Enemy_Cards(Cards allCards){
-        Debug.Log("Creating enemy cards");
+        int [] allowedCards = {2,3,4,7};
         enemyCards.Clear();
         for(int j=0; j<2; j++)
         {
-            int valorAleatorio = Random.Range(1, 8); // Genera un valor aleatorio
+            int valorAleatorio = allowedCards[Random.Range(0, allowedCards.Length)]; 
             if (enemyCards.Contains(valorAleatorio))
             {
                 j--;
