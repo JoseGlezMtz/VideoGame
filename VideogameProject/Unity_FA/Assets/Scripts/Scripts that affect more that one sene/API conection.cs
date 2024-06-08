@@ -11,6 +11,7 @@ public class APIconection : MonoBehaviour
     [SerializeField] string url;
     [SerializeField] string getEndpoint;
     [SerializeField] TMP_Text statusTxtLogin;
+    [SerializeField] TMP_Text statusTxtRegister;
 
     public LoginResponse loginCredentials;
 
@@ -152,6 +153,7 @@ public class APIconection : MonoBehaviour
             }
         }
     }
+    
 public void Register(string username, string password){
         StartCoroutine(RequestRegister("http://localhost:4444/api/register", username, password));
     }
@@ -162,7 +164,6 @@ public void Register(string username, string password){
         string jsonData = JsonUtility.ToJson(registerData);
 
         Debug.Log("JSON data: " + jsonData);
-        Debug.Log("URL: " + url);
 
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
@@ -177,11 +178,13 @@ public void Register(string username, string password){
             if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError("Request error: " + www.error);
+                statusTxtRegister.text = "That username is already taken";
             }
             else
             {
                 string result = www.downloadHandler.text;
-                Debug.Log("Response: " + result);
+                Debug.Log("Response: Todo bien");
+                 SceneChanger.GoTo("Home");
 
                 
             }

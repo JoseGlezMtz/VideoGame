@@ -614,6 +614,8 @@ public class CardManager : MonoBehaviour
         ++num_turn;
         Atributos activeCard1 = Cartas_mano[3].GetComponent<CardScript>().atributos;
         Atributos activeCard2 = Cartas_mano[4].GetComponent<CardScript>().atributos;
+        Atributos enemyCard1 = Cartas_mano[5].GetComponent<CardScript>().atributos;
+        Atributos enemyCard2 = Cartas_mano[6].GetComponent<CardScript>().atributos;
         
         GetComponent<PU_controller>().DiscardPU();
 
@@ -621,6 +623,8 @@ public class CardManager : MonoBehaviour
         activeCard2.canAttack = true;
         activeCard1.Update_Shield();
         activeCard2.Update_Shield();
+        enemyCard1.Update_CannotAttack();
+        enemyCard2.Update_CannotAttack();
         
         IncreaseEnegry();
         turnText.text = $"Turn: {num_turn}";

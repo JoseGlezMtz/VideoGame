@@ -11,14 +11,13 @@ public class Atributos
      public int health = 100; 
      public int attack = 20; 
      public int abilityCost = 5;
-     public string cards_affectted;
      public string effect;
      public int resistance;
      public bool canAttack=true;
      public int isShielded = 0;
-     public int speed = 0;
      public bool Alive = true;
      public bool alredyboosted = false;
+     public int cannotAttack = 0;
 
 /*    public int Id 
     { 
@@ -57,6 +56,11 @@ public class Atributos
             isShielded-=1;
         }
     }
+    public void Update_CannotAttack(){
+        if(cannotAttack>0){
+            cannotAttack-=1;
+        }
+    }
 
     
 }
@@ -72,10 +76,8 @@ public class Carta : MonoBehaviour
      public int health = 100; 
      public int attack = 20; 
      public int abilityCost = 5;
-     public string cards_affectted;
      public string effect;
      public int resistance;
-     public int speed = 0;
      public bool Alive = true;
 
     public void SetAtributos(Carta atributos){
@@ -85,7 +87,6 @@ public class Carta : MonoBehaviour
         this.abilityCost=atributos.abilityCost;
         this.effect=atributos.effect;
         
-        this.speed=atributos.speed;
 
     }
 }

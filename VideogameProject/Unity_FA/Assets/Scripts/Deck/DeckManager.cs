@@ -253,6 +253,7 @@ public class DeckManager : MonoBehaviour
                 updateDeckDB();
                 UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
             }
+            
         }
         UpdateIcons();
     }
