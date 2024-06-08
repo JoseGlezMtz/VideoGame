@@ -31,24 +31,3 @@ header{
     padding: 30px;
     font-size: 20px;
 }
-
-.button-container{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-size: cover;
-    cursor: pointer;
-    border-radius: 5px;
-}
-#button{
-    width: 320px;
-    height: 114px;
-    background-image: url('../assets/Boton_play.jpg');
-    background-size: cover;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-
-
