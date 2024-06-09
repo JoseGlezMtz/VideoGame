@@ -80,4 +80,5 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (35, 'Telescope', 'Increases atack', 35),
 (36, 'Smore', 'Revive a character', 36);
 
+INSERT INTO Characters_Cards_played (character_card_id) VALUES (1), (2), (3), (4), (5), (6), (7);
 

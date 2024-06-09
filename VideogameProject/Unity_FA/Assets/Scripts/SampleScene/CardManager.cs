@@ -1,3 +1,11 @@
+/*
+Last changes:
+08/06/24
+Valentina 
+1. Create methods Initialize and Update CardCounters
+
+*/
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -48,8 +56,6 @@ public class CardManager : MonoBehaviour
     
     public string Characters_Data;
     public string Deck_Data;
-    
-    
 
     [SerializeField] public bool Character_Dataready = false;
     [SerializeField] public bool PU_Dataready = false;
@@ -70,6 +76,8 @@ public class CardManager : MonoBehaviour
         turnText.text = $"Turn: {num_turn}";
         energyText.text = $"{energy}";
         RoundText.text = $"Round: {Rounds}";
+
+        InitializeCardCounters();
         
         GetComponent<APIconection>().get_Deck_cards(PlayerPrefs.GetInt("id"));
         GetComponent<APIconection>().get_PU_cards();
@@ -94,11 +102,25 @@ public class CardManager : MonoBehaviour
         StartCoroutine(Create_Board());
        
     }
+
+    //Create variables to store the number of times a card is used inside the PlayerPrefs map
+    public void InitializeCardCounters(){
+        for(int i = 1; i <= 7; i++){
+            PlayerPrefs.SetInt($"c{i}Counter", 0);
+        }
+    }
+
+    //Method to update the card counters when a card is used and recieves the cards id (1-7)
+    public void UpdateCardCounter(int id){
+        Debug.Log($"Updating CardCounters of card: {id}");
+        PlayerPrefs.SetInt($"c{id}Counter", +1);
+        Debug.Log(PlayerPrefs.GetInt($"c{id}Counter"));
+    }
+
     //template of all  the cards in the board 
     IEnumerator Create_Board()
     {
         int i = 0;
-        
         DeckCards=JsonUtility.FromJson<Cards>(Deck_Data);
         allCards=JsonUtility.FromJson<Cards>(Characters_Data);
         Debug.Log(allCards.cards);
@@ -144,13 +166,19 @@ public class CardManager : MonoBehaviour
 
     public void Change_Cards(GameObject obj1, GameObject obj2)
     {
+        Debug.Log("Method Change Cards called");
         int card_Index1=Cartas_mano.IndexOf(obj1);
         int card_Index2=Cartas_mano.IndexOf(obj2);
+
         Vector3 tempV = obj1.transform.position;
+        
         obj1.transform.position = obj2.transform.position;
         obj2.transform.position = tempV;
+        
         Debug.Log("Character " + obj1.GetComponent<CardScript>().atributos.character_name + " changed with " + obj2.GetComponent<CardScript>().atributos.character_name);
+        
         GameObject temp = obj1;
+        
         Cartas_mano[card_Index1]=obj2;
         Cartas_mano[card_Index2]=temp;
     }
@@ -240,6 +268,7 @@ public class CardManager : MonoBehaviour
                         Debug.Log("Caso de Prueba 1");
                         Debug.Log("index pre" + Cartas_mano.IndexOf(Selected_card1));
                         Change_Cards(Selected_card1, Selected_card2);
+                        //UpdateCardCounter(Selected_card2.GetComponent<CardScript>().atributos.id);
                             
                         //Intercambia las posiciones de los objetos en la lista
                         Debug.Log("index 1" + card_Index1);
@@ -468,6 +497,8 @@ public class CardManager : MonoBehaviour
                         }
                         else
                         {
+                            //Update counter for card usage
+                            UpdateCardCounter(Selected_card1.GetComponent<CardScript>().atributos.id);
 
                             // We attack the enemy card 
                             atributosCarta2.health -= damageDealt;

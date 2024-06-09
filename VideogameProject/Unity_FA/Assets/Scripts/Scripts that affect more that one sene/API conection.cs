@@ -154,7 +154,7 @@ public class APIconection : MonoBehaviour
         }
     }
     
-public void Register(string username, string password){
+    public void Register(string username, string password){
         StartCoroutine(RequestRegister("http://localhost:4444/api/register", username, password));
     }
 
@@ -192,7 +192,6 @@ public void Register(string username, string password){
 
         }
     }
-
 
     public void SaveDeck(int player, int card1, int card2, int card3, int card4, int card5){
         Debug.Log("Calling Coroutine Update Deck...");
@@ -243,5 +242,36 @@ public void Register(string username, string password){
         }
     }
 }
+
+    public void characterStats(int cardId, int cardCounter){
+        Debug.Log("Calling Coroutine Update Character Stats");
+        StartCoroutine(PostCharacterStats("http://localhost:4444/api/update_characterStats", cardId, cardCounter));
+    }
+
+    IEnumerator PostCharacterStats(string url, int card, int counter){
+        CharacterStats characterStats = new CharacterStats(counter, card);
+        string jsonData = JsonUtility.ToJson(characterStats);
+        
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST")){
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            
+            Debug.LogError("Request error: " + www.error);
+        }
+        else
+        {
+            Debug.Log("Inserted into Character_Cards_played succesfully: ");
+        }
+        }
+        
+    }
 
 }

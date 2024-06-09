@@ -80,6 +80,7 @@ public class EnemyController : MonoBehaviour
                     {
                         Debug.Log("You lose");
                         cardManager.PlayerTurn = false;
+                        UpdateCharacters();
                     }
                     
                 }
@@ -235,6 +236,13 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         for(int i = 5; i < 7; i++){
             Destroy(cardManager.Cartas_mano[i]);
+        }
+    }
+
+    public void UpdateCharacters(){
+        for(int i = 1; i <= 7; i++){
+            //llamar de api connection characterStats
+            GetComponent<APIconection>().characterStats(i, PlayerPrefs.GetInt($"c{i}Counter"));
         }
     }
 }
