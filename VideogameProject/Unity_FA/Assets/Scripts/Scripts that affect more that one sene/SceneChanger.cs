@@ -13,32 +13,23 @@ public class SceneChanger : MonoBehaviour
 {
     private static string previusScene;
     private static string currentScene;
-    private void Start() {
-        currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-    }
-    private static string previousScene;
-    private static string currentScene;
-
-    private void Start()
-    {
-        // Guarda el nombre de la escena actual al inicio
-        currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-    }
+    [SerializeField] public Canvas pauseCanvas ;
+    
+    
 
     public static void GoTo(string sceneName)
     {
-        if (sceneName == "AudioScene")
-        {
-            // Guarda la escena actual antes de cambiar a AudioScene
-            previousScene = currentScene;
-        }
-
-        // Cambia a la nueva escena
-        if (sceneName=="AudioScene")
-        {
-            previusScene = currentScene;
-        }
+        
         
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
+
+    public void Pause_canvas_Active()
+    {
+        pauseCanvas.gameObject.SetActive(true);
+    }
+    public void Pause_canvas_Unactive()
+    {
+        pauseCanvas.gameObject.SetActive(false);
     }
 }
