@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Powerup_card (
 CREATE TABLE IF NOT EXISTS Game (
   id INT NOT NULL AUTO_INCREMENT,
   player_id INT NOT NULL,
-  num_roand INT NOT NULL DEFAULT (0),
+  num_round INT NOT NULL DEFAULT (0),
   PRIMARY KEY (id),
   CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -74,26 +74,20 @@ CREATE TABLE IF NOT EXISTS Deck (
 
 CREATE TABLE IF NOT EXISTS Characters_Cards_played (
   id INT NOT NULL AUTO_INCREMENT,
-  
-  player_id INT NOT NULL,
   character_card_id INT DEFAULT NULL,
   amount INT DEFAULT 0,
   PRIMARY KEY (id),
   
-  CONSTRAINT fk_played_player FOREIGN KEY (player_id) REFERENCES Player(id),
   CONSTRAINT fk_played_character_card FOREIGN KEY (character_card_id) REFERENCES Character_card(id)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS PowerUP_Cards_played (
   id INT NOT NULL AUTO_INCREMENT,
- 
-  player_id INT NOT NULL,
   PU_card_id INT DEFAULT NULL,
   amount INT DEFAULT 0,
   PRIMARY KEY (id),
   
-  CONSTRAINT fk_played_PU FOREIGN KEY (player_id) REFERENCES Player(id),
   CONSTRAINT fk_played_PU_card FOREIGN KEY (PU_card_id) REFERENCES powerup_card(id)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -130,7 +124,7 @@ CREATE VIEW Game_Resultado AS
 SELECT
 	p.name,
 	g.player_id,
-    g.num_roand
+    g.num_round
     
 FROM
     Game g 
@@ -313,21 +307,20 @@ CREATE PROCEDURE Register_result(
     OUT status_message VARCHAR(45)
 )
 BEGIN
-	Insert into Game (player_id,num_roand) values (Player_ID,Resultado);
+	Insert into Game (player_id,num_round) values (Player_ID,Resultado);
     SET status_message = 'Game Registered succesfully';
 END $$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE Save_Cards_used(
-	IN Player_ID int,
     IN ID_carta int,
     IN Amount int,
-    OUT status_message varchar(255)
+    OUT status_message varchar(64)
 )
 BEGIN
 	Update Characters_Cards_played cc SET amount = amount + Amount WHERE ID_carta=cc.character_card_id;
-    SET status_message = 'Cards registered succesfully';
+    SET status_message = 'Cards updated succesfully';
 END $$
 
 DELIMITER ;

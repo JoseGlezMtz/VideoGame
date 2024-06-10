@@ -10,9 +10,14 @@ public class EnemyController : MonoBehaviour
      public List <int> enemyCards = new List<int>();
 
      [SerializeField] GameObject explosion;
+     [SerializeField] GameObject ghosts;
 
     [SerializeField] Transform position1;
     [SerializeField] Transform position2;
+
+    [SerializeField] Transform positionLeft;
+    [SerializeField] Transform positionMiddle;
+    [SerializeField] Transform positionRight;
    
 
 
@@ -73,13 +78,32 @@ public class EnemyController : MonoBehaviour
                 else if (cardManager.Cartas_mano[2].GetComponent<CardScript>().atributos.Alive){
                 cardManager.Change_Cards(playerCard, cardManager.Cartas_mano[2]);}
                 
+                if(playerCard == cardManager.Cartas_mano[0]){
+                    Debug.Log("Character in position 0");
+                    playDead(0);
+                    }
+                else if (playerCard == cardManager.Cartas_mano[1])
+                    {
+                        Debug.Log("Character in position 1");
+                        playDead(1);
+                    }
+                    else if (playerCard == cardManager.Cartas_mano[2])
+                    {
+                        Debug.Log("Character in position 2");
+                        playDead(2);
+                    }
+                
                 //CONDICIÓN DE PERDER
                 else{
+                    //ANIMACION DE MUERTE
+                    
                     Debug.Log("No more cards to change");
                     if(cardManager.Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && cardManager.Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
                     {
                         Debug.Log("You lose");
                         cardManager.PlayerTurn = false;
+                        UpdateCharacters();
+                        UpdatePU();
                     }
                     
                 }
@@ -157,20 +181,18 @@ public class EnemyController : MonoBehaviour
 
             int indexenemy=0;
             GameObject enemyCard = null;
-            if(enemyCardAtributos.cannotAttack>0 && enemyCardAtributos2.cannotAttack>0){
-            indexenemy= Random.Range(5, 7);
+            if (enemyCardAtributos.cannotAttack > 0 && enemyCardAtributos2.cannotAttack > 0 && enemyCardAtributos2.health > 0 && enemyCardAtributos.health > 0) {
+                    indexenemy= Random.Range(5, 7);
+
             }
-            if (enemyCardAtributos.cannotAttack > 0){
+
+            else if (enemyCardAtributos.cannotAttack > 0){
                 indexenemy = 6;
                 } else if (enemyCardAtributos2.cannotAttack > 0)
                 {
                     indexenemy = 5;
-                }else if (enemyCardAtributos.health >0 && enemyCardAtributos2.health > 0){
-
-            indexenemy= Random.Range(5, 7);
-
-            }  
-            else if (enemyCardAtributos.health > 0){
+             
+            }else if (enemyCardAtributos.health > 0){
                 indexenemy = 5;
             }
             else if (enemyCardAtributos2.health > 0){
@@ -229,6 +251,18 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void playDead(int position){
+        if(position == 0){
+            Instantiate(ghosts, positionLeft);
+        }
+        else if(position == 1){
+            Instantiate(ghosts, positionMiddle);
+        }
+        else if(position == 2){
+            Instantiate(ghosts, positionRight);
+        }
+    }
+
     public void Destroy_Cards(){
         StartCoroutine(Destroy_Cards_Coroutine());
     }
@@ -237,6 +271,20 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         for(int i = 5; i < 7; i++){
             Destroy(cardManager.Cartas_mano[i]);
+        }
+    }
+
+    public void UpdateCharacters(){
+        for(int i = 1; i <= 7; i++){
+            //llamar de api connection characterStats
+            GetComponent<APIconection>().characterStats(i, PlayerPrefs.GetInt($"c{i}Counter"));
+        }
+    }
+
+    public void UpdatePU(){
+        for(int i = 8; i <= 36; i++){
+            //MODIFY FOR PU
+            GetComponent<APIconection>().puStats(i, PlayerPrefs.GetInt($"pu{i}Counter"));
         }
     }
 }

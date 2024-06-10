@@ -35,7 +35,7 @@ INSERT INTO `Ability` (`id`, `amount`, `cost`, `effect`) VALUES
 (33, 1, 0, 'escudo'),
 (34, 2, 0, 'curacion'),
 (35, 20, 0, 'mejora_dano'),
-(36, 50, 0, 'revive');
+(36, 70, 0, 'revive');
 
 
 INSERT INTO `Character_card` (`id`, `name`,`nameAbility`, `description`, `ability`, `resistance`, `health`) VALUES
@@ -80,4 +80,13 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (35, 'Telescope', 'Increases atack', 35),
 (36, 'Smore', 'Revive a character', 36);
 
+INSERT INTO Characters_Cards_played (character_card_id) VALUES (1), (2), (3), (4), (5), (6), (7);
+
+INSERT INTO powerup_cards_played (PU_card_id) VALUES 
+(8), (9), (10), 
+(11), (12), (13), (14), (15), (16), (17), (18), (19), (20), 
+(21), (22), (23), (24), (25), (26), (27), (28), (29), (30), 
+(31), (32), (33), (34), (35), (36);
+
+SELECT * FROM fa_database.powerup_cards_played;
 

@@ -50,7 +50,9 @@ public class CardScript : MonoBehaviour
         if(atributos.health <= 0){
             
             atributos.Alive=false;
-            
+            Image img = GetComponent<Image>();
+            img.color = new Color32(166, 166, 166, 255); // 255 is the alpha value for full opacity
+
             
             return false;
         }

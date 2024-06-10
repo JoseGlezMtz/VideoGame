@@ -274,13 +274,15 @@ MonoBehaviour:
     health: 100
     attack: 20
     abilityCost: 5
-    cards_affectted: 
     effect: 
     resistance: 0
     canAttack: 1
     isShielded: 0
-    speed: 0
     Alive: 1
+    alredyboosted: 0
+    cannotAttack: 0
+  Start_Attack: 0
+  Start_cost: 0
   cardManager: {fileID: 0}
   selfCard: {fileID: 0}
   health_text: {fileID: 455175215783532614}
