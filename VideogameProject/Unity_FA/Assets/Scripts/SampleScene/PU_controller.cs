@@ -33,6 +33,18 @@ public class PU_controller : MonoBehaviour
     {
         
     }
+
+    public void InitializePUCounters(){
+        for(int i = 8; i <= 36; i++){
+            PlayerPrefs.SetInt($"pu{i}Counter", 0);
+        }
+    }
+
+    public void UpdatePUCounter(int id){
+        PlayerPrefs.SetInt($"pu{id}Counter", +1);
+        Debug.Log($"Updating power up with id: {id}");
+    }
+
     /*public void Init_PU_ID(){
     pu_Pile.Clear(); // Limpiar la lista para asegurarnos de que está vacía antes de llenarla
     for (int id = 8; id < maxPuPile; id++) {
@@ -169,8 +181,12 @@ public class PU_controller : MonoBehaviour
             cardManager.Selected_card1 = null;
             return;
         }
+        //INSERTAR MÉTODO PARA CONTAR SI EL POWER UP ES USADO
+        // powerUpObject.GetComponent<PUscript>().atributosPU.description
 
-    
+        UpdatePUCounter(PU_ability_id);
+
+
         // Revisamos el efecto del power-up y aplicamos el efecto correspondiente accediendo a los atributos de los power-ups para ver el efecto
         switch (PU_ability_effect)
         {
@@ -233,6 +249,7 @@ public class PU_controller : MonoBehaviour
                         return;
                     } else{
                         Debug.Log("Applying revive power-up");
+                        cardObject.GetComponent<Image>().color=Color.white;
                         cardScript.atributos.health = 70;
                         cardScript.atributos.Alive = true;
                         Debug.Log("Card: " + cardScript.atributos.character_name + " has been revived");

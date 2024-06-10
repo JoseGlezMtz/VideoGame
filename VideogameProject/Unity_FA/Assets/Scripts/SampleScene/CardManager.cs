@@ -513,6 +513,7 @@ public class CardManager : MonoBehaviour
                             objeto_carta2.GetComponent<CardScript>().check_alive();
                             
                             playAnimation(Cartas_mano.IndexOf(objeto_carta2));
+                           
                         }
                     }
                     else

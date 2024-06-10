@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Powerup_card (
 CREATE TABLE IF NOT EXISTS Game (
   id INT NOT NULL AUTO_INCREMENT,
   player_id INT NOT NULL,
-  num_roand INT NOT NULL DEFAULT (0),
+  num_round INT NOT NULL DEFAULT (0),
   PRIMARY KEY (id),
   CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -124,7 +124,7 @@ CREATE VIEW Game_Resultado AS
 SELECT
 	p.name,
 	g.player_id,
-    g.num_roand
+    g.num_round
     
 FROM
     Game g 
@@ -307,7 +307,7 @@ CREATE PROCEDURE Register_result(
     OUT status_message VARCHAR(45)
 )
 BEGIN
-	Insert into Game (player_id,num_roand) values (Player_ID,Resultado);
+	Insert into Game (player_id,num_round) values (Player_ID,Resultado);
     SET status_message = 'Game Registered succesfully';
 END $$
 DELIMITER ;

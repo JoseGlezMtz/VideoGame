@@ -5,6 +5,7 @@ using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
+using System.Resources;
 
 public class APIconection : MonoBehaviour
 {
@@ -274,4 +275,34 @@ public class APIconection : MonoBehaviour
         
     }
 
+    public void puStats(int cardId, int cardCounter){
+        Debug.Log("Calling coroutine Update PU");
+        StartCoroutine(PostPUStats("http://localhost:4444/api/update_powerupStats", cardId, cardCounter));
+    }
+
+    IEnumerator PostPUStats(string url, int card, int counter){
+        PowerupStats powerupStats = new PowerupStats(counter, card);
+        string jsonData = JsonUtility.ToJson(powerupStats);
+        Debug.Log(jsonData);
+
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST")){
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            
+            Debug.LogError("Request error: " + www.error);
+        }
+        else
+        {
+            Debug.Log("Inserted into PU_Cards_played succesfully: ");
+        }
+        }
+    }
 }

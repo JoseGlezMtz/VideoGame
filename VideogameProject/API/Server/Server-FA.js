@@ -130,6 +130,33 @@ app.post("/api/login", async (request, response) => {
     }
   });
 
+  app.post("/api/update_powerupStats", async (request, response) =>{
+    const {amount, PU_card_id} = request.body;
+
+    let connection = null;
+
+    try{
+      connection = await connectToDB();
+      console.log("");
+      await connection.execute(
+        "Update powerup_cards_played pu SET amount = amount + ? WHERE ? = pu.PU_card_id;",
+        [amount, PU_card_id]
+      );
+
+      response.status(200).json({ message: "Successfully inserted into PU Cards Played" });
+    }
+    catch(error){
+      response.status(500).json({ error: error.message });
+      console.log(error);
+    }
+    finally {
+      if (connection) {
+        connection.end();
+        console.log("Database connection closed");
+      }
+    }
+  })
+
 app.get("/api/Character_card", async (request, response) => {
   let connection = null;
 
