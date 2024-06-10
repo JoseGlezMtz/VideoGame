@@ -26,6 +26,33 @@ async function connectToDB() {
     });
   }
 
+  app.post("/api/register", async (request, response) => {
+    console.log('Request body:', request.body);
+  
+      const { registered_name, registered_password } = request.body;
+    
+      let connection = null;
+    
+      try {
+        connection = await connectToDB();
+    
+        await connection.execute("CALL register_player(?, ?)", [registered_name, registered_password]);
+        const [output] = await connection.query("SELECT @status_message AS status_message");
+    
+        const { status_message } = output[0];
+    
+        response.status(200).json({ message: status_message });
+      } catch (error) {
+        response.status(500).json({ error: error.message });
+        console.log(error);
+      } finally {
+        if (connection) {
+          connection.end();
+          console.log("Database connection closed");
+        }
+      }
+    });
+
 app.post("/api/login", async (request, response) => {
     const { username, password } = request.body;
   
@@ -61,6 +88,7 @@ app.post("/api/login", async (request, response) => {
       connection = await connectToDB();
   
       await connection.execute("CALL update_deck(?, ?, ?, ?, ?, ?, @status_message)", [player_id, card1, card2, card3, card4, card5]);
+
       const [output] = await connection.query("SELECT @status_message AS status_message");
   
       const { status_message } = output[0];
@@ -77,22 +105,20 @@ app.post("/api/login", async (request, response) => {
     }
   });
 
-app.post("/api/register", async (request, response) => {
-  console.log('Request body:', request.body);
-
-    const { registered_name, registered_password } = request.body;
+  app.post("/api/update_characterStats", async (request, response) => {
+    const {amount, character_card_id} = request.body;
   
     let connection = null;
   
     try {
       connection = await connectToDB();
+      console.log("");
+      await connection.execute(
+        "Update Characters_Cards_played cc SET amount = amount + ? WHERE ? =cc.character_card_id;",
+        [amount, character_card_id]
+      );
   
-      await connection.execute("CALL register_player(?, ?)", [registered_name, registered_password]);
-      const [output] = await connection.query("SELECT @status_message AS status_message");
-  
-      const { status_message } = output[0];
-  
-      response.status(200).json({ message: status_message });
+      response.status(200).json({ message: "Successfully inserted into Character Cards Played" });
     } catch (error) {
       response.status(500).json({ error: error.message });
       console.log(error);
@@ -103,6 +129,33 @@ app.post("/api/register", async (request, response) => {
       }
     }
   });
+
+  app.post("/api/update_powerupStats", async (request, response) =>{
+    const {amount, PU_card_id} = request.body;
+
+    let connection = null;
+
+    try{
+      connection = await connectToDB();
+      console.log("");
+      await connection.execute(
+        "Update powerup_cards_played pu SET amount = amount + ? WHERE ? = pu.PU_card_id;",
+        [amount, PU_card_id]
+      );
+
+      response.status(200).json({ message: "Successfully inserted into PU Cards Played" });
+    }
+    catch(error){
+      response.status(500).json({ error: error.message });
+      console.log(error);
+    }
+    finally {
+      if (connection) {
+        connection.end();
+        console.log("Database connection closed");
+      }
+    }
+  })
 
 app.get("/api/Character_card", async (request, response) => {
   let connection = null;
