@@ -342,7 +342,7 @@ public class CardManager : MonoBehaviour
                                 //hacer el ataque de las cartas
                                 Attack(Selected_card1, Selected_card2);
                                 
-                                ResetSelection();
+                                //ResetSelection();
                             }
                             break;
                         //In case the effect is to heal a card
@@ -355,7 +355,7 @@ public class CardManager : MonoBehaviour
                                 //hacer el ataque de las cartas
                                 Heal(Selected_card1, Selected_card2);
                                 // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
-                                ResetSelection();
+                               // ResetSelection();
                             }
                             else
                             {
@@ -374,7 +374,7 @@ public class CardManager : MonoBehaviour
                                 //hacer el ataque de las cartas
                                 mejoradano(Selected_card1, Selected_card2);
                                 // cambiamos la opcion Can Attack para que ya no se pueda atacar con esa carta
-                                ResetSelection();
+                                //ResetSelection();
                                
                             }
                             break;
@@ -513,6 +513,7 @@ public class CardManager : MonoBehaviour
                             objeto_carta2.GetComponent<CardScript>().check_alive();
                             
                             playAnimation(Cartas_mano.IndexOf(objeto_carta2));
+                            ResetSelection();
                            
                         }
                     }
@@ -564,6 +565,7 @@ public class CardManager : MonoBehaviour
                 objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                 
                 objeto_carta2.GetComponent<CardScript>().check_alive();
+                ResetSelection();
                 
             }
             else
@@ -608,6 +610,7 @@ public class CardManager : MonoBehaviour
                 sliderComponent.value = energy;
                 objeto_carta1.GetComponent<CardScript>().atributos.canAttack=false;
                 objeto_carta2.GetComponent<CardScript>().atributos.alredyboosted = true;
+                ResetSelection();
                 
             }
             else 
@@ -716,6 +719,8 @@ public class CardManager : MonoBehaviour
 
         yield return new WaitForSeconds(4f);
         Debug.Log("New Enemies are coming");
+        Cartas_mano.RemoveAt(6);
+        Cartas_mano.RemoveAt(5);
         GetComponent<EnemyController>().Start_Enemy_Cards(allCards);
 
         Atributos activeCard1 = Cartas_mano[3].GetComponent<CardScript>().atributos;

@@ -61,6 +61,17 @@ public class Atributos
             cannotAttack-=1;
         }
     }
+    public void SetAtributos(Atributos atributos){
+        this.id=atributos.id;
+        this.character_name=atributos.character_name;
+        this.health=atributos.health;
+        this.attack=atributos.attack;
+        this.abilityCost=atributos.abilityCost;
+        this.effect=atributos.effect;
+        
+
+    }
+
 
     
 }
@@ -86,6 +97,7 @@ public class Carta : MonoBehaviour
         this.attack=atributos.attack;
         this.abilityCost=atributos.abilityCost;
         this.effect=atributos.effect;
+        this.resistance=atributos.resistance;
         
 
     }

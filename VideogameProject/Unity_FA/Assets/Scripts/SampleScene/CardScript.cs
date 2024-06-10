@@ -18,7 +18,7 @@ public class CardScript : MonoBehaviour
     // Start is called before the first frame update
     public void Init(Atributos _atributos)
     {
-        atributos = _atributos;
+        atributos.SetAtributos(_atributos);
         Start_Attack = atributos.attack;
         Start_cost=atributos.abilityCost;
 

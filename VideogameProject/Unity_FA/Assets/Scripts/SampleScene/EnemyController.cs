@@ -181,7 +181,7 @@ public class EnemyController : MonoBehaviour
 
             int indexenemy=0;
             GameObject enemyCard = null;
-            if (enemyCardAtributos.cannotAttack > 0 && enemyCardAtributos2.cannotAttack > 0 && enemyCardAtributos2.health > 0 && enemyCardAtributos.health > 0) {
+            if (enemyCardAtributos.cannotAttack > 0 && enemyCardAtributos2.cannotAttack > 0 || enemyCardAtributos2.health > 0 && enemyCardAtributos.health > 0) {
                     indexenemy= Random.Range(5, 7);
 
             }
