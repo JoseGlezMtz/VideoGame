@@ -16,6 +16,19 @@ async function connectToDB(){
 
 app.get(
     "/", (req, res)=>{
+        const file = fs.readFileSync("public/html/Main_page.html", "utf8", (err, html)=>{
+            if (err) response.status(500).send('Error: ' + err)
+            console.log("Loading page ...")
+        response.send(html)
+        });
+        res.status(200).send(file);
+
+
+    }
+)
+
+app.get(
+    "/stats", (req, res)=>{
         const file = fs.readFileSync("public/html/Statistics.html", "utf8", (err, html)=>{
             if (err) response.status(500).send('Error: ' + err)
             console.log("Loading page ...")
@@ -23,10 +36,7 @@ app.get(
         });
         res.status(200).send(file);
 
-        /*
-        const file = fs.readFileSync("public/html/index.html", "utf8");
-        res.status(200).send(file);
-        */
+
     }
 )
 
@@ -42,6 +52,7 @@ app.get('/stats/characters', async(request, response)=>{
         console.log("Data sent correctly")
         response.status(200)
         response.json(results)
+
     }
     catch(error){
         response.status(500)
@@ -63,6 +74,31 @@ app.get('/stats/powerup_cards_played', async(request, response)=>{
         let [results, fields] = await connection.query
         //Replace with information from the 
         ('select * FROM PowerUp_cards_played')
+
+        console.log("Data sent correctly")
+        response.status(200)
+        response.json(results)
+    }
+    catch(error){
+        response.status(500)
+        response.json(error)
+        console.log(error)
+    }
+    finally{
+        if(connection!==null){
+            connection.end()
+            console.log("Connection closed succesfully!")
+        }
+    }
+})
+app.get('/stats/Register_result', async(request, response)=>{
+    let connection = null
+    try{
+        connection = await connectToDB()
+
+        let [results, fields] = await connection.query
+        //Replace with information from the 
+        ('select * FROM Register_Resultado')
 
         console.log("Data sent correctly")
         response.status(200)

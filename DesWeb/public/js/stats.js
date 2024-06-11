@@ -19,7 +19,7 @@ function getRandomColor(opacity) {
 
 async function CreateChart() {
     try {
-        const response = await fetch('/stats/characters_played');
+        const response = await fetch('http://localhost:5000/stats/characters_played');
         const data = await response.json();
 
         const characterIds = data.map(entry => entry.character_card_id);
@@ -57,7 +57,7 @@ async function CreateChart() {
 
 async function CreateChart2() {
     try {
-        const response = await fetch('/stats/powerup_cards_played');
+        const response = await fetch('http://localhost:5000/stats/powerup_cards_played');
         const data = await response.json();
 
         const filteredData = data.filter(entry => entry.amount !== 0);
