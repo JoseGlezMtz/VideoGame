@@ -42,4 +42,17 @@ h6{
     padding: 30px;
     font-size: 20px;
 }
+.chart-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.chart-container canvas {
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+    height: auto;
+}
+
+
 

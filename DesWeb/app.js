@@ -16,7 +16,7 @@ async function connectToDB(){
 
 app.get(
     "/", (req, res)=>{
-        const file = fs.readFileSync("public/html/play.html", "utf8", (err, html)=>{
+        const file = fs.readFileSync("public/html/Statistics.html", "utf8", (err, html)=>{
             if (err) response.status(500).send('Error: ' + err)
             console.log("Loading page ...")
         response.send(html)
@@ -55,7 +55,57 @@ app.get('/stats/characters', async(request, response)=>{
         }
     }
 })
+app.get('/stats/powerup_cards_played', async(request, response)=>{
+    let connection = null
+    try{
+        connection = await connectToDB()
+
+        let [results, fields] = await connection.query
+        //Replace with information from the 
+        ('select * FROM PowerUp_cards_played')
+
+        console.log("Data sent correctly")
+        response.status(200)
+        response.json(results)
+    }
+    catch(error){
+        response.status(500)
+        response.json(error)
+        console.log(error)
+    }
+    finally{
+        if(connection!==null){
+            connection.end()
+            console.log("Connection closed succesfully!")
+        }
+    }
+})
+app.get('/stats/characters_played', async(request, response)=>{
+    let connection = null
+    try{
+        connection = await connectToDB()
+
+        let [results, fields] = await connection.query
+        //Replace with information from the 
+        ('select * FROM Characters_Cards_played')
+
+        console.log("Data sent correctly")
+        response.status(200)
+        response.json(results)
+    }
+    catch(error){
+        response.status(500)
+        response.json(error)
+        console.log(error)
+    }
+    finally{
+        if(connection!==null){
+            connection.end()
+            console.log("Connection closed succesfully!")
+        }
+    }
+})
 
 app.listen(port, ()=>{
-    console.log(`Running on port ${port}`);
+    console.log(`Running on port http://localhost:${port}`);
 })

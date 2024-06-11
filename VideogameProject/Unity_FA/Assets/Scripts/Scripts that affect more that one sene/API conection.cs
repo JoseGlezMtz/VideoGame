@@ -185,7 +185,7 @@ public class APIconection : MonoBehaviour
             {
                 string result = www.downloadHandler.text;
                 Debug.Log("Response: Todo bien");
-                 SceneChanger.GoTo("Home");
+                 SceneChanger.GoTo("Login");
 
                 
             }
@@ -243,9 +243,10 @@ public class APIconection : MonoBehaviour
         }
     }
 }
+    
 
     public void characterStats(int cardId, int cardCounter){
-        Debug.Log("Calling Coroutine Update Character Stats");
+       // Debug.Log("Calling Coroutine Update Character Stats");
         StartCoroutine(PostCharacterStats("http://localhost:4444/api/update_characterStats", cardId, cardCounter));
     }
 
@@ -267,23 +268,20 @@ public class APIconection : MonoBehaviour
             
             Debug.LogError("Request error: " + www.error);
         }
-        else
-        {
-            Debug.Log("Inserted into Character_Cards_played succesfully: ");
-        }
+        
         }
         
     }
 
     public void puStats(int cardId, int cardCounter){
-        Debug.Log("Calling coroutine Update PU");
+        //Debug.Log("Calling coroutine Update PU");
         StartCoroutine(PostPUStats("http://localhost:4444/api/update_powerupStats", cardId, cardCounter));
     }
 
     IEnumerator PostPUStats(string url, int card, int counter){
         PowerupStats powerupStats = new PowerupStats(counter, card);
         string jsonData = JsonUtility.ToJson(powerupStats);
-        Debug.Log(jsonData);
+       // Debug.Log(jsonData);
 
         using(UnityWebRequest www = new UnityWebRequest(url, "POST")){
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
@@ -299,10 +297,7 @@ public class APIconection : MonoBehaviour
             
             Debug.LogError("Request error: " + www.error);
         }
-        else
-        {
-            Debug.Log("Inserted into PU_Cards_played succesfully: ");
-        }
+        
         }
     }
 }
