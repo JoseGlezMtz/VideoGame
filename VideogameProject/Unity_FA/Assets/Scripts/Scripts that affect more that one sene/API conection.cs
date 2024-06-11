@@ -146,6 +146,7 @@ public class APIconection : MonoBehaviour
                     PlayerPrefs.SetInt("allowLogin", 1);
 
                     Debug.Log("Credentials: " + PlayerPrefs.GetInt("id"));
+                    SceneChanger.GoTo("Home");
                 }
                 else{
                     Debug.LogError("Login failed: " + loginCredentials.message);

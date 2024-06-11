@@ -79,6 +79,7 @@ public class PU_controller : MonoBehaviour
             if (pu.id == pu_Pile[0])
             {
                 PU.GetComponent<PUscript>().Init(pu);
+                PU.GetComponent<Button>().onClick.AddListener(() => SelectPowerUp(PU));
             }
         }
         
@@ -92,7 +93,7 @@ public class PU_controller : MonoBehaviour
     public void AddPU()
     {
         GameObject PowerUp = PUParentPrefab.transform.GetChild(1).gameObject;
-
+        cardManager.Selectpowerup =null;
         if (pu_Hand.Count == 3)
         {
             Debug.LogError("Can't add more power ups");
@@ -105,7 +106,7 @@ public class PU_controller : MonoBehaviour
 
             // Asignamos el listener para seleccionar el power-up
             Button powerUpButton = PowerUp.GetComponent<Button>();
-            powerUpButton.onClick.AddListener(() => SelectPowerUp(PowerUp));
+            //powerUpButton.onClick.AddListener(() => SelectPowerUp(PowerUp));
             Deletingrident();
 
         }
@@ -116,8 +117,16 @@ public class PU_controller : MonoBehaviour
         }
     }
 
+
+
     public void SelectPowerUp(GameObject powerUpObject)
-    {
+    {   if (cardManager.Selectpowerup == powerUpObject)
+        {
+            cardManager.Selectpowerup=null;
+            Debug.Log("Power up deselected");
+            return;
+        }
+        
         cardManager.Selectpowerup = powerUpObject;
         Debug.Log("Power up description: " + powerUpObject.GetComponent<PUscript>().atributosPU.description 
         + ". By (" + powerUpObject.GetComponent<PUscript>().atributosPU.ability_amount + ") points/turns");
@@ -125,6 +134,12 @@ public class PU_controller : MonoBehaviour
 
     public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
     {
+        if (pu_Hand.Contains(powerUpObject) == false)
+        {
+            Debug.Log("Must save power up first");
+            cardManager.Selectpowerup = null;
+            return;
+        }
         CardScript cardScript = cardObject.GetComponent<CardScript>();
         PUscript powerUpScript = powerUpObject.GetComponent<PUscript>();
         string PU_ability_effect=powerUpScript.atributosPU.ability_effect;
@@ -140,6 +155,7 @@ public class PU_controller : MonoBehaviour
         {
             Debug.Log("Card is dead, can't use power-up");
             cardManager.Selectpowerup = null;
+            cardObject.GetComponent<CardScript>().Size_decrease();
             cardManager.Selected_card1 = null;
             return;
             
@@ -148,6 +164,7 @@ public class PU_controller : MonoBehaviour
             Debug.Log("Can't use this power up you need Cookie, Chocolate and marshmellow to create smore and use the power up");
             
             cardManager.Selectpowerup = null;
+            cardObject.GetComponent<CardScript>().Size_decrease();
             cardManager.Selected_card1 = null;
             return;
         }
@@ -155,6 +172,7 @@ public class PU_controller : MonoBehaviour
         {
             Debug.Log("Can't use this power up on your own cards");
             cardManager.Selectpowerup = null;
+            cardObject.GetComponent<CardScript>().Size_decrease();
             cardManager.Selected_card1 = null;
             return;
         }else if (PU_ability_effect != "bloquea_dano" && cardManager.Cartas_mano.IndexOf(cardObject) >= 5)
@@ -162,6 +180,7 @@ public class PU_controller : MonoBehaviour
 
             Debug.Log("Can't use this power up on opponent's cards");
             cardManager.Selectpowerup = null;
+            cardObject.GetComponent<CardScript>().Size_decrease();
             cardManager.Selected_card1 = null;
             return;
         }
@@ -253,9 +272,11 @@ public class PU_controller : MonoBehaviour
 
             Destroy(powerUpObject);
             pu_Hand.Remove(powerUpObject);
-            cardObject.GetComponent<CardScript>().UpdateHealth();
+            //cardObject.GetComponent<CardScript>().UpdateHealth();
+            cardObject.GetComponent<CardScript>().UpdateCard();
             // Se setea el power-up seleccionado a null al igual que la carta seleccionada
             cardManager.Selectpowerup = null;
+            cardObject.GetComponent<CardScript>().Size_decrease();
             cardManager.Selected_card1 = null;
     }
 

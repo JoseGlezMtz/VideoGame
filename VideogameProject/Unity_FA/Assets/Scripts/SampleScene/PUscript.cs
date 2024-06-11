@@ -20,6 +20,7 @@ public class PUscript : MonoBehaviour
             {
                 // Image component found, proceed to set sprite
                 imageComponent.sprite = Resources.Load<Sprite>($"Powerups/{atributosPU.id}");
+                
             }
         
        
