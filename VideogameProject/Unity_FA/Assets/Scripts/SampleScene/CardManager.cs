@@ -74,6 +74,7 @@ public class CardManager : MonoBehaviour
     {
         num_turn = 1;
         Rounds = 1;
+        PlayerPrefs.SetInt("num_rounds", 1);
         energy = 20;
         max_energy = 100;
 
@@ -736,6 +737,8 @@ public class CardManager : MonoBehaviour
         yield return new WaitForSeconds(4f);
         Debug.Log("New Round");
         Rounds++;
+        PlayerPrefs.SetInt("num_rounds", Rounds);
+        //VALENTINA CHECAR PLAYERPREFS NUM ROUND
         num_turn=0;
 
         yield return new WaitForSeconds(4f);
