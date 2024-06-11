@@ -21,19 +21,6 @@ public class PU_controller : MonoBehaviour
     public string pu_Cards_Data;
     [SerializeField]  PUs puCards;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //GetComponent<APIconection>().get_PU_cards();
-        //puCards =JsonUtility.FromJson<PUs>(pu_Cards_Data);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void InitializePUCounters(){
         for(int i = 8; i <= 36; i++){
             PlayerPrefs.SetInt($"pu{i}Counter", 0);
@@ -44,13 +31,6 @@ public class PU_controller : MonoBehaviour
         PlayerPrefs.SetInt($"pu{id}Counter", +1);
         Debug.Log($"Updating power up with id: {id}");
     }
-
-    /*public void Init_PU_ID(){
-    pu_Pile.Clear(); // Limpiar la lista para asegurarnos de que está vacía antes de llenarla
-    for (int id = 8; id < maxPuPile; id++) {
-        pu_Pile.Add(id);
-    }
-    }*/
 
     public void Init_PU_ID(){
         HashSet<int> usedIds = new HashSet<int>();
@@ -63,6 +43,7 @@ public class PU_controller : MonoBehaviour
       }
 
     }
+    
     public void PU_button()
     {
         GameObject PU = Instantiate(PuButtonPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
@@ -72,11 +53,13 @@ public class PU_controller : MonoBehaviour
         puCards =JsonUtility.FromJson<PUs>(pu_Cards_Data);
         
     }
+    
     public void Create_PU()
     {
         if (PowerUp_created)
         {
             Debug.Log("Power up already created");
+            
             return;
         }
         else if (!cardManager.PlayerTurn)
@@ -86,6 +69,7 @@ public class PU_controller : MonoBehaviour
         else{
         //Agregar for loop para crear los 27 power ups
         //Agregar los objects a la lista de pile
+        
         GameObject PU = Instantiate(PUPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
         Debug.Log(pu_Pile[0]);
         foreach (AtributosPU pu in puCards.powerUps)
@@ -137,7 +121,6 @@ public class PU_controller : MonoBehaviour
         Debug.Log("Power up description: " + powerUpObject.GetComponent<PUscript>().atributosPU.description 
         + ". By (" + powerUpObject.GetComponent<PUscript>().atributosPU.ability_amount + ") points/turns");
     }
-
 
     public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
     {
@@ -194,6 +177,7 @@ public class PU_controller : MonoBehaviour
                 case "curacion":
         
                     Debug.Log("Applying healing power-up");
+                    //VALENTINA: ADD ANIMATION FOR HEALING
                     int healthBoost = PU_ability_amount;
                     if (cardScript.atributos.health + healthBoost > 100)
                     {
@@ -203,6 +187,7 @@ public class PU_controller : MonoBehaviour
                     {
                         cardScript.atributos.health += healthBoost;
                         Debug.Log("Health boosted of card: " + cardScript.atributos.character_name + " by " + healthBoost);
+                        cardScript.UpdateHealth();
                     }
                 break;
 
@@ -212,6 +197,7 @@ public class PU_controller : MonoBehaviour
                     int energyBoost = PU_ability_amount;
                     cardScript.atributos.abilityCost -= energyBoost;
                     Debug.Log("Energy cost reduced of card: " + cardScript.atributos.character_name + " by " + energyBoost);
+                    cardScript.UpdateEnergy();
                 break;
         
                 // En caso de que el efecto sea aumentar el daño
@@ -219,7 +205,7 @@ public class PU_controller : MonoBehaviour
                     Debug.Log("Applying damage boost power-up");
                     int damageBoost = PU_ability_amount ;
                     cardScript.atributos.attack += damageBoost ;
-            
+                    cardScript.UpdateAmount();
                     Debug.Log("Damage boosted of card: " + cardScript.atributos.character_name + " by " + PU_ability_amount); 
                 break;
             // En caso de que el efecto sea aumentar la resistencia
@@ -285,9 +271,10 @@ public class PU_controller : MonoBehaviour
             }
         
         }
-        public int RandomId(){
-            return Random.Range(8, 36);
-        }
+    
+    public int RandomId(){
+        return Random.Range(8, 36);
+    }
 
     // Nuevo método para verificar y reemplazar los power-ups
     public void Deletingrident()
@@ -338,7 +325,5 @@ public class PU_controller : MonoBehaviour
             }
         }
     }
-
-
     
 }
