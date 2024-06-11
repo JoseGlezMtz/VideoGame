@@ -180,7 +180,7 @@ public class CardManager : MonoBehaviour
         obj2.transform.position = tempV;
         
         Debug.Log("Character " + obj1.GetComponent<CardScript>().atributos.character_name + " changed with " + obj2.GetComponent<CardScript>().atributos.character_name);
-        
+        obj1.GetComponent<CardScript>().Size_decrease();
         GameObject temp = obj1;
         
         Cartas_mano[card_Index1]=obj2;
@@ -189,6 +189,12 @@ public class CardManager : MonoBehaviour
 
     public void registerCard(GameObject objeto_carta)
     {
+        if (!PlayerTurn)
+        {
+            Debug.Log("It's not your turn");
+            return;
+        }
+        else{
     //We check if the power up is selected
         if(Selectpowerup != null)
         {
@@ -209,14 +215,17 @@ public class CardManager : MonoBehaviour
             //si no, guardamos la primera carta
                 else
                 {
-                    Selected_card1= objeto_carta;
-                    
-                    Debug.Log("Selecting " + Selected_card1.GetComponent<CardScript>().atributos.character_name);
                     //Debug.Log("Selecting " + Selected_card1.name);
-                    if (!Selected_card1.GetComponent<CardScript>().atributos.Alive)
+                    if (!objeto_carta.GetComponent<CardScript>().atributos.Alive)
                     {
                         Debug.Log("This card is Death");
                         Selected_card1 = null;
+                    }
+                    else
+                    {
+                        Selected_card1 = objeto_carta;
+                        Debug.Log("Selecting " + Selected_card1.GetComponent<CardScript>().atributos.character_name);
+                        Selected_card1.GetComponent<CardScript>().Size_increase();
                     }
                 }
             }
@@ -232,13 +241,16 @@ public class CardManager : MonoBehaviour
                     else{
                         if (Selected_card1 == objeto_carta)
                         {
+                            Selected_card1.GetComponent<CardScript>().Size_decrease();
                             Selected_card1 = null;
                             Debug.Log("Unselecting " + objeto_carta.GetComponent<CardScript>().atributos.character_name);
                             return;
                         }
                         else if (Selected_card1 != objeto_carta)
                         {
+                            Selected_card1.GetComponent<CardScript>().Size_decrease();
                             Selected_card1 = objeto_carta;
+                            Selected_card1.GetComponent<CardScript>().Size_increase();
                             Debug.Log("Selecting " + Selected_card1.GetComponent<CardScript>().atributos.character_name);
                         }
                     }
@@ -254,6 +266,7 @@ public class CardManager : MonoBehaviour
                     if(card_Index1>4 && card_Index2<=4 ||card_Index1<=4 && card_Index2>4 )
                     {
                         Debug.Log("You can't change the card with the enemy");
+                        Selected_card1.GetComponent<CardScript>().Size_decrease();
                         Selected_card1 = null;
                         Selected_card2 = null;
                         return;
@@ -262,6 +275,7 @@ public class CardManager : MonoBehaviour
                     if (Selected_card1 == Selected_card2)
                     {       //Revisamos que la carta no sea la misma
                         Debug.Log("You can't change the card with itself");
+                        Selected_card1.GetComponent<CardScript>().Size_decrease();
                         Selected_card1 = null;
                         Selected_card2 = null;
                         return;
@@ -277,6 +291,7 @@ public class CardManager : MonoBehaviour
                         //Intercambia las posiciones de los objetos en la lista
                         Debug.Log("index 1" + card_Index1);
                         Debug.Log("index 2" + card_Index2);
+                        
                         Selected_card1 = null;
                         Selected_card2 = null;
                         Change_Option = false;
@@ -295,6 +310,7 @@ public class CardManager : MonoBehaviour
                         //Intercambia las posiciones de los objetos en la lista
                         Cartas_mano[card_Index1]=Selected_card2;
                         Cartas_mano[card_Index2]=Selected_card1;
+                        
                         Selected_card1 = null;
                         Selected_card2 = null;
                         Change_Option = false;
@@ -312,6 +328,7 @@ public class CardManager : MonoBehaviour
                     if (Selected_card1.GetComponent<CardScript>().atributos.canAttack==false )
                     {
                         Debug.Log("You have already used this card for attack");
+                        Selected_card1.GetComponent<CardScript>().Size_decrease();
                         Selected_card1 = null;
                         return;
                     }
@@ -321,6 +338,7 @@ public class CardManager : MonoBehaviour
                     if (Selected_card1 == null && (Cartas_mano.IndexOf(objeto_carta) == 3 || Cartas_mano.IndexOf(objeto_carta) == 4))
                     {
                         Selected_card1 = objeto_carta;
+                        Selected_card1.GetComponent<CardScript>().Size_increase();
                         Debug.Log("Selected card for attacking: " + Selected_card1.name);
                     }
                     
@@ -391,10 +409,13 @@ public class CardManager : MonoBehaviour
                 }
             }
         }
+        }
 
     }
      void ResetSelection()
     {
+        Selected_card2.GetComponent<CardScript>().UpdateCard();
+        Selected_card1.GetComponent<CardScript>().Size_decrease();
         Selected_card1 = null;
         Selected_card2 = null;
         Attack_Option = false;
@@ -671,7 +692,9 @@ public class CardManager : MonoBehaviour
         CountCountEnemyTurn = true;
         counter = 0;
         GetComponent<PU_controller>().PowerUp_created = false;
-   
+        if(Selected_card1 != null){
+        Selected_card1.GetComponent<CardScript>().Size_decrease();}
+        
         Selected_card1 = null;
         Selected_card2 = null;
         Change_Option = false;
@@ -739,7 +762,7 @@ public class CardManager : MonoBehaviour
         Rounds++;
         PlayerPrefs.SetInt("num_rounds", Rounds);
         //VALENTINA CHECAR PLAYERPREFS NUM ROUND
-        num_turn=0;
+        num_turn=1;
 
         yield return new WaitForSeconds(4f);
         Debug.Log("New Enemies are coming");
@@ -758,6 +781,9 @@ public class CardManager : MonoBehaviour
         RoundText.text = $"Round: {Rounds}";
 
         GetComponent<PU_controller>().PowerUp_created = false;
+        if(Selected_card1 != null){
+        Selected_card1.GetComponent<CardScript>().Size_decrease();}
+        
         Selected_card1 = null;
         Selected_card2 = null;
         Change_Option = false;

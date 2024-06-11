@@ -81,10 +81,25 @@ public class CardScript : MonoBehaviour
         amount_text.text = atributos.attack.ToString();
     }
 
+    public void UpdateCard(){
+        UpdateHealth();
+        UpdateEnergy();
+        UpdateAmount();
+    }
+
     public void Reset_card(){
         atributos.attack = Start_Attack;
         atributos.alredyboosted = false;
         atributos.abilityCost = Start_cost;
+        UpdateCard();
+    }
+
+    public void Size_increase(){
+        GetComponent<RectTransform>().sizeDelta = new Vector2(96, 144);
+    }
+    public void Size_decrease(){
+        GetComponent<RectTransform>().sizeDelta = new Vector2(80, 120);
+        
     }
     
 }
