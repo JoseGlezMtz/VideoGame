@@ -239,7 +239,7 @@ public class EnemyController : MonoBehaviour
         {
             if (enemyCards.Contains(atributosCarta.id))
             {
-            cardManager.Card_base(cardManager.Cartas_mano, i, atributosCarta);
+            cardManager.Card_base( i, atributosCarta);
             yield return new WaitForSeconds(0.1f);
             i++;
             }

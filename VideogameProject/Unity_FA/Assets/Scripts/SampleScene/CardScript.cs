@@ -17,36 +17,37 @@ public class CardScript : MonoBehaviour
     [SerializeField] TMP_Text amount_text;
     
     // Start is called before the first frame update
-    public void Init(Atributos _atributos)
+    public void Init(Atributos _atributos, int Index)
     {
         atributos.SetAtributos(_atributos);
         Start_Attack = atributos.attack;
         Start_cost=atributos.abilityCost;
-
         Image imageComponent = GetComponent<Image>();
-   
-            if (imageComponent == null)
-            {
+        
                 //Debug.LogError("Image component not found on newCard.");
+            
+            if (Index>4){
+                imageComponent.sprite = Resources.Load<Sprite>($"EnemyImages/{atributos.id -1}");  
             }
+            
+            
             else
             {
                 // Image component found, proceed to set sprite
                 imageComponent.sprite = Resources.Load<Sprite>($"CardImages/{atributos.id -1}");
-                
-                health_text.text=atributos.health.ToString();
-                health_text.fontSize = 10; 
-                health_text.color = Color.black;
-
-                energy_text.text=atributos.abilityCost.ToString();
-                energy_text.fontSize = 10; 
-                energy_text.color = Color.white;
-
-                amount_text.text=atributos.attack.ToString();
-                amount_text.fontSize = 10; 
-                amount_text.color = Color.white;
-                
             }
+            health_text.text=atributos.health.ToString();
+            health_text.fontSize = 10; 
+            health_text.color = Color.black;
+
+            energy_text.text=atributos.abilityCost.ToString();
+            energy_text.fontSize = 10; 
+            energy_text.color = Color.white;
+
+            amount_text.text=atributos.attack.ToString();
+            amount_text.fontSize = 10; 
+            amount_text.color = Color.white;
+        
     }
 
     public bool check_alive(){
