@@ -26,12 +26,12 @@ INSERT INTO `Ability` (`id`, `amount`, `cost`, `effect`) VALUES
 (24, 20, 0, 'mejora_dano'),
 (25, 10, 0, 'mejora_dano'),
 (26, 5, 0, 'mejora_dano'),
-(27, 5, 0, 'mejora_curacion'),
-(28, 5, 0, 'mejora_curacion'),
+(27, 5, 0, 'mejora_resistencia'),
+(28, 5, 0, 'mejora_resistencia'),
 (29, 6, 0, 'restaura_energia'),
 (30, 20, 0, 'mejora_dano'),
 (31, 3, 0, 'bloquea_dano'),
-(32, 10, 0, 'mejora_curacion'),
+(32, 10, 0, 'mejora_resistencia'),
 (33, 1, 0, 'escudo'),
 (34, 2, 0, 'curacion'),
 (35, 20, 0, 'mejora_dano'),
@@ -74,7 +74,7 @@ INSERT INTO `Powerup_card` (`id`, `name`, `description`, `ability`) VALUES
 (29, 'Coffee', 'Allows attack without energy cost', 29),
 (30, 'Arrows', 'Improves damage', 30),
 (31, 'Fishing Net', 'Traps an opponent', 31),
-(32, 'Spatula', 'Improves hp ', 32),
+(32, 'Spatula', 'Improves resistence ', 32),
 (33, 'Jetski', 'Allows a character to dodge an enemy atack', 33),
 (34, 'Float', 'Heals an ally', 34),
 (35, 'Telescope', 'Increases atack', 35),
@@ -88,5 +88,5 @@ INSERT INTO powerup_cards_played (PU_card_id) VALUES
 (21), (22), (23), (24), (25), (26), (27), (28), (29), (30), 
 (31), (32), (33), (34), (35), (36);
 
-SELECT * FROM fa_database.powerup_cards_played;
+SELECT * FROM Characters_Cards_played;
 

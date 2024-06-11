@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
 
      [SerializeField] GameObject explosion;
      [SerializeField] GameObject ghosts;
+     bool youLose = true;
 
     [SerializeField] Transform position1;
     [SerializeField] Transform position2;
@@ -30,9 +31,11 @@ public class EnemyController : MonoBehaviour
     private IEnumerator delaymesage( )
     {
         yield return new WaitForSeconds(4f);
+        if(youLose){
         cardManager.PlayerTurn = true;
         Debug.Log("player's turn");
-
+        }
+            
         
         
     }
@@ -101,8 +104,9 @@ public class EnemyController : MonoBehaviour
                     if(cardManager.Cartas_mano[3].GetComponent<CardScript>().atributos.health <= 0 && cardManager.Cartas_mano[4].GetComponent<CardScript>().atributos.health <= 0)
                     {
                         Debug.Log("You lose");
+                        youLose = false;
                         cardManager.PlayerTurn = false;
-                        UpdateCharacters();
+                        
                         UpdatePU();
                     }
                     
@@ -274,12 +278,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void UpdateCharacters(){
-        for(int i = 1; i <= 7; i++){
-            //llamar de api connection characterStats
-            GetComponent<APIconection>().characterStats(i, PlayerPrefs.GetInt($"c{i}Counter"));
-        }
-    }
+    
 
     public void UpdatePU(){
         for(int i = 8; i <= 36; i++){

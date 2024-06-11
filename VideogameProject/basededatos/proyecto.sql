@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS Characters_Cards_played (
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
 CREATE TABLE IF NOT EXISTS PowerUP_Cards_played (
   id INT NOT NULL AUTO_INCREMENT,
   PU_card_id INT DEFAULT NULL,
@@ -303,7 +304,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE Register_result(
 	IN Player_ID int,
-    IN Resultado varchar(8),
+    IN Resultado int,
     OUT status_message VARCHAR(45)
 )
 BEGIN

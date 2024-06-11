@@ -716,8 +716,14 @@ public class CardManager : MonoBehaviour
         }
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    
+    public void UpdateCharacters(){
+        for(int i = 1; i <= 7; i++){
+            //llamar de api connection characterStats
+            GetComponent<APIconection>().characterStats(i, PlayerPrefs.GetInt($"c{i}Counter"));
+        }
+    }
     public void Start_New_Round(){
+        UpdateCharacters();
         PlayerTurn = false;
         GetComponent<EnemyController>().Destroy_Cards();
         foreach (GameObject card in Cartas_mano)
@@ -757,5 +763,6 @@ public class CardManager : MonoBehaviour
         PlayerTurn = true;
         CountCountEnemyTurn = false;
         Debug.Log("Player's turn");
+
     }
 }
