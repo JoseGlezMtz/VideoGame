@@ -30,14 +30,14 @@ app.get(
     }
 )
 
-app.get('/stats/characters', async(request, response)=>{
+app.get('/stats/Game', async(request, response)=>{
     let connection = null
     try{
         connection = await connectToDB()
 
         let [results, fields] = await connection.query
         //Replace with information from the 
-        ('select * from characters')
+        ('select * FROM Game')
 
         console.log("Data sent correctly")
         response.status(200)
@@ -54,7 +54,7 @@ app.get('/stats/characters', async(request, response)=>{
             console.log("Connection closed succesfully!")
         }
     }
-})
+});
 app.get('/stats/powerup_cards_played', async(request, response)=>{
     let connection = null
     try{
