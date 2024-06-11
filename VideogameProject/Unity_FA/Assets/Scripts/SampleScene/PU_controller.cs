@@ -226,7 +226,7 @@ public class PU_controller : MonoBehaviour
                     int damageBoost = PU_ability_amount ;
                     cardScript.atributos.attack += damageBoost ;
                     cardScript.UpdateAmount();
-                    Debug.Log("Damage boosted of card: " + cardScript.atributos.character_name + " by " + PU_ability_amount); 
+                    Debug.Log("Ability boosted of card: " + cardScript.atributos.character_name + " by " + PU_ability_amount); 
                 break;
             // En caso de que el efecto sea aumentar la resistencia
             case "mejora_resistencia":

@@ -133,7 +133,7 @@ public class CardManager : MonoBehaviour
         Debug.Log("Game started");
         foreach (Atributos atributosCarta in DeckCards.cards)
         {
-            Card_base(Cartas_mano, i, atributosCarta);
+            Card_base( i, atributosCarta);
             yield return new WaitForSeconds(0.1f);
             i++;
         }
@@ -154,13 +154,13 @@ public class CardManager : MonoBehaviour
         gameText.text = logString;
     }
     
-    public void Card_base(List<GameObject> Lista, int i, Atributos atributosCarta)
+    public void Card_base( int i, Atributos atributosCarta)
     {
         GameObject Card = Instantiate(CardPrefab, Panels[i].transform.position, Quaternion.identity, parentPrefab);
-        Card.GetComponent<CardScript>().Init(atributosCarta);
-        Card.GetComponent<CardScript>().selfCard=Card;
-        Card.name = "Card" + Lista.Count;
-        Lista.Add(Card);
+        //Card.GetComponent<CardScript>().Init(atributosCarta);
+        Card.name = "Card" + Cartas_mano.Count;
+        Cartas_mano.Add(Card);
+        Card.GetComponent<CardScript>().Init(atributosCarta, Cartas_mano.IndexOf(Card));
         Button button = Card.GetComponent<Button>();
         button.onClick.AddListener(() => registerCard(Card));
         
