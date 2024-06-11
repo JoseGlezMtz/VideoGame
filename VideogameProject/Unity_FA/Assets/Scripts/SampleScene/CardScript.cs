@@ -13,7 +13,8 @@ public class CardScript : MonoBehaviour
 
     [SerializeField] public GameObject selfCard;
     [SerializeField] TMP_Text health_text;
-
+    [SerializeField] TMP_Text energy_text;
+    [SerializeField] TMP_Text amount_text;
     
     // Start is called before the first frame update
     public void Init(Atributos _atributos)
@@ -36,16 +37,19 @@ public class CardScript : MonoBehaviour
                 health_text.text=atributos.health.ToString();
                 health_text.fontSize = 10; 
                 health_text.color = Color.black;
+
+                energy_text.text=atributos.abilityCost.ToString();
+                energy_text.fontSize = 10; 
+                energy_text.color = Color.white;
+
+                amount_text.text=atributos.attack.ToString();
+                amount_text.fontSize = 10; 
+                amount_text.color = Color.white;
+                
             }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-     public bool check_alive(){
+    public bool check_alive(){
         UpdateHealth();
         if(atributos.health <= 0){
             
@@ -60,6 +64,7 @@ public class CardScript : MonoBehaviour
             return true;
         }
     }
+    
     public void UpdateHealth(){
         if(atributos.health<=0){
             health_text.text="0";
@@ -67,6 +72,14 @@ public class CardScript : MonoBehaviour
         else{
         health_text.text=atributos.health.ToString();
     }}
+
+    public void UpdateEnergy(){
+        energy_text.text = atributos.abilityCost.ToString();
+    }
+
+    public void UpdateAmount(){
+        amount_text.text = atributos.attack.ToString();
+    }
 
     public void Reset_card(){
         atributos.attack = Start_Attack;

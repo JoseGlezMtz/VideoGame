@@ -29,9 +29,14 @@ public class CardManager : MonoBehaviour
     [SerializeField]  GameObject energySlider;
 
     [SerializeField] GameObject explosion;
+    [SerializeField] GameObject heal;
 
     [SerializeField] Transform position1;
     [SerializeField] Transform position2;
+    [SerializeField] Transform allyTop;
+    [SerializeField] Transform allyBot;
+    [SerializeField] Transform healBot;
+    [SerializeField] Transform healTop;
 
     private bool changeButtonPressed = false;
     public bool PlayerTurn = false;
@@ -64,7 +69,6 @@ public class CardManager : MonoBehaviour
     [SerializeField] bool PowerUp_created = false;
     [SerializeField] bool pu_saved = false;
     [SerializeField] public int Rounds;
-
 
     void Start()
     {
@@ -149,7 +153,6 @@ public class CardManager : MonoBehaviour
         gameText.text = logString;
     }
     
-
     public void Card_base(List<GameObject> Lista, int i, Atributos atributosCarta)
     {
         GameObject Card = Instantiate(CardPrefab, Panels[i].transform.position, Quaternion.identity, parentPrefab);
@@ -409,10 +412,7 @@ public class CardManager : MonoBehaviour
  
     }
 
-    
     //If the change option is not active we send error message
-
-        
     //This function is used to change the state of the change option(active in the change button)
 
     public void Change_State()
@@ -553,6 +553,9 @@ public class CardManager : MonoBehaviour
             {
                 int healthBoost = atributosCarta1.attack;
                 atributosCarta2.health += healthBoost;
+                //CALL HEAL ANIMATION
+                
+                healAnimation(Cartas_mano.IndexOf(objeto_carta2));
                 if (atributosCarta2.health > 100) 
                 {
                     atributosCarta2.health = 100;
@@ -699,6 +702,18 @@ public class CardManager : MonoBehaviour
             Instantiate(explosion, position2);
         }
         
+    }
+
+    public void healAnimation(int position){
+        Debug.Log("Heal Animation Starting...");
+        if(position == 3){
+            Debug.Log("Case 1 Heal Animation");
+            Instantiate(heal, healBot);
+        }
+        else if (position == 4){
+            Instantiate(heal, healTop);
+            Debug.Log("Case 5 Heal Animation");
+        }
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
