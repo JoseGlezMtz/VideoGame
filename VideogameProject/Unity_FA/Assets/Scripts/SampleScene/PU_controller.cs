@@ -50,6 +50,7 @@ public class PU_controller : MonoBehaviour
         Button button = PU.GetComponent<Button>();
         //We add that we the button is clicked we create a power up
         button.onClick.AddListener(() => Create_PU());
+        PU.GetComponent<Image>().sprite=Resources.Load<Sprite>($"Powerups/Pu3");
         puCards =JsonUtility.FromJson<PUs>(pu_Cards_Data);
         
     }

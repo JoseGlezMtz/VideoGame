@@ -300,4 +300,40 @@ public class APIconection : MonoBehaviour
         
         }
     }
+
+    public void GameResults(int playerId, int num_rounds){
+        StartCoroutine(PostResults("http://localhost:4444/api/registerGame", playerId, num_rounds));
+    }
+
+   IEnumerator PostResults(string url, int playerId, int numRounds)
+{
+
+    GameResults gameResults = new GameResults(playerId, numRounds);
+    string jsonData = JsonUtility.ToJson(gameResults);
+
+    using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
+    {
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+
+        www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Request error: " + www.error);
+        }
+        else if (www.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Request succeeded: " + www.downloadHandler.text);
+        }
+        else
+        {
+            Debug.LogWarning("Unexpected response: " + www.responseCode);
+        }
+    }
+}
+
 }

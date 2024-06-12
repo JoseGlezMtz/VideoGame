@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 
 
@@ -106,7 +107,7 @@ public class EnemyController : MonoBehaviour
                         Debug.Log("You lose");
                         youLose = false;
                         cardManager.PlayerTurn = false;
-                        
+                        GameResults(PlayerPrefs.GetInt("id"), PlayerPrefs.GetInt("num_rounds"));
                         UpdatePU();
                     }
                     
@@ -285,5 +286,9 @@ public class EnemyController : MonoBehaviour
             //MODIFY FOR PU
             GetComponent<APIconection>().puStats(i, PlayerPrefs.GetInt($"pu{i}Counter"));
         }
+    }
+
+    public void GameResults(int id, int rounds){
+        GetComponent<APIconection>().GameResults(id, rounds);
     }
 }

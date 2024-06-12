@@ -22,7 +22,7 @@ INSERT INTO `Ability` (`id`, `amount`, `cost`, `effect`) VALUES
 (20, 10, 0, 'mejora_resistencia'),
 (21, 5, 0, 'mejora_dano'),
 (22, 5, 0, 'mejora_dano'),
-(23, 10, 0, 'restaene'),
+(23, 10, 0, 'restaura_energia'),
 (24, 20, 0, 'mejora_dano'),
 (25, 10, 0, 'mejora_dano'),
 (26, 5, 0, 'mejora_dano'),

@@ -95,8 +95,44 @@ async function CreateChart2() {
         console.error('Error fetching or creating second chart:', error);
     }
 }
+async function CreateChart3() {
+    try {
+        const response = await fetch('http://localhost:5000/stats/Game');
+        const data = await response.json();
+
+        const labels = data.map(entry => entry.player_id);
+        const values = data.map(entry => entry.num_round);
+
+        const ctx = document.getElementById('myThirdChart').getContext('2d');
+        const myThirdChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Games Played',
+                    data: values,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching or creating third chart:', error);
+    }
+
+}
+
 
 window.addEventListener('load', () => {
     CreateChart();
     CreateChart2();
+    CreateChart3();
 });
