@@ -39,6 +39,18 @@ app.get(
 
     }
 )
+app.get(
+    "/Game_Screen", (req, res)=>{
+        const file = fs.readFileSync("public/html/play.html", "utf8", (err, html)=>{
+            if (err) response.status(500).send('Error: ' + err)
+            console.log("Loading page ...")
+        response.send(html)
+        });
+        res.status(200).send(file);
+
+
+    }
+)
 
 app.get('/stats/Game', async(request, response)=>{
     let connection = null

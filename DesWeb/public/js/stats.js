@@ -103,6 +103,9 @@ async function CreateChart3() {
         const labels = data.map(entry => entry.player_id);
         const values = data.map(entry => entry.num_round);
 
+        const backgroundColors = labels.map(() => getRandomColor(0.6));
+        const borderColors = backgroundColors.map(color => color.replace('0.6', '1'));
+
         const ctx = document.getElementById('myThirdChart').getContext('2d');
         const myThirdChart = new Chart(ctx, {
             type: 'bar',
@@ -111,8 +114,8 @@ async function CreateChart3() {
                 datasets: [{
                     label: 'Total Games Played',
                     data: values,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
                     tension: 0.1
                 }]
             },
