@@ -27,9 +27,9 @@ public class LoginManager : MonoBehaviour
     {
         string username = usernameInput.text;
         string password = passwordInput.text;
-       if(apiConnection!=null){
+       
         apiConnection.Login(username, password);
-       }
+       
     }
 
     public void PlayButtonClicked(){
