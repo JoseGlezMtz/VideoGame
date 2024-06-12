@@ -62,23 +62,26 @@ public class EnemyController : MonoBehaviour
             {
                 Debug.Log("No damage dealt because the player card has more resistance than the enemy card's attack");
                 StartCoroutine(delaymesage());
-            }else{
-            if(enemyCardAtributos.health> 0 && enemyCardAtributos.isShielded != 0){
-            playerCardAtributos.health -= damageDealt;
-            Debug.Log(enemyCardAtributos.character_name + " attacked " + playerCardAtributos.character_name + " dealing " + damageDealt + " damage."); 
-            if(playerCard == cardManager.Cartas_mano[3]){
-                playAnimation(1);
             }
-            else if (playerCard == cardManager.Cartas_mano[4])
-                {
-                    playAnimation(2);
-                }
+            else{
+                if(enemyCardAtributos.health> 0 && enemyCardAtributos.cannotAttack == 0){
+                playerCardAtributos.health -= damageDealt;
+                Debug.Log(enemyCardAtributos.character_name + " attacked " + playerCardAtributos.character_name + " dealing " + damageDealt + " damage."); 
+                    if(playerCard == cardManager.Cartas_mano[3]){
+                    playAnimation(1);
+                    }
+                    else if (playerCard == cardManager.Cartas_mano[4])
+                    {
+                        playAnimation(2);
+                    }
             
-            } 
-            else {
+                } 
+                else 
+                {
                 Debug.Log("Enemies cannot attack");
                 
-            }
+                }
+            
             StartCoroutine(delaymesage());
             //revisar si la carta que atacaron murió
             if (!playerCard.GetComponent<CardScript>().check_alive()){
@@ -138,9 +141,14 @@ public class EnemyController : MonoBehaviour
     {
         Debug.Log("Error en el ataque del enemigo");
     }
-}
+    }
 
-
+    public void Send_Data()
+    {
+        GameResults(PlayerPrefs.GetInt("id"), PlayerPrefs.GetInt("num_rounds"));
+        UpdatePU();
+        cardManager.UpdateCharacters();
+    }
     public void EnemyTurn()
     {
         // We check if it's the enemy turn
@@ -296,6 +304,7 @@ public class EnemyController : MonoBehaviour
     public void UpdatePU(){
         for(int i = 8; i <= 36; i++){
             //MODIFY FOR PU
+            Debug.Log($"pu{i}Counter: {PlayerPrefs.GetInt($"pu{i}Counter")}");
             GetComponent<APIconection>().puStats(i, PlayerPrefs.GetInt($"pu{i}Counter"));
         }
     }

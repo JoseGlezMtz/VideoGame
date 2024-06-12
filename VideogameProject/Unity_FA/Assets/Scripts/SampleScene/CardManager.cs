@@ -84,6 +84,7 @@ public class CardManager : MonoBehaviour
         RoundText.text = $"Round: {Rounds}";
 
         InitializeCardCounters();
+        InitializePUCounters();
         
         GetComponent<APIconection>().get_Deck_cards(PlayerPrefs.GetInt("id"));
         GetComponent<APIconection>().get_PU_cards();
@@ -114,6 +115,13 @@ public class CardManager : MonoBehaviour
         for(int i = 1; i <= 7; i++){
             PlayerPrefs.SetInt($"c{i}Counter", 0);
         }
+    }
+
+    public void InitializePUCounters(){
+        for(int i = 8; i <= 36; i++){
+            PlayerPrefs.SetInt($"pu{i}Counter", 0);
+        
+    }
     }
 
     //Method to update the card counters when a card is used and recieves the cards id (1-7)
@@ -405,6 +413,8 @@ public class CardManager : MonoBehaviour
     }
      void ResetSelection()
     {
+        UpdateCardCounter(Selected_card1.GetComponent<CardScript>().atributos.id);
+
         Selected_card2.GetComponent<CardScript>().UpdateCard();
         Selected_card1.GetComponent<CardScript>().Size_decrease();
         Selected_card1 = null;
@@ -510,8 +520,6 @@ public class CardManager : MonoBehaviour
                         }
                         else
                         {
-                            //Update counter for card usage
-                            UpdateCardCounter(Selected_card1.GetComponent<CardScript>().atributos.id);
 
                             // We attack the enemy card 
                             atributosCarta2.health -= damageDealt;

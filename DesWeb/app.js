@@ -59,7 +59,7 @@ app.get('/stats/Game', async(request, response)=>{
 
         let [results, fields] = await connection.query
         //Replace with information from the 
-        ('select * FROM Game')
+        ('select * FROM Game_Resultado')
 
         console.log("Data sent correctly")
         response.status(200)
@@ -85,7 +85,7 @@ app.get('/stats/powerup_cards_played', async(request, response)=>{
 
         let [results, fields] = await connection.query
         //Replace with information from the 
-        ('select * FROM PowerUp_cards_played')
+        ('select * FROM PowerUp_Played_Character')
 
         console.log("Data sent correctly")
         response.status(200)
@@ -112,7 +112,7 @@ app.get('/stats/characters_played', async(request, response)=>{
 
         let [results, fields] = await connection.query
         //Replace with information from the 
-        ('select * FROM Characters_Cards_played')
+        ('select * FROM Cards_Played_Character')
 
         console.log("Data sent correctly")
         response.status(200)
