@@ -92,56 +92,7 @@ app.get('/stats/powerup_cards_played', async(request, response)=>{
         }
     }
 })
-app.get('/stats/Register_result', async(request, response)=>{
-    let connection = null
-    try{
-        connection = await connectToDB()
 
-        let [results, fields] = await connection.query
-        //Replace with information from the 
-        ('select * FROM Register_Resultado')
-
-        console.log("Data sent correctly")
-        response.status(200)
-        response.json(results)
-    }
-    catch(error){
-        response.status(500)
-        response.json(error)
-        console.log(error)
-    }
-    finally{
-        if(connection!==null){
-            connection.end()
-            console.log("Connection closed succesfully!")
-        }
-    }
-})
-app.get('/stats/Register_result', async(request, response)=>{
-    let connection = null
-    try{
-        connection = await connectToDB()
-
-        let [results, fields] = await connection.query
-        //Replace with information from the 
-        ('select * FROM Register_Resultado')
-
-        console.log("Data sent correctly")
-        response.status(200)
-        response.json(results)
-    }
-    catch(error){
-        response.status(500)
-        response.json(error)
-        console.log(error)
-    }
-    finally{
-        if(connection!==null){
-            connection.end()
-            console.log("Connection closed succesfully!")
-        }
-    }
-})
 app.get('/stats/characters_played', async(request, response)=>{
     let connection = null
     try{
