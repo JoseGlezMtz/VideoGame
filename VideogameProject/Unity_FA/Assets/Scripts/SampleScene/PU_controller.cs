@@ -29,7 +29,6 @@ public class PU_controller : MonoBehaviour
 
     public void UpdatePUCounter(int id){
         PlayerPrefs.SetInt($"pu{id}Counter", +1);
-        Debug.Log($"Updating power up with id: {id}");
     }
 
     public void Init_PU_ID(){
@@ -72,7 +71,6 @@ public class PU_controller : MonoBehaviour
         //Agregar los objects a la lista de pile
         
         GameObject PU = Instantiate(PUPrefab, PUParentPrefab.transform.position, Quaternion.identity, PUParentPrefab);
-        Debug.Log(pu_Pile[0]);
         foreach (AtributosPU pu in puCards.powerUps)
         {
             
@@ -83,7 +81,7 @@ public class PU_controller : MonoBehaviour
             }
         }
         
-        Debug.Log("Power UP " + PU.GetComponent<PUscript>().atributosPU.name + " (Press button green to save power up)");
+        Debug.Log("Power UP " + PU.GetComponent<PUscript>().atributosPU.name + " (Press + button to save power up)");
         pu_Pile.RemoveAt(0);
         PowerUp_created = true;
         }
@@ -129,7 +127,7 @@ public class PU_controller : MonoBehaviour
         
         cardManager.Selectpowerup = powerUpObject;
         Debug.Log("Power up description: " + powerUpObject.GetComponent<PUscript>().atributosPU.description 
-        + ". By (" + powerUpObject.GetComponent<PUscript>().atributosPU.ability_amount + ") points/turns");
+         );
     }
 
     public void UsePowerUp(GameObject cardObject, GameObject powerUpObject)
@@ -161,7 +159,7 @@ public class PU_controller : MonoBehaviour
             
         }
         if(PU_ability_id < 11){
-            Debug.Log("Can't use this power up you need Cookie, Chocolate and marshmellow to create smore and use the power up");
+            Debug.Log("To use this power up, try to find all the ingredientes to create a Smore!");
             
             cardManager.Selectpowerup = null;
             cardObject.GetComponent<CardScript>().Size_decrease();
@@ -244,9 +242,9 @@ public class PU_controller : MonoBehaviour
                 break;
         
             case "bloquea_dano":
-                    Debug.Log("Applying cannot attack power-up");
+                    Debug.Log("Applying Attack Block");
                     cardScript.atributos.cannotAttack = PU_ability_amount +1;
-                    Debug.Log("Cannot attack applied to card: " + cardScript.atributos.character_name + " for " + PU_ability_amount + " turns");
+                    Debug.Log("Attack Block applied to card: " + cardScript.atributos.character_name + " for " + PU_ability_amount + " turns");
                 break;
         
             case "revive":
@@ -322,7 +320,7 @@ public class PU_controller : MonoBehaviour
            }
 
            Addsmore(36);
-           Debug.Log("All ingridients found, power-up smore created");
+           Debug.Log("All ingridients found! Smore power up created!");
        }
 
 

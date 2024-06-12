@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using Unity.VisualScripting.ReorderableList.Element_Adder_Menu;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
@@ -12,6 +14,9 @@ public class EnemyController : MonoBehaviour
 
      [SerializeField] GameObject explosion;
      [SerializeField] GameObject ghosts;
+
+     [SerializeField] Canvas loseCanvas;
+
      bool youLose = true;
 
     [SerializeField] Transform position1;
@@ -34,7 +39,7 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(4f);
         if(youLose){
         cardManager.PlayerTurn = true;
-        Debug.Log("player's turn");
+        Debug.Log("Player's turn");
         }
             
         
@@ -58,9 +63,9 @@ public class EnemyController : MonoBehaviour
                 Debug.Log("No damage dealt because the player card has more resistance than the enemy card's attack");
                 StartCoroutine(delaymesage());
             }else{
+            if(enemyCardAtributos.health> 0 && enemyCardAtributos.isShielded != 0){
             playerCardAtributos.health -= damageDealt;
             Debug.Log(enemyCardAtributos.character_name + " attacked " + playerCardAtributos.character_name + " dealing " + damageDealt + " damage."); 
-            
             if(playerCard == cardManager.Cartas_mano[3]){
                 playAnimation(1);
             }
@@ -68,7 +73,12 @@ public class EnemyController : MonoBehaviour
                 {
                     playAnimation(2);
                 }
-
+            
+            } 
+            else {
+                Debug.Log("Enemies cannot attack");
+                
+            }
             StartCoroutine(delaymesage());
             //revisar si la carta que atacaron murió
             if (!playerCard.GetComponent<CardScript>().check_alive()){
@@ -106,6 +116,7 @@ public class EnemyController : MonoBehaviour
                     {
                         Debug.Log("You lose");
                         youLose = false;
+                        loseCanvas.gameObject.SetActive(true);
                         cardManager.PlayerTurn = false;
                         GameResults(PlayerPrefs.GetInt("id"), PlayerPrefs.GetInt("num_rounds"));
                         UpdatePU();
@@ -186,7 +197,8 @@ public class EnemyController : MonoBehaviour
 
             int indexenemy=0;
             GameObject enemyCard = null;
-            if (enemyCardAtributos.cannotAttack > 0 && enemyCardAtributos2.cannotAttack > 0 || enemyCardAtributos2.health > 0 && enemyCardAtributos.health > 0) {
+            
+             if (enemyCardAtributos.cannotAttack > 0 && enemyCardAtributos2.cannotAttack > 0 || enemyCardAtributos2.health > 0 && enemyCardAtributos.health > 0) {
                     indexenemy= Random.Range(5, 7);
 
             }
@@ -240,6 +252,8 @@ public class EnemyController : MonoBehaviour
             if (enemyCards.Contains(atributosCarta.id))
             {
             cardManager.Card_base( i, atributosCarta);
+            CardScript enemyScript = cardManager.GetComponent<CardScript>();
+            //AUMENTAR DAÑO DE LAS CARTAS?
             yield return new WaitForSeconds(0.1f);
             i++;
             }
@@ -278,8 +292,6 @@ public class EnemyController : MonoBehaviour
             Destroy(cardManager.Cartas_mano[i]);
         }
     }
-
-    
 
     public void UpdatePU(){
         for(int i = 8; i <= 36; i++){

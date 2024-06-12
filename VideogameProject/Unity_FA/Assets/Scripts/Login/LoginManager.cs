@@ -18,6 +18,7 @@ public class LoginManager : MonoBehaviour
 
     public void Start(){
         loginBtn.onClick.AddListener(()=> LoginButtonClicked());
+
         apiConnection = GetComponent<APIconection>();
         
         

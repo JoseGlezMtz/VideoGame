@@ -12,9 +12,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using JetBrains.Annotations;
 
 public class CardManager : MonoBehaviour
 {
+    
+
     [SerializeField] GameObject CardPrefab;
     
     [SerializeField] Transform parentPrefab;
@@ -43,8 +46,6 @@ public class CardManager : MonoBehaviour
     public bool CountCountEnemyTurn = false;
     public bool Change_Option = false;
     public bool Attack_Option = false;
-    int card_Index1;
-    int card_Index2;
 
     public GameObject Selected_card1 = null;
     public GameObject Selected_card2 = null;
@@ -117,9 +118,7 @@ public class CardManager : MonoBehaviour
 
     //Method to update the card counters when a card is used and recieves the cards id (1-7)
     public void UpdateCardCounter(int id){
-        Debug.Log($"Updating CardCounters of card: {id}");
         PlayerPrefs.SetInt($"c{id}Counter", +1);
-        Debug.Log(PlayerPrefs.GetInt($"c{id}Counter"));
     }
 
     //template of all  the cards in the board 
@@ -128,7 +127,6 @@ public class CardManager : MonoBehaviour
         int i = 0;
         DeckCards=JsonUtility.FromJson<Cards>(Deck_Data);
         allCards=JsonUtility.FromJson<Cards>(Characters_Data);
-        Debug.Log(allCards.cards);
 
         Debug.Log("Game started");
         foreach (Atributos atributosCarta in DeckCards.cards)
@@ -170,7 +168,6 @@ public class CardManager : MonoBehaviour
 
     public void Change_Cards(GameObject obj1, GameObject obj2)
     {
-        Debug.Log("Method Change Cards called");
         int card_Index1=Cartas_mano.IndexOf(obj1);
         int card_Index2=Cartas_mano.IndexOf(obj2);
 
@@ -218,7 +215,7 @@ public class CardManager : MonoBehaviour
                     //Debug.Log("Selecting " + Selected_card1.name);
                     if (!objeto_carta.GetComponent<CardScript>().atributos.Alive)
                     {
-                        Debug.Log("This card is Death");
+                        Debug.Log("This card is dead");
                         Selected_card1 = null;
                     }
                     else
@@ -265,7 +262,7 @@ public class CardManager : MonoBehaviour
                     Debug.Log("Changing with " + card_Index2);
                     if(card_Index1>4 && card_Index2<=4 ||card_Index1<=4 && card_Index2>4 )
                     {
-                        Debug.Log("You can't change the card with the enemy");
+                        Debug.Log("You can't change cards with an enemy");
                         Selected_card1.GetComponent<CardScript>().Size_decrease();
                         Selected_card1 = null;
                         Selected_card2 = null;
@@ -274,7 +271,7 @@ public class CardManager : MonoBehaviour
                     else
                     if (Selected_card1 == Selected_card2)
                     {       //Revisamos que la carta no sea la misma
-                        Debug.Log("You can't change the card with itself");
+                        Debug.Log("You can't change a card with itself");
                         Selected_card1.GetComponent<CardScript>().Size_decrease();
                         Selected_card1 = null;
                         Selected_card2 = null;
@@ -283,15 +280,10 @@ public class CardManager : MonoBehaviour
                     }
                     else if(card_Index1>2 && card_Index2<=2 ||card_Index1<=2 && card_Index2>2 )
                     {
-                        Debug.Log("Caso de Prueba 1");
-                        Debug.Log("index pre" + Cartas_mano.IndexOf(Selected_card1));
                         Change_Cards(Selected_card1, Selected_card2);
                         //UpdateCardCounter(Selected_card2.GetComponent<CardScript>().atributos.id);
                             
                         //Intercambia las posiciones de los objetos en la lista
-                        Debug.Log("index 1" + card_Index1);
-                        Debug.Log("index 2" + card_Index2);
-                        
                         Selected_card1 = null;
                         Selected_card2 = null;
                         Change_Option = false;
@@ -301,7 +293,6 @@ public class CardManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Caso de Prueba 2");
                         //en caso de que las cartas estén en la mano del jugador no le quitara un turno
                         Change_Cards(Selected_card1, Selected_card2);
                         
@@ -356,7 +347,7 @@ public class CardManager : MonoBehaviour
                                 //corroboramos que la carta del enemigo no este muerta
                                 if (Selected_card2.GetComponent<CardScript>().atributos.Alive == false)
                                 {
-                                    Debug.Log("This card is Death");
+                                    Debug.Log("This card is dead");
                                     Selected_card2 = null;
                                     return;
                                 }
@@ -381,7 +372,7 @@ public class CardManager : MonoBehaviour
                             }
                             else
                             {
-                                Debug.Log("You can't heal the enemy card");
+                                Debug.Log("You can't heal an enemy card");
                             }
                             break;
                         //In case the effect is to boost the damage of a card
@@ -402,7 +393,7 @@ public class CardManager : MonoBehaviour
                             break;
 
                         default:
-                            Debug.Log("No se a implementado la funcion todavia");
+                            Debug.Log("No se ha implementado la funcion todavia");
                             break;
                     
                     }
@@ -546,7 +537,7 @@ public class CardManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("No enough energy");
+                    Debug.Log("Not enough energy");
                 }
                 
             }
@@ -643,7 +634,7 @@ public class CardManager : MonoBehaviour
                 Debug.Log("No valid cards to boost damage");
             }
         }else {
-            Debug.Log("No enough energy");
+            Debug.Log("Not enough energy");
         }
     }
 
@@ -729,15 +720,17 @@ public class CardManager : MonoBehaviour
     }
 
     public void healAnimation(int position){
-        Debug.Log("Heal Animation Starting...");
         if(position == 3){
-            Debug.Log("Case 1 Heal Animation");
             Instantiate(heal, healBot);
         }
         else if (position == 4){
             Instantiate(heal, healTop);
-            Debug.Log("Case 5 Heal Animation");
         }
+    }
+
+    public void BoostEnemies(GameObject enemy){
+        enemy.GetComponent<CardScript>().atributos.attack += Rounds * 5;
+        enemy.GetComponent<CardScript>().UpdateAmount();
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void UpdateCharacters(){
@@ -789,9 +782,18 @@ public class CardManager : MonoBehaviour
         Change_Option = false;
         GetComponent<PU_controller>().pu_saved = false;
 
+        StartCoroutine(WaitBoost());
+
         PlayerTurn = true;
         CountCountEnemyTurn = false;
         Debug.Log("Player's turn");
 
+    }
+
+    IEnumerator WaitBoost(){
+        yield return new WaitForSeconds(2f);
+        BoostEnemies(Cartas_mano[5]);
+        BoostEnemies(Cartas_mano[6]);
+        
     }
 }
