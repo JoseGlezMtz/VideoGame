@@ -129,7 +129,9 @@ SELECT
     
 FROM
     Game g 
-JOIN Player p;
+JOIN Player p
+limit 5;
+
 
 CREATE VIEW Cards_Played_Character AS
 SELECT

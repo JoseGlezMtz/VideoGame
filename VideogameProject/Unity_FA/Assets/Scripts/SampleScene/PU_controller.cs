@@ -21,14 +21,11 @@ public class PU_controller : MonoBehaviour
     public string pu_Cards_Data;
     [SerializeField]  PUs puCards;
 
-    public void InitializePUCounters(){
-        for(int i = 8; i <= 36; i++){
-            PlayerPrefs.SetInt($"pu{i}Counter", 0);
-        }
-    }
+    
 
     public void UpdatePUCounter(int id){
-        PlayerPrefs.SetInt($"pu{id}Counter", +1);
+        PlayerPrefs.SetInt($"pu{id}Counter", + 1);
+        Debug.Log($"Power up {id} has been used {PlayerPrefs.GetInt($"pu{id}Counter")} times");
     }
 
     public void Init_PU_ID(){
@@ -78,6 +75,7 @@ public class PU_controller : MonoBehaviour
             {
                 PU.GetComponent<PUscript>().Init(pu);
                 PU.GetComponent<Button>().onClick.AddListener(() => SelectPowerUp(PU));
+                
             }
         }
         
@@ -143,6 +141,7 @@ public class PU_controller : MonoBehaviour
         string PU_ability_effect=powerUpScript.atributosPU.ability_effect;
         int PU_ability_amount=powerUpScript.atributosPU.ability_amount;
         int PU_ability_id=powerUpScript.atributosPU.id;
+        Debug.Log("Power up id used: " + PU_ability_id);
     
     
         // Accedemos al script de la carta y del power-up y lo guardamos en variables
