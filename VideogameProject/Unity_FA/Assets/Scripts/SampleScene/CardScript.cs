@@ -27,7 +27,8 @@ public class CardScript : MonoBehaviour
                 //Debug.LogError("Image component not found on newCard.");
             
             if (Index>4){
-                imageComponent.sprite = Resources.Load<Sprite>($"EnemyImages/{atributos.id -1}");  
+                imageComponent.sprite = Resources.Load<Sprite>($"EnemyImages/{atributos.id -1}"); 
+               
             }
             
             

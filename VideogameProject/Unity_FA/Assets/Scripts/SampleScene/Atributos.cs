@@ -72,6 +72,10 @@ public class Atributos
 
     }
 
+    public void EnemyBoost(int amount){
+        this.attack += amount;
+    }
+
 
     
 }

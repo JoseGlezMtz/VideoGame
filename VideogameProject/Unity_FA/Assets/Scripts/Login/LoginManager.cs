@@ -18,7 +18,7 @@ public class LoginManager : MonoBehaviour
 
     public void Start(){
         loginBtn.onClick.AddListener(()=> LoginButtonClicked());
-        playBtn.onClick.AddListener(()=> PlayButtonClicked());
+        //playBtn.onClick.AddListener(()=> PlayButtonClicked());
         apiConnection = GetComponent<APIconection>();
         
     }
