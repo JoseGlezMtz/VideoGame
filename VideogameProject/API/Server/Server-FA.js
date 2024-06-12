@@ -1,12 +1,14 @@
 "use strict";
 
-import express from 'express'
+import express, { response } from 'express'
 import mysql from 'mysql2/promise'
+import fs from "fs"
 
 
 const app = express()
 
 app.use(express.json())
+app.use(express.static("public"));
 
 const port = 4444;
 
@@ -279,3 +281,123 @@ app.get("/api/Deck_id/:ID", async (request, response) => {
     }
   }
 });
+
+app.get(
+  "/", (req, res)=>{
+      const file = fs.readFileSync("public/html/Main_page.html", "utf8", (err, html)=>{
+          if (err) response.status(500).send('Error: ' + err)
+          console.log("Loading page ...")
+      response.send(html)
+      });
+      res.status(200).send(file);
+
+
+  }
+)
+
+app.get(
+  "/stats", (req, res)=>{
+      const file = fs.readFileSync("public/html/Statistics.html", "utf8", (err, html)=>{
+          if (err) response.status(500).send('Error: ' + err)
+          console.log("Loading page ...")
+      response.send(html)
+      });
+      res.status(200).send(file);
+
+
+  }
+)
+app.get(
+  "/Game_Screen", (req, res)=>{
+      const file = fs.readFileSync("public/html/play.html", "utf8", (err, html)=>{
+          if (err) response.status(500).send('Error: ' + err)
+          console.log("Loading page ...")
+      response.send(html)
+      });
+      res.status(200).send(file);
+
+
+  }
+)
+
+app.get('/stats/Game', async(request, response)=>{
+  let connection = null
+  try{
+      connection = await connectToDB()
+
+      let [results, fields] = await connection.query
+      //Replace with information from the 
+      ('select * FROM Game_Resultado')
+
+      console.log("Data sent correctly")
+      response.status(200)
+      response.json(results)
+
+  }
+  catch(error){
+      response.status(500)
+      response.json(error)
+      console.log(error)
+  }
+  finally{
+      if(connection!==null){
+          connection.end()
+          console.log("Connection closed succesfully!")
+      }
+  }
+});
+app.get('/stats/powerup_cards_played', async(request, response)=>{
+  let connection = null
+  try{
+      connection = await connectToDB()
+
+      let [results, fields] = await connection.query
+      //Replace with information from the 
+      ('select * FROM PowerUp_Played_Character')
+
+      console.log("Data sent correctly")
+      response.status(200)
+      response.json(results)
+
+  }
+  catch(error){
+      response.status(500)
+      response.json(error)
+      console.log(error)
+  }
+  finally{
+      if(connection!==null){
+          connection.end()
+          console.log("Connection closed succesfully!")
+      }
+  }
+})
+
+app.get('/stats/characters_played', async(request, response)=>{
+  let connection = null
+  try{
+      connection = await connectToDB()
+
+      let [results, fields] = await connection.query
+      //Replace with information from the 
+      ('select * FROM Cards_Played_Character')
+
+      console.log("Data sent correctly")
+      response.status(200)
+      response.json(results)
+  }
+  catch(error){
+      response.status(500)
+      response.json(error)
+      console.log(error)
+  }
+  finally{
+      if(connection!==null){
+          connection.end()
+          console.log("Connection closed succesfully!")
+      }
+  }
+})
+
+
+
