@@ -120,59 +120,31 @@ At the end of the turn, the energy bar will restore 20 points of energy.
 
 After the player's turn, the enemy will follow a similar flow, and the loop will reapeat.
 
-## _Level Design_
+## _Rounds Design_
 
-The levels will be formed by diferent enemies, by each level the dificultie of the enemies will increase.
-
-### **Themes**
-
-1. Forest
-    1. Mood
-        1. Dark, calm, foreboding
-    2. Objects
-        1. _Ambient_
-            1. Fireflies
-            2. Beams of moonlight
-            3. Tall grass
-        2. _Interactive_
-            1. Wolves
-            2. Goblins
-            3. Rocks
-2. Castle
-    1. Mood
-        1. Dangerous, tense, active
-    2. Objects
-        1. _Ambient_
-            1. Rodents
-            2. Torches
-            3. Suits of armor
-        2. _Interactive_
-            1. Guards
-            2. Giant rats
-            3. Chests
-
-_(example)_
+Every time the player wins a round, there will reapered other cards of the enemy with ability boosts, this making more dificult the game every round you win
 
 ### **Game Flow**
 
-1. The player log-in
-2. Create the deck
-3. Select level
-4. Star the level
-
+1. The player register
+2. Players' log-in
+3. Create the deck
+4. Enters battle
 
 ## _Development_
 
----
 
 ### **Abstract Classes / Components**
-
-1.Menu manager
-2.Buld_deck manager
-3.BoardManager 
+1.Register Manager
+2.Login Manager
+3.Buld_deck manager
+4.BoardManager 
     1. Cards Manager
+    2. Enemy Controller
+    3. Power Ups Manager
 4.Scene Manager
-5.getCards
+5.Conection with the API
+6.Audio controller
 
 
 ## _Graphics_
@@ -232,47 +204,23 @@ We're looking for a soft music for the main menu, something that transmite a for
 ### **Music Needed**
 (pendiente)
 
-1. Slow-paced, nerve-racking &quot;forest&quot; track
-2. Exciting &quot;castle&quot; track
-3. Creepy, slow &quot;dungeon&quot; track
-4. Happy ending credits track
-5. Rick Astley&#39;s hit #1 single &quot;Never Gonna Give You Up&quot;
 
-_(example)_
 
 
 ## _Schedule_
 
 ---
 
-_(define the main activities and the expected dates when they should be finished. This is only a reference, and can change as the project is developed)_
+1. Week 1
+    1. Unity
+        1. Start cards in positions
+        2. Attack and change mechanic
+        3. Main menu
+    2. Data base
+        1.Creation of data base
+2. Week 2
+    1.Unity
+        1.create Power ups
+        2. 
 
-1. develop base classes
-    1. base entity
-        1. base player
-        2. base enemy
-        3. base block
-  2. base app state
-        1. game world
-        2. menu world
-2. develop player and basic block classes
-    1. physics / collisions
-3. find some smooth controls/physics
-4. develop other derived classes
-    1. blocks
-        1. moving
-        2. falling
-        3. breaking
-        4. cloud
-    2. enemies
-        1. soldier
-        2. rat
-        3. etc.
-5. design levels
-    1. introduce motion/jumping
-    2. introduce throwing
-    3. mind the pacing, let the player play between lessons
-6. design sounds
-7. design music
 
-_(example)_

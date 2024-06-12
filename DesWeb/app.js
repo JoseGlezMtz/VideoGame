@@ -39,15 +39,27 @@ app.get(
 
     }
 )
+app.get(
+    "/Game_Screen", (req, res)=>{
+        const file = fs.readFileSync("public/html/play.html", "utf8", (err, html)=>{
+            if (err) response.status(500).send('Error: ' + err)
+            console.log("Loading page ...")
+        response.send(html)
+        });
+        res.status(200).send(file);
 
-app.get('/stats/characters', async(request, response)=>{
+
+    }
+)
+
+app.get('/stats/Game', async(request, response)=>{
     let connection = null
     try{
         connection = await connectToDB()
 
         let [results, fields] = await connection.query
         //Replace with information from the 
-        ('select * from characters')
+        ('select * FROM Game')
 
         console.log("Data sent correctly")
         response.status(200)
@@ -65,7 +77,7 @@ app.get('/stats/characters', async(request, response)=>{
             console.log("Connection closed succesfully!")
         }
     }
-})
+});
 app.get('/stats/powerup_cards_played', async(request, response)=>{
     let connection = null
     try{
@@ -78,6 +90,7 @@ app.get('/stats/powerup_cards_played', async(request, response)=>{
         console.log("Data sent correctly")
         response.status(200)
         response.json(results)
+
     }
     catch(error){
         response.status(500)
@@ -91,31 +104,7 @@ app.get('/stats/powerup_cards_played', async(request, response)=>{
         }
     }
 })
-app.get('/stats/Register_result', async(request, response)=>{
-    let connection = null
-    try{
-        connection = await connectToDB()
 
-        let [results, fields] = await connection.query
-        //Replace with information from the 
-        ('select * FROM Register_Resultado')
-
-        console.log("Data sent correctly")
-        response.status(200)
-        response.json(results)
-    }
-    catch(error){
-        response.status(500)
-        response.json(error)
-        console.log(error)
-    }
-    finally{
-        if(connection!==null){
-            connection.end()
-            console.log("Connection closed succesfully!")
-        }
-    }
-})
 app.get('/stats/characters_played', async(request, response)=>{
     let connection = null
     try{

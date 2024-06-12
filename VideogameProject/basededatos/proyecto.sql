@@ -131,7 +131,6 @@ FROM
     Game g 
 JOIN Player p;
 
-
 CREATE VIEW Cards_Played_Character AS
 SELECT
 	cp.character_card_id,

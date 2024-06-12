@@ -16,7 +16,7 @@ header{
     width: 450px;
     height: 133px;
 }  
-#left{
+#links{
     display: flex;
     justify-content: space-evenly;  
     align-items: center;
@@ -24,9 +24,7 @@ header{
     margin-right: 50px;
     
 } 
-h6{
-    margin: 10px;
-}
+
 
 .description{
     display:flex;
@@ -42,10 +40,6 @@ h6{
     padding: 30px;
     font-size: 20px;
 }
-.chart-container {
-    display: flex;
-    justify-content: space-around;
-}
 
 .chart-container canvas {
     max-width: 300px;
@@ -54,5 +48,14 @@ h6{
     height: auto;
 }
 
+#topCharts{
+    display: flex;
+    
+    justify-content: space-around;
+}
+#bottomChart{
+    display: flex;
+    justify-content: center;
+}
 
 

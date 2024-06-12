@@ -18,8 +18,9 @@ public class LoginManager : MonoBehaviour
 
     public void Start(){
         loginBtn.onClick.AddListener(()=> LoginButtonClicked());
-        //playBtn.onClick.AddListener(()=> PlayButtonClicked());
+
         apiConnection = GetComponent<APIconection>();
+        
         
     }
 
@@ -27,9 +28,9 @@ public class LoginManager : MonoBehaviour
     {
         string username = usernameInput.text;
         string password = passwordInput.text;
-
+       
         apiConnection.Login(username, password);
-        
+       
     }
 
     public void PlayButtonClicked(){
