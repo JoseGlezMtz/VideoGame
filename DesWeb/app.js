@@ -40,14 +40,40 @@ app.get(
     }
 )
 
-app.get('/stats/characters', async(request, response)=>{
+app.get('/stats/Game', async(request, response)=>{
     let connection = null
     try{
         connection = await connectToDB()
 
         let [results, fields] = await connection.query
         //Replace with information from the 
-        ('select * from characters')
+        ('select * FROM Game')
+
+        console.log("Data sent correctly")
+        response.status(200)
+        response.json(results)
+
+    }
+    catch(error){
+        response.status(500)
+        response.json(error)
+        console.log(error)
+    }
+    finally{
+        if(connection!==null){
+            connection.end()
+            console.log("Connection closed succesfully!")
+        }
+    }
+});
+app.get('/stats/powerup_cards_played', async(request, response)=>{
+    let connection = null
+    try{
+        connection = await connectToDB()
+
+        let [results, fields] = await connection.query
+        //Replace with information from the 
+        ('select * FROM PowerUp_cards_played')
 
         console.log("Data sent correctly")
         response.status(200)
@@ -66,14 +92,14 @@ app.get('/stats/characters', async(request, response)=>{
         }
     }
 })
-app.get('/stats/powerup_cards_played', async(request, response)=>{
+app.get('/stats/Register_result', async(request, response)=>{
     let connection = null
     try{
         connection = await connectToDB()
 
         let [results, fields] = await connection.query
         //Replace with information from the 
-        ('select * FROM PowerUp_cards_played')
+        ('select * FROM Register_Resultado')
 
         console.log("Data sent correctly")
         response.status(200)

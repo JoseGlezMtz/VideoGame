@@ -42,10 +42,6 @@ h6{
     padding: 30px;
     font-size: 20px;
 }
-.chart-container {
-    display: flex;
-    justify-content: space-around;
-}
 
 .chart-container canvas {
     max-width: 300px;
@@ -54,5 +50,13 @@ h6{
     height: auto;
 }
 
+#topCharts{
+    display: flex;
+    justify-content: center;
+}
+#bottomChart{
+    display: flex;
+    justify-content: center;
+}
 
 
