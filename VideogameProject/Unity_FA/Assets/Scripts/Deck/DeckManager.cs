@@ -250,7 +250,7 @@ public class DeckManager : MonoBehaviour
 
                 PlayerPrefs.SetInt($"card{i+1}",cardAtributos.cardIndex + 1);
                 updateDeckDB();
-                UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Game_Scene");
             }
             
         }
