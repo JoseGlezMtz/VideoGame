@@ -16,9 +16,9 @@ header{
     width: 450px;
     height: 133px;
 }   
-#links{
+.links {
     display: flex;
-    justify-content: space-evenly;  
+    justify-content: space-between;  
     align-items: center;
     flex-direction: row;
     margin-right: 50px;
@@ -38,4 +38,33 @@ header{
     margin-right: 50px;
     padding: 30px;
     font-size: 20px;
+}
+
+#statsButton {
+    width: 200px;
+    height: 114px;
+    background-image: url('../assets/Boton_stats.png');
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    
+}
+#mainPageButton {
+    width: 200px;
+    height: 114px;
+    background-image: url('../assets/Boton_menu.png');
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    margin-right: 50px;
 }
