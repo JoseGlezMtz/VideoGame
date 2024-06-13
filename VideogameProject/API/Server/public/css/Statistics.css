@@ -58,4 +58,16 @@ header{
     justify-content: center;
 }
 
-
+#mainPageButton {
+    width: 200px;
+    height: 114px;
+    background-image: url('../assets/Boton_menu.png');
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
