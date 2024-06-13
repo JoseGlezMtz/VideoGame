@@ -25,6 +25,10 @@ header{
     
 } 
 
+#mechanics{
+   transform: scale(0.75);
+}
+
 .description{
     display:flex;
     background-color: RGBA(220,216,168,0.9);
@@ -58,5 +62,11 @@ header{
     border-radius: 5px;
 }
 
+h3{
+    color: #1B5557
+}
 
+p, ol{
+    line-height: 26pt;
+}
 
