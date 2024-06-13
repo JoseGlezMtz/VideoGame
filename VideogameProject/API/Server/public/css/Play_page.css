@@ -1,6 +1,6 @@
 body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background-image:url( ../assets/fondo.jpg);
+    background:url( ../assets/fondo.jpg) no-repeat center center fixed;
 }
 header{
     display:flex;

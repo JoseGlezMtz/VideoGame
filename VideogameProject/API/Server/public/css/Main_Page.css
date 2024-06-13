@@ -1,6 +1,6 @@
 body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background-image:url( ../assets/fondo.jpg);
+    background:url( ../assets/fondo.jpg) no-repeat center center fixed;
 }
 header{
     display:flex;
@@ -24,6 +24,9 @@ header{
     margin-right: 50px;
 } 
 
+#mechanics{
+    transform: scale(0.75);
+ }
 .description{
     display:flex;
     background-color: RGBA(220,216,168,0.9);
@@ -41,7 +44,7 @@ header{
 
 .button-container{
     display:flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-size: cover;
@@ -70,6 +73,11 @@ header{
     padding: 0;
     background-color: transparent;
     border: none;
+}
+
+
+p, ol{
+    line-height: 26pt;
 }
 
 
