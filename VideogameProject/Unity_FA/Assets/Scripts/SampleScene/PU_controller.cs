@@ -96,6 +96,10 @@ public class PU_controller : MonoBehaviour
         }
         else
         {
+            cardManager.Selected_card1.GetComponent<CardScript>().Size_decrease();
+            cardManager.Selected_card1=null;
+            cardManager.Change_Option=false;
+            cardManager.Attack_Option=false;
             PowerUp.transform.SetParent(PUSlot);
             pu_Hand.Add(PowerUp);
             pu_saved = true;

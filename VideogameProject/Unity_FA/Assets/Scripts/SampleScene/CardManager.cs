@@ -457,14 +457,16 @@ public class CardManager : MonoBehaviour
             return;
         }
         else{
-            if (!changeButtonPressed)
+            if (!Change_Option)
             {
                 Change_Option = true;
+                Debug.Log("Change option active");
                 changeButtonPressed = true;
             }
             else
             {
                 Change_Option = false;
+                Debug.Log("Change option inactive");
                 changeButtonPressed = false;
             }
         }
@@ -621,6 +623,10 @@ public class CardManager : MonoBehaviour
             if (atributosCarta2.alredyboosted)
             {
                 Debug.Log("You can't boost the damage of a card that has already been boosted");
+                Selected_card1.GetComponent<CardScript>().Size_decrease();
+                Selected_card1 = null;
+                Selected_card2 = null;
+                Change_Option = false;
             }
             else
             
@@ -659,9 +665,19 @@ public class CardManager : MonoBehaviour
                 Debug.Log("It's not your turn");
                 return;
         }
-        else
-        {
-            Attack_Option=!Attack_Option;
+        else{
+            if (!Change_Option)
+            {
+                Attack_Option = true;
+                Debug.Log("Attack option active");
+                
+            }
+            else
+            {
+                Attack_Option = false;
+                Debug.Log("Attack option inactive");
+                
+            }
         }
     }
 
@@ -764,6 +780,7 @@ public class CardManager : MonoBehaviour
         PlayerPrefs.SetInt("num_rounds", Rounds);
         //VALENTINA CHECAR PLAYERPREFS NUM ROUND
         num_turn=1;
+        counter = 0;
 
         yield return new WaitForSeconds(4f);
         Debug.Log("New Enemies are coming");
