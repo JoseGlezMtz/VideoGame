@@ -94,10 +94,15 @@ public class PU_controller : MonoBehaviour
         {
             Debug.LogError("Can't add more power ups");
         }
-        else
+        else 
         {
+            if(cardManager.Selected_card1 != null)
+            {
             cardManager.Selected_card1.GetComponent<CardScript>().Size_decrease();
             cardManager.Selected_card1=null;
+                
+            }
+            
             cardManager.Change_Option=false;
             cardManager.Attack_Option=false;
             PowerUp.transform.SetParent(PUSlot);
