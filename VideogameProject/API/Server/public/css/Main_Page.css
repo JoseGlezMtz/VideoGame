@@ -22,7 +22,6 @@ header{
     align-items: center;
     flex-direction: row;
     margin-right: 50px;
-    
 } 
 
 .description{
@@ -57,6 +56,25 @@ header{
     cursor: pointer;
     border-radius: 5px;
 }
+
+
+#statsButton {
+    width: 200px;
+    height: 114px;
+    background-image: url('../assets/Boton_stats.png');
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+
+
+
 
 
 
