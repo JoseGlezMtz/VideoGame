@@ -413,7 +413,9 @@ public class CardManager : MonoBehaviour
     }
      void ResetSelection()
     {
+
         UpdateCardCounter(Selected_card1.GetComponent<CardScript>().atributos.id);
+        UpdateCharacters();
 
         Selected_card2.GetComponent<CardScript>().UpdateCard();
         Selected_card1.GetComponent<CardScript>().Size_decrease();
@@ -764,7 +766,6 @@ public class CardManager : MonoBehaviour
         }
     }
     public void Start_New_Round(){
-        UpdateCharacters();
         PlayerTurn = false;
         GetComponent<EnemyController>().Destroy_Cards();
         foreach (GameObject card in Cartas_mano)
