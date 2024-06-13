@@ -44,11 +44,13 @@ CREATE TABLE IF NOT EXISTS Powerup_card (
 CREATE TABLE IF NOT EXISTS Game (
   id INT NOT NULL AUTO_INCREMENT,
   player_id INT NOT NULL,
-  num_round INT NOT NULL DEFAULT (0),
+  num_round INT NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
-  CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id)
+  CONSTRAINT fk_results_player FOREIGN KEY (player_id) REFERENCES Player(id),
+  CONSTRAINT unique_player_round UNIQUE (player_id, num_round)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+select * from game;
 CREATE TABLE IF NOT EXISTS Deck (
   id INT NOT NULL AUTO_INCREMENT,
   player_id INT NOT NULL,
@@ -120,16 +122,16 @@ cc.description AS character_description
 FROM Deck d
 JOIN Character_card cc ON d.card1 = cc.id OR d.card2 = cc.id OR d.card3 = cc.id OR d.card4 = cc.id OR d.card5 = cc.id
 JOIN Player p ON d.player_id = p.id;
-
 CREATE VIEW Game_Resultado AS
 SELECT
 	p.name,
-	g.player_id,
+	p.id,
     g.num_round
     
 FROM
     Game g 
-JOIN Player p
+JOIN Player p  ON g.player_id = p.id
+
 limit 5;
 
 
@@ -304,15 +306,26 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE Register_result(
-	IN Player_ID int,
+    IN Player_ID int,
     IN Resultado int,
     OUT status_message VARCHAR(45)
 )
 BEGIN
-	Insert into Game (player_id,num_round) values (Player_ID,Resultado);
-    SET status_message = 'Game Registered succesfully';
+    DECLARE duplicate_count INT;
+
+    SELECT COUNT(*) INTO duplicate_count
+    FROM Game
+    WHERE player_id = Player_ID AND num_round = Resultado;
+
+    IF duplicate_count = 0 THEN
+        INSERT INTO Game (player_id, num_round) VALUES (Player_ID, Resultado);
+        SET status_message = 'Game Registered successfully';
+    ELSE
+        SET status_message = 'Duplicate entry. Game not registered.';
+    END IF;
 END $$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE PROCEDURE Save_Cards_used(
@@ -332,7 +345,7 @@ CREATE PROCEDURE Save_PU_used(
 	IN Player_ID int,
     IN ID_PU int,
     IN Amount int,
-    OUT status_message varchar(255)
+    OUT status_message varchar(55)
 )
 BEGIN
 	insert into PowerUP_Cards_played (player_id,PU_card_id,amount) values (Player_ID,ID_PU, Amount);
