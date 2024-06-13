@@ -668,7 +668,7 @@ public class CardManager : MonoBehaviour
                 return;
         }
         else{
-            if (!Change_Option)
+            if (!Attack_Option)
             {
                 Attack_Option = true;
                 Debug.Log("Attack option active");
